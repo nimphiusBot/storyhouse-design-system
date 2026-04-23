@@ -1,0 +1,39 @@
+{
+  "name": "@storyhouse/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Elite design system for Orange Doorhouse Inc",
+  "author": "Design System Platform Engineer",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap.js",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "storybook": "turbo run storybook",
+    "docs": "turbo run docs",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "type-check": "turbo run type-check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.0.0"
+  },
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

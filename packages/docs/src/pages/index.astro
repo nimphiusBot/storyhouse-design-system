@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@storyhouse/components';
+---
+
+<Layout>
+  <div class="py-12">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+        Storyhouse Design System
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
+        An elite design system built for scale, precision, and developer experience.
+      </p>
+      <div class="mt-10 flex justify-center gap-4">
+        <Button variant="primary" size="lg">Get Started</Button>
+        <Button variant="secondary" size="lg">View Components</Button>
+      </div>
+    </div>
+
+    <div class="mt-20 grid gap-8 md:grid-cols-3">
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <div class="mb-4 h-12 w-12 rounded-lg bg-blue-100 p-3">
+          <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900">Production Ready</h3>
+        <p class="mt-2 text-gray-600">
+          Every component is built for enterprise scale with comprehensive testing and accessibility.
+        </p>
+      </div>
+
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <div class="mb-4 h-12 w-12 rounded-lg bg-green-100 p-3">
+          <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900">High Performance</h3>
+        <p class="mt-2 text-gray-600">
+          Optimized for speed with tree-shaking, code splitting, and minimal bundle size.
+        </p>
+      </div>
+
+      <div class="rounded-lg bg-white p-6 shadow-sm">
+        <div class="mb-4 h-12 w-12 rounded-lg bg-purple-100 p-3">
+          <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900">Developer Experience</h3>
+        <p class="mt-2 text-gray-600">
+          Comprehensive documentation, TypeScript support, and intuitive APIs.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
