@@ -12,8 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "clean": "rm -rf dist",
-    "lint": "eslint . --ext .ts,.tsx --ignore-path ../../.gitignore",
-    "lint:astro": "eslint . --ext .astro"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.0.0",

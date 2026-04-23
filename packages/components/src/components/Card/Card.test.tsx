@@ -10,17 +10,14 @@ describe('Card', () => {
 
   it('applies variant classes', () => {
     const { rerender } = render(<Card variant="elevated">Content</Card>);
-    const card = screen.getByText('Content');
-    expect(card).toHaveClass('shadow-md');
-
+    expect(screen.getByText('Content')).toHaveClass('shadow-md');
     rerender(<Card variant="flat">Content</Card>);
-    expect(card).toHaveClass('bg-gray-50');
+    expect(screen.getByText('Content')).toHaveClass('bg-gray-50');
   });
 
   it('applies padding classes', () => {
     const { rerender } = render(<Card padding="none">Content</Card>);
     expect(screen.getByText('Content')).toHaveClass('p-0');
-
     rerender(<Card padding="lg">Content</Card>);
     expect(screen.getByText('Content')).toHaveClass('p-8');
   });
@@ -43,8 +40,7 @@ describe('CardHeader', () => {
 describe('CardTitle', () => {
   it('renders as h3 by default', () => {
     render(<CardTitle>Title</CardTitle>);
-    const title = screen.getByText('Title');
-    expect(title.tagName).toBe('H3');
+    expect(screen.getByText('Title').tagName).toBe('H3');
   });
 
   it('renders as custom element', () => {

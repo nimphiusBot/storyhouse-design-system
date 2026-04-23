@@ -12,14 +12,12 @@ describe('Avatar', () => {
 
   it('renders initials from name', () => {
     render(<Avatar name="John Doe" />);
-    const initials = screen.getByText('JD');
-    expect(initials).toBeInTheDocument();
+    expect(screen.getByText('JD')).toBeInTheDocument();
   });
 
   it('renders single initial for single name', () => {
     render(<Avatar name="Alice" />);
-    const initials = screen.getByText('A');
-    expect(initials).toBeInTheDocument();
+    expect(screen.getByText('A')).toBeInTheDocument();
   });
 
   it('renders fallback icon when no src or name', () => {
@@ -31,11 +29,9 @@ describe('Avatar', () => {
 
   it('applies size classes', () => {
     const { rerender } = render(<Avatar name="Test" size="xs" />);
-    const avatar = screen.getByRole('img', { name: /test/i });
-    expect(avatar).toHaveStyle({ width: '24px', height: '24px' });
-
+    expect(screen.getByRole('img', { name: /test/i })).toHaveStyle({ width: '24px', height: '24px' });
     rerender(<Avatar name="Test" size="xl" />);
-    expect(avatar).toHaveStyle({ width: '72px', height: '72px' });
+    expect(screen.getByRole('img', { name: /test/i })).toHaveStyle({ width: '72px', height: '72px' });
   });
 
   it('applies circle variant by default', () => {

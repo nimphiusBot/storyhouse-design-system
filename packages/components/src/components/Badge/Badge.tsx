@@ -52,13 +52,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         )}
       >
         {dot && (
-          <span
-            className={cn(
-              'h-1.5 w-1.5 rounded-full',
-              dotColors[variant]
-            )}
-            aria-hidden="true"
-          />
+          <span className={cn('h-1.5 w-1.5 rounded-full', dotColors[variant])} aria-hidden="true" />
         )}
         {children}
         {removable && (

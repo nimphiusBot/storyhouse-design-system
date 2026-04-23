@@ -7,8 +7,8 @@ describe('Button', () => {
     render(<Button>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('bg-blue-600'); // primary variant
-    expect(button).toHaveClass('px-4 py-2'); // md size
+    expect(button).toHaveClass('bg-blue-600');
+    expect(button).toHaveClass('px-4 py-2');
   });
 
   it('renders with secondary variant', () => {

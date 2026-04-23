@@ -35,15 +35,14 @@ describe('Input', () => {
   it('renders with different sizes', () => {
     const { rerender } = render(<Input size="sm" placeholder="Test" />);
     expect(screen.getByPlaceholderText('Test')).toHaveClass('px-3 py-1.5 text-sm');
-
     rerender(<Input size="lg" placeholder="Test" />);
     expect(screen.getByPlaceholderText('Test')).toHaveClass('px-6 py-3 text-lg');
   });
 
   it('applies full width class', () => {
     render(<Input fullWidth placeholder="Test" />);
-    const container = screen.getByPlaceholderText('Test').closest('div > div');
-    expect(container?.parentElement).toHaveClass('w-full');
+    const input = screen.getByPlaceholderText('Test');
+    expect(input.closest('div > div')?.parentElement).toHaveClass('w-full');
   });
 
   it('forwards ref', () => {

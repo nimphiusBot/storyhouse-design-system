@@ -55,10 +55,7 @@ export interface CardHeaderProps {
 export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ children, className }, ref) => {
     return (
-      <div
-        ref={ref}
-        className={cn('mb-4 flex items-center justify-between', className)}
-      >
+      <div ref={ref} className={cn('mb-4 flex items-center justify-between', className)}>
         {children}
       </div>
     );
@@ -76,10 +73,7 @@ export interface CardTitleProps {
 export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ children, className, as: Tag = 'h3' }, ref) => {
     return (
-      <Tag
-        ref={ref}
-        className={cn('text-lg font-semibold text-gray-900', className)}
-      >
+      <Tag ref={ref} className={cn('text-lg font-semibold text-gray-900', className)}>
         {children}
       </Tag>
     );

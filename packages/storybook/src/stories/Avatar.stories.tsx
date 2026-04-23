@@ -1,22 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar } from '@storyhouse/components';
+import { Avatar } from './stubs';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
   component: Avatar,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'centered' },
   tags: ['autodocs'],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
-    },
-    variant: {
-      control: 'select',
-      options: ['circle', 'square'],
-    },
+    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
+    variant: { control: 'select', options: ['circle', 'square'] },
     name: { control: 'text' },
   },
 };
@@ -24,29 +16,12 @@ const meta: Meta<typeof Avatar> = {
 export default meta;
 type Story = StoryObj<typeof Avatar>;
 
-export const WithImage: Story = {
-  args: {
-    src: 'https://i.pravatar.cc/150?u=storyhouse',
-    alt: 'User avatar',
-    name: 'Jane Smith',
-  },
-};
-
-export const WithInitials: Story = {
-  args: {
-    name: 'Jane Smith',
-  },
-};
-
-export const SingleInitial: Story = {
-  args: {
-    name: 'Alice',
-  },
-};
-
-export const FallbackIcon: Story = {
-  args: {},
-};
+export const WithImage: Story = { args: { src: 'https://i.pravatar.cc/150?u=storyhouse', alt: 'User avatar', name: 'Jane Smith' } };
+export const WithInitials: Story = { args: { name: 'Jane Smith' } };
+export const SingleInitial: Story = { args: { name: 'Alice' } };
+export const FallbackIcon: Story = { args: {} };
+export const CircleVariant: Story = { args: { name: 'Circle', variant: 'circle' } };
+export const SquareVariant: Story = { args: { name: 'Square', variant: 'square' } };
 
 export const Sizes: Story = {
   render: () => (
@@ -58,18 +33,4 @@ export const Sizes: Story = {
       <Avatar name="XL" size="xl" />
     </div>
   ),
-};
-
-export const CircleVariant: Story = {
-  args: {
-    name: 'Circle',
-    variant: 'circle',
-  },
-};
-
-export const SquareVariant: Story = {
-  args: {
-    name: 'Square',
-    variant: 'square',
-  },
 };

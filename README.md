@@ -68,36 +68,45 @@ Lint all packages:
 npm run lint
 ```
 
+## Components
+
+### Button
+Primary, secondary, ghost, and danger variants with sm/md/lg sizing. Supports loading state, disabled state, and full-width mode.
+
+### Input
+Form inputs with labels, error states, helper text, and icon support. Available in sm/md/lg sizes.
+
+### Card
+Composable card component with variant support (default, elevated, bordered, flat) and sub-components (Header, Title, Content, Footer).
+
+### Badge
+Status badges in 6 color variants (default, primary, success, warning, danger, neutral). Supports dot indicator and removable option.
+
+### Avatar
+Image avatars with automatic initial fallback, deterministic color coding, 5 sizes, and circle/square variants.
+
 ## Packages
 
 ### @storyhouse/components
-
 The core component library. Each component is:
-
 - Built with TypeScript (strict mode)
 - Fully tested with Vitest and Testing Library
 - Accessible by default
 - Documented with Storybook
 
 ### @storyhouse/utils
-
 Utility functions used across the design system, including:
-
 - `cn()` - Tailwind CSS class merging utility
 
 ### @storyhouse/storybook
-
 Storybook instance for component development and documentation.
 
 ### @storyhouse/docs
-
 Production documentation site built with Astro and MDX.
 
 ## CI/CD
 
 GitHub Actions workflows are configured for:
-
-- Type checking
 - Linting
 - Testing
 - Building all packages
@@ -109,10 +118,9 @@ GitHub Actions workflows are configured for:
 - **TypeScript:** Strict mode, no `any` types
 - **Testing:** 90%+ test coverage required
 - **Accessibility:** WCAG 2.1 AA compliant
-- **Performance:** <2s Storybook load time
+- **Performance:** Optimized bundles with tree-shaking
 - **Documentation:** 100% component documentation coverage
 
 ## License
 
-UNLICENSED - Proprietary software
-Elite design system for Orange Doorhouse Inc
+UNLICENSED - Proprietary software for Orange Doorhouse Inc

@@ -11,10 +11,8 @@ describe('Badge', () => {
   it('renders with different variants', () => {
     const { rerender } = render(<Badge variant="success">Done</Badge>);
     expect(screen.getByText('Done')).toHaveClass('bg-green-100');
-
     rerender(<Badge variant="danger">Error</Badge>);
     expect(screen.getByText('Error')).toHaveClass('bg-red-100');
-
     rerender(<Badge variant="warning">Pending</Badge>);
     expect(screen.getByText('Pending')).toHaveClass('bg-yellow-100');
   });
@@ -22,15 +20,13 @@ describe('Badge', () => {
   it('renders sizes', () => {
     const { rerender } = render(<Badge size="sm">Small</Badge>);
     expect(screen.getByText('Small')).toHaveClass('text-xs');
-
     rerender(<Badge size="md">Medium</Badge>);
     expect(screen.getByText('Medium')).toHaveClass('text-sm');
   });
 
   it('renders with dot indicator', () => {
     render(<Badge dot>Online</Badge>);
-    const badge = screen.getByText('Online');
-    expect(badge.querySelector('span')).toBeInTheDocument();
+    expect(screen.getByText('Online').querySelector('span')).toBeInTheDocument();
   });
 
   it('renders removable with close button', () => {
