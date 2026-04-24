@@ -11,7 +11,7 @@ const names = [
 
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
 
-export default function LiveAvatarDemo() {
+export default function LiveAvatarDemo(): React.ReactNode {
   return (
     <div className="space-y-8">
       {/* Sizes */}

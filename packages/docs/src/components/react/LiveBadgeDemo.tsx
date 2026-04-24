@@ -16,7 +16,7 @@ const dotVariants: { variant: BadgeProps['variant']; label: string }[] = [
   { variant: 'danger', label: 'Offline' },
 ];
 
-export default function LiveBadgeDemo() {
+export default function LiveBadgeDemo(): React.ReactNode {
   const [tags, setTags] = React.useState<string[]>([
     'TypeScript',
     'React',

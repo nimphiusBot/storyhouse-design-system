@@ -1,11 +1,11 @@
 import React from 'react';
 import { Input } from '@storyhouse/components';
 
-export default function LiveInputDemo() {
+export default function LiveInputDemo(): React.ReactNode {
   const [emailValue, setEmailValue] = React.useState('');
   const [submitted, setSubmitted] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     setSubmitted(true);
   };

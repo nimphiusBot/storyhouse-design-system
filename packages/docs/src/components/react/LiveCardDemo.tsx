@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, Button, Badge } from '@storyhouse/components';
 
-export default function LiveCardDemo() {
+export default function LiveCardDemo(): React.ReactNode {
   const [activeVariant, setActiveVariant] = React.useState<'default' | 'elevated' | 'bordered' | 'flat'>('default');
 
   return (

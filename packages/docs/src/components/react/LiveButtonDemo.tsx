@@ -19,7 +19,7 @@ const sizeVariants: { size: ButtonProps['size']; label: string }[] = [
   { size: 'lg', label: 'Large' },
 ];
 
-export default function LiveButtonDemo() {
+export default function LiveButtonDemo(): React.ReactNode {
   const [isLoading, setIsLoading] = React.useState(false);
 
   return (

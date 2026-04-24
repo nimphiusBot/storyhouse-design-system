@@ -19,6 +19,8 @@
     "@astrojs/react": "^3.0.0",
     "@astrojs/tailwind": "^5.0.0",
     "astro": "^4.0.0",
+    "astro-eslint-parser": "^1.4.0",
+    "eslint-plugin-astro": "^1.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
