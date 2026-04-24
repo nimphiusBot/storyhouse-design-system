@@ -57,8 +57,7 @@ jobs:
           mkdir -p _site/storybook
           cp -r packages/docs/dist/* _site/
           cp -r packages/storybook/storybook-static/* _site/storybook/
-          # Copy index.html as 404.html so GitHub Pages serves it on 404 (SPA-like)
-          cp _site/index.html _site/404.html
+          # 404.html is built by Astro's 404.astro — no need to copy index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -3,6 +3,7 @@ import DocLayout from '../../layouts/DocLayout.astro';
 import PropsTable from '../../components/PropsTable.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveInputDemo from '../../components/react/LiveInputDemo';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 const currentPath = `${base}components/input`;
@@ -20,6 +21,14 @@ const currentPath = `${base}components/input`;
       The <code>Input</code> component provides a feature-rich form input with built-in label support, error states,
       helper text, optional icon slots, and comprehensive ARIA attributes for accessibility.
     </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Try the Input component in action — including validation, icons, and sizes.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveInputDemo client:load />
+    </div>
   </section>
 
   <section>

@@ -3,6 +3,7 @@ import DocLayout from '../../layouts/DocLayout.astro';
 import PropsTable from '../../components/PropsTable.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveCardDemo from '../../components/react/LiveCardDemo';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 const currentPath = `${base}components/card`;
@@ -21,6 +22,14 @@ const currentPath = `${base}components/card`;
       It ships with <code>CardHeader</code>, <code>CardTitle</code>, <code>CardContent</code>, and <code>CardFooter</code> sub-components
       for consistent layout patterns. The Card is the foundation for dashboards, settings panels, and content sections.
     </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Click the variant buttons to see the Card component change styles live.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveCardDemo client:load />
+    </div>
   </section>
 
   <section>
