@@ -1,0 +1,92 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveDurationSliderDemo from '../../components/react/LiveDurationSliderDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/duration-slider';
+---
+
+<DocLayout
+  title="DurationSlider"
+  status="stable"
+  description="A segmented slider component with snap points for selecting duration values (20s, 60s, 90s, 15min). Supports keyboard navigation, mouse dragging, and manual input."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>DurationSlider</code> is a polished slider component that snaps to predefined duration detents:
+      20 seconds, 60 seconds (1 minute), 90 seconds (1.5 minutes), and 900 seconds (15 minutes).
+      It features smooth animations, keyboard navigation, and an inline manual input editor for precise values.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Click the slider below to select a duration. You can also click the label to enter a custom value.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveDurationSliderDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'value', type: '20 | 60 | 90 | 900', default: '-', description: 'Current selected duration in seconds.' },
+        { name: 'onChange', type: '(value: 20 | 60 | 90 | 900) => void', default: '-', description: 'Callback when the selected duration changes.' },
+        { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the slider.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes to merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="duration-slider-basic.tsx" code={`import { DurationSlider } from '@storyhouse/components';
+
+export function DurationExample() {
+  const [duration, setDuration] = React.useState<20 | 60 | 90 | 900>(60);
+
+  return (
+    <DurationSlider
+      value={duration}
+      onChange={setDuration}
+    />
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="keyboard">Keyboard Navigation</h2>
+    <ul>
+      <li><strong>Arrow Left / Arrow Down</strong> — Move to the previous detent</li>
+      <li><strong>Arrow Right / Arrow Up</strong> — Move to the next detent</li>
+      <li><strong>Home</strong> — Jump to the first detent (20s)</li>
+      <li><strong>End</strong> — Jump to the last detent (900s)</li>
+      <li><strong>Tab to current label, then Enter</strong> — Open manual input editor</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>Manual Input</h3>
+    <p>
+      Click the current selection label to open a manual input editor. Enter a value between 1 and 900 seconds.
+      Values outside this range are ignored. Press Enter to confirm or Escape to cancel.
+    </p>
+
+    <h3>Disabled State</h3>
+    <p>When disabled, all interaction (clicking, dragging, keyboard, manual input) is prevented. The slider appears with reduced opacity.</p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all variants in Storybook:</p>
+    <StorybookPreview id="components-duration-slider--short" title="DurationSlider — Storybook" height="400" />
+  </section>
+</DocLayout>

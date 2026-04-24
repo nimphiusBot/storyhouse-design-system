@@ -1,0 +1,104 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveSlideOutPanelDemo from '../../components/react/LiveSlideOutPanelDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/slide-out-panel';
+---
+
+<DocLayout
+  title="SlideOutPanel"
+  status="stable"
+  description="A slide-out side panel (drawer) that appears from the right edge of the screen. Supports escape key closing, backdrop click, and four size variants."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>SlideOutPanel</code> component provides a slide-out drawer panel from the right edge of the viewport.
+      It includes a title header with optional subtitle, a close button, backdrop overlay, and scroll locking for the
+      body content behind it.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Click the button to open the slide-out panel and interact with the settings form inside.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveSlideOutPanelDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'isOpen', type: 'boolean', default: '-', description: 'Controls whether the panel is visible.' },
+        { name: 'onClose', type: '() => void', default: '-', description: 'Callback when the panel should close.' },
+        { name: 'title', type: 'string', default: '-', description: 'Panel title displayed in the header.' },
+        { name: 'subtitle', type: 'string', default: '-', description: 'Optional subtitle displayed below the title.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Panel body content.' },
+        { name: 'size', type: '"sm" | "md" | "lg" | "xl"', default: '"md"', description: 'Panel width: sm=md, md=lg, lg=2xl, xl=4xl.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="slide-out-panel-basic.tsx" code={`import React from 'react';
+import { SlideOutPanel, Button } from '@storyhouse/components';
+
+export function SettingsPanel() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Open Settings</Button>
+      <SlideOutPanel
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Settings"
+        subtitle="Manage your preferences"
+        size="md"
+      >
+        <p>Panel content goes here.</p>
+      </SlideOutPanel>
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>Escape Key</h3>
+    <p>Pressing the Escape key while the panel is open calls <code>onClose</code>. The event listener is scoped to only fire when <code>isOpen</code> is true.</p>
+
+    <h3>Body Scroll Lock</h3>
+    <p>When the panel opens, <code>document.body.style.overflow</code> is set to <code>'hidden'</code> to prevent background scrolling. It is restored to <code>'unset'</code> when the panel closes or the component unmounts.</p>
+
+    <h3>Closed State</h3>
+    <p>When <code>isOpen</code> is <code>false</code>, the component returns <code>null</code> — nothing is rendered in the DOM.</p>
+
+    <h3>Multiple Panels</h3>
+    <p>Avoid opening multiple SlideOutPanel instances simultaneously. The body scroll lock and z-index stacking may conflict.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      The panel uses a fixed-position overlay with <code>z-50</code> for stacking. The backdrop is a semi-transparent
+      black overlay that closes the panel on click. The panel slides in from the right with a 300ms CSS transition.
+      The component always renders <code>pl-10</code> padding on the right side for a visual gap from the viewport edge.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all size variants in Storybook:</p>
+    <StorybookPreview id="components-slide-out-panel--default" title="SlideOutPanel — Storybook" height="400" />
+  </section>
+</DocLayout>

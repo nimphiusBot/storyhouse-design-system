@@ -1,0 +1,91 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveSocialIconDemo from '../../components/react/LiveSocialIconDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/social-icon';
+---
+
+<DocLayout
+  title="SocialIcon"
+  status="stable"
+  description="A simple icon component for common social media platforms (YouTube, TikTok, Instagram, Facebook). Supports multiple sizes and optional link wrapping."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>SocialIcon</code> component renders platform-specific icons for YouTube, TikTok, Instagram, and Facebook
+      using <code>lucide-react</code> icons. It supports custom sizes and can optionally wrap the icon in a link that
+      opens in a new tab.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveSocialIconDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'type', type: '"youtube" | "tiktok" | "instagram" | "facebook"', default: '-', description: 'Social media platform type.' },
+        { name: 'size', type: 'number', default: '20', description: 'Icon size in pixels (width and height).' },
+        { name: 'href', type: 'string', default: '-', description: 'Optional URL. When provided, icon becomes a clickable link.' },
+        { name: 'label', type: 'string', default: '-', description: 'Accessible aria-label. Defaults to platform name.' },
+        { name: 'external', type: 'boolean', default: 'true', description: 'Open link in a new tab with rel="noopener noreferrer".' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes to merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="social-icon-basic.tsx" code={`import { SocialIcon } from '@storyhouse/components';
+
+export function SocialIcons() {
+  return (
+    <div className="flex items-center gap-4">
+      <SocialIcon type="youtube" size={24} />
+      <SocialIcon type="tiktok" size={24} />
+      <SocialIcon type="instagram" size={24} />
+      <SocialIcon type="facebook" size={24} />
+    </div>
+  );
+}
+
+export function SocialIconLinks() {
+  return (
+    <div className="flex items-center gap-4">
+      <SocialIcon type="youtube" size={24} href="https://youtube.com/@channel" />
+      <SocialIcon type="tiktok" size={24} href="https://tiktok.com/@user" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>Missing Href</h3>
+    <p>When no <code>href</code> is provided, the icon renders as a <code>&lt;span&gt;</code> with <code>role="img"</code> for accessibility.</p>
+
+    <h3>Custom Label</h3>
+    <p>Provide a <code>label</code> prop to override the default "YouTube", "TikTok", "Instagram", or "Facebook" accessible label.</p>
+
+    <h3>Icon Mapping</h3>
+    <p>The icons use lucide-react: YouTube → <code>Youtube</code>, TikTok → <code>Music</code>, Instagram → <code>Instagram</code>, Facebook → <code>Facebook</code>.</p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all platform icons in Storybook:</p>
+    <StorybookPreview id="components-social-icon--all-platforms" title="SocialIcon — Storybook" height="300" />
+  </section>
+</DocLayout>

@@ -59,3 +59,18 @@ export type { ProgressBarProps } from './components/ProgressBar';
 
 export { Radio, RadioGroup, RadioCard } from './components/Radio';
 export type { RadioProps, RadioGroupProps, RadioCardProps } from './components/Radio';
+
+export { DateTimePicker, DateRangePicker } from './components/DateTimePicker';
+export type { DateTimePickerProps, DateRangePickerProps, DateTimeMode } from './components/DateTimePicker';
+
+export { DurationSlider } from './components/DurationSlider';
+export type { DurationSliderProps, DurationOption } from './components/DurationSlider';
+
+export { FormField, FormGroup } from './components/FormField';
+export type { FormFieldProps, FormGroupProps } from './components/FormField';
+
+export { SocialIcon } from './components/SocialIcon';
+export type { SocialIconProps, SocialIconType } from './components/SocialIcon';
+
+export { SlideOutPanel } from './components/SlideOutPanel';
+export type { SlideOutPanelProps } from './components/SlideOutPanel';
