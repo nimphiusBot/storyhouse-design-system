@@ -37,7 +37,7 @@ export default function LiveProgressBarDemo(): React.ReactNode {
     return () => clearInterval(timer);
   }, []);
 
-  const getColorClass = (val: number) => {
+  const getColorClass = (val: number): string => {
     if (val < 50) return 'bg-green-500';
     if (val < 80) return 'bg-orange-500';
     return 'bg-red-500';

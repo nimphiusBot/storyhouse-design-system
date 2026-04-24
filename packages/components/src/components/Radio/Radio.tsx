@@ -328,7 +328,6 @@ export const RadioCard = React.forwardRef<HTMLInputElement, RadioCardProps>(
   (
     {
       className,
-      size = 'md',
       title,
       description,
       icon,

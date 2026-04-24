@@ -95,7 +95,6 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
       clearable = true,
       min,
       max,
-      format,
       showIcon = true,
       variant = 'default',
       size = 'md',
