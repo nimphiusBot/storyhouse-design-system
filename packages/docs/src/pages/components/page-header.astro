@@ -1,0 +1,305 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LivePageHeaderDemo from '../../components/react/LivePageHeaderDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/page-header';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/PageHeader';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-design-system-page-components-pageheader--docs';
+
+const props = [
+  { name: 'title', type: 'string', default: '-', description: 'The page title, displayed as a heading' },
+  { name: 'description', type: 'string', default: '-', description: 'Optional description below the title' },
+  { name: 'icon', type: 'ReactNode', default: '-', description: 'Icon rendered next to the title' },
+  { name: 'breadcrumbs', type: 'BreadcrumbItem[]', default: '-', description: 'Breadcrumb navigation items' },
+  { name: 'actions', type: 'ReactNode', default: '-', description: 'Action buttons rendered on the right side' },
+  { name: 'tabs', type: 'TabItem[]', default: '-', description: 'Page-level tab navigation items' },
+  { name: 'activeTab', type: 'string', default: '-', description: 'Currently active tab value' },
+  { name: 'onTabChange', type: '(value: string) => void', default: '-', description: 'Callback fired when a tab is clicked' },
+  { name: 'selector', type: 'object', default: '-', description: 'Context selector dropdown configuration' },
+  { name: 'pageInfo', type: '{ left?: ReactNode; right?: ReactNode }', default: '-', description: 'Page info bar with metadata (left) and status indicators (right)' },
+  { name: 'toolbar', type: 'ReactNode', default: '-', description: 'Toolbar content (filters, controls) below the title section' },
+  { name: 'greeting', type: '{ text: string; name?: string }', default: '-', description: 'Personalized greeting text above the title' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size variant affecting font sizes and spacing' },
+  { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes for the root element' },
+];
+
+const subcomponentProps = [
+  {
+    name: 'PageHeaderTop',
+    props: [
+      { name: 'title', type: 'string', default: '-', description: 'Page title' },
+      { name: 'description', type: 'string', default: '-', description: 'Optional description' },
+      { name: 'icon', type: 'ReactNode', default: '-', description: 'Title icon' },
+      { name: 'breadcrumbs', type: 'BreadcrumbItem[]', default: '-', description: 'Breadcrumb navigation' },
+      { name: 'actions', type: 'ReactNode', default: '-', description: 'Action buttons' },
+      { name: 'selector', type: 'object', default: '-', description: 'Context selector' },
+      { name: 'greeting', type: 'GreetingConfig', default: '-', description: 'Personalized greeting' },
+      { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size variant' },
+    ],
+  },
+  {
+    name: 'PageHeaderMiddle',
+    props: [
+      { name: 'pageInfo', type: '{ left?: ReactNode; right?: ReactNode }', default: '-', description: 'Page info bar' },
+      { name: 'toolbar', type: 'ReactNode', default: '-', description: 'Toolbar content' },
+      { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size variant' },
+    ],
+  },
+  {
+    name: 'PageHeaderTabs',
+    props: [
+      { name: 'tabs', type: 'TabItem[]', default: '-', description: 'Tab items with label, value, icon, badge' },
+      { name: 'activeTab', type: 'string', default: '-', description: 'Active tab value' },
+      { name: 'onTabChange', type: '(value: string) => void', default: '-', description: 'Tab change callback' },
+      { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size variant' },
+    ],
+  },
+  {
+    name: 'PageHeaderBottom',
+    props: [
+      { name: 'pageInfo', type: '{ left?: ReactNode; right?: ReactNode }', default: '-', description: 'Page info bar' },
+      { name: 'toolbar', type: 'ReactNode', default: '-', description: 'Toolbar content' },
+      { name: 'tabs', type: 'TabItem[]', default: '-', description: 'Tab navigation' },
+      { name: 'activeTab', type: 'string', default: '-', description: 'Active tab value' },
+      { name: 'onTabChange', type: '(value: string) => void', default: '-', description: 'Tab change callback' },
+      { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size variant' },
+    ],
+  },
+];
+---
+
+<DocLayout
+  title="PageHeader"
+  currentPath={currentPath}
+  description="A comprehensive page-level header component with support for icons, breadcrumbs, metadata, status indicators, context selectors, toolbars, and tab navigation."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">PageHeader</h1>
+        <StatusBadge status="alpha" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A comprehensive page-level header component that scales from simple titles to complex
+        multi-section headers with icons, breadcrumbs, metadata, status indicators, context
+        selectors, toolbars, and tab navigation.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <LivePageHeaderDemo client:load />
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Key Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Flexible Composition</p>
+          <p class="text-sm text-gray-500">Use the unified PageHeader or compose individual sub-components for granular control.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Sticky Sections</p>
+          <p class="text-sm text-gray-500">Title and tabs remain visible while scrolling through page content.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Context Selector</p>
+          <p class="text-sm text-gray-500">Searchable dropdown for switching between projects or contexts.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Page Info Bar</p>
+          <p class="text-sm text-gray-500">Display metadata and status indicators with left/right alignment.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Tab Navigation</p>
+          <p class="text-sm text-gray-500">Horizontal tabs with optional icons and badge counts supporting keyboard navigation.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Size Variants</p>
+          <p class="text-sm text-gray-500">Three sizes (sm, md, lg) for different layout densities and visual hierarchy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Architecture</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-4">
+        PageHeader is composed of four sub-components that can be used individually or combined
+        through the unified <code>PageHeader</code> component:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-orange-600 dark:text-orange-400 mb-1">PageHeaderTop</p>
+          <p class="text-sm text-gray-500">Breadcrumbs, title, icon, description, selector, actions</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-orange-600 dark:text-orange-400 mb-1">PageHeaderMiddle</p>
+          <p class="text-sm text-gray-500">Page info bar and toolbar</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-orange-600 dark:text-orange-400 mb-1">PageHeaderTabs</p>
+          <p class="text-sm text-gray-500">Sticky tab navigation bar</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-orange-600 dark:text-orange-400 mb-1">PageHeaderBottom</p>
+          <p class="text-sm text-gray-500">Combined info bar, toolbar, and tabs</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">PageHeader</h3>
+      <PropsTable rows={props} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Sub-components</h3>
+      {subcomponentProps.map((sub) => (
+        <div class="mt-4">
+          <h4 class="text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">{sub.name}</h4>
+          <PropsTable rows={sub.props} />
+        </div>
+      ))}
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Usage</h3>
+      <CodeBlock lang="tsx" code={`import { PageHeader } from '@storyhouse/components';
+
+export function DashboardHeader() {
+  return (
+    <PageHeader
+      title="Dashboard"
+      description="Welcome to your dashboard"
+      icon={<BarChart3 className="w-6 h-6 text-orange-500" />}
+      actions={
+        <button className="px-3 py-1.5 text-sm font-medium rounded-md bg-orange-500 text-white">
+          Create
+        </button>
+      }
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Tabs and Breadcrumbs</h3>
+      <CodeBlock lang="tsx" code={`import { useState } from 'react';
+import { PageHeader } from '@storyhouse/components';
+
+export function ProjectHeader() {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const tabs = [
+    { label: 'Overview', value: 'overview', badge: 12 },
+    { label: 'Settings', value: 'settings' },
+    { label: 'Activity', value: 'activity', badge: 5 },
+  ];
+
+  return (
+    <PageHeader
+      title="Project Settings"
+      breadcrumbs={[
+        { label: 'Projects', href: '/projects' },
+        { label: 'Current Project' },
+      ]}
+      tabs={tabs}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Context Selector</h3>
+      <CodeBlock lang="tsx" code={`import { PageHeader } from '@storyhouse/components';
+
+export function EngineHeader() {
+  return (
+    <PageHeader
+      title="Story Engine"
+      icon={<Sparkles className="w-6 h-6 text-orange-500" />}
+      selector={{
+        currentItem: { id: '1', label: 'Project Alpha', metadata: '3 stories' },
+        items: [
+          { id: '1', label: 'Project Alpha', metadata: '3 stories' },
+          { id: '2', label: 'Project Beta', metadata: '7 stories' },
+        ],
+        onSelect: (item) => console.log(item),
+        searchable: true,
+      }}
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Using Sub-components</h3>
+      <CodeBlock lang="tsx" code={`import {
+  PageHeaderTop,
+  PageHeaderMiddle,
+  PageHeaderTabs,
+  PageHeaderBottom,
+} from '@storyhouse/components';
+
+export function CustomHeader() {
+  return (
+    <div>
+      <PageHeaderTop
+        title="Custom Layout"
+        description="Fine-grained control"
+        actions={<button className="...">Save</button>}
+      />
+      <PageHeaderMiddle
+        pageInfo={{ left: <span>Last updated: today</span> }}
+      />
+      <PageHeaderBottom
+        tabs={[{ label: 'Tab 1', value: '1' }, { label: 'Tab 2', value: '2' }]}
+        activeTab="1"
+      />
+    </div>
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases &amp; Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Breadcrumb navigation</strong> — Uses nav element with aria-label="Breadcrumb" for screen reader identification.</li>
+          <li><strong>Tab navigation</strong> — Tabs use role="tablist" with aria-selected and aria-current for accessibility. Focus-visible ring for keyboard users.</li>
+          <li><strong>Empty state</strong> — PageHeaderMiddle and PageHeaderTabs return null when no content is provided.</li>
+          <li><strong>Selector dropdown</strong> — Uses aria-haspopup="listbox" and aria-expanded for screen readers; closes on outside click.</li>
+          <li><strong>Responsive</strong> — Header sections wrap gracefully on small screens with flex-wrap.</li>
+          <li><strong>Backwards compatibility</strong> — Deprecated metadata/status props still work but pageInfo is recommended.</li>
+          <li><strong>Compound components</strong> — PageHeader.Metadata, PageHeader.MetadataBadge, PageHeader.MetadataText, and PageHeader.Status are available as static properties.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="PageHeader Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>

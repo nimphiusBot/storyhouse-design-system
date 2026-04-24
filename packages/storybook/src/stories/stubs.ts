@@ -24,6 +24,7 @@ export {
   FormGroup,
   Modal,
   ConfirmModal,
+  PageHeader,
   Pagination,
   ProgressBar,
   Radio,

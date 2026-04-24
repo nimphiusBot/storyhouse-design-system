@@ -40,6 +40,13 @@ export type { ToastProps } from './components/Toast';
 export { Tooltip } from './components/Tooltip';
 export type { TooltipProps } from './components/Tooltip';
 
+export { PageHeader, PageHeaderTop, PageHeaderMiddle, PageHeaderTabs, PageHeaderBottom } from './components/PageHeader';
+export type { PageHeaderProps } from './components/PageHeader';
+export type { PageHeaderTopProps, BreadcrumbItem, SelectorItem, GreetingConfig } from './components/PageHeader/PageHeaderTop';
+export type { PageHeaderMiddleProps } from './components/PageHeader/PageHeaderMiddle';
+export type { PageHeaderTabsProps } from './components/PageHeader/PageHeaderTabs';
+export type { PageHeaderBottomProps } from './components/PageHeader/PageHeaderBottom';
+
 export { Pagination } from './components/Pagination';
 export type { PaginationProps } from './components/Pagination';
 
@@ -86,3 +93,4 @@ export type { ThumbnailLightboxProps } from './components/ThumbnailLightbox';
 
 export { SlidePanel } from './components/SlidePanel';
 export type { SlidePanelProps } from './components/SlidePanel';
+
