@@ -15,7 +15,8 @@ export interface Props {
 }
 
 const { title, description, sidebar = [], currentPath = '', status } = Astro.props;
-const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+// Ensure base always has trailing slash so `${base}path` produces correct URLs
+const base = (import.meta.env.BASE_URL || '/storyhouse-design-system/').replace(/\/?$/, '/');
 
 const defaultSidebar: SidebarSection[] = [
   {
