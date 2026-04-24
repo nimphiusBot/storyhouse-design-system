@@ -7,10 +7,12 @@ function cn(...inputs: ClassValue[]): string {
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   fullWidth?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -22,6 +24,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading = false,
       fullWidth = false,
       disabled,
+      leftIcon,
+      rightIcon,
       children,
       ...props
     },
@@ -34,6 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus-visible:ring-gray-400',
       ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus-visible:ring-gray-400',
       danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600',
+      outline: 'bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50 focus-visible:ring-gray-400 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800',
     };
 
     const sizes = {
@@ -61,7 +66,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {children}
           </>
         ) : (
-          children
+          <>
+            {leftIcon && <span className="mr-2 -ml-1 flex-shrink-0">{leftIcon}</span>}
+            {children}
+            {rightIcon && <span className="ml-2 -mr-1 flex-shrink-0">{rightIcon}</span>}
+          </>
         )}
       </button>
     );
