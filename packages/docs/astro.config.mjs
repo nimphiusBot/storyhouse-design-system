@@ -5,5 +5,6 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   integrations: [react(), mdx(), tailwind()],
-  site: 'https://storyhouse.design',
+  site: 'https://nimphiusbot.github.io',
+  base: '/storyhouse-design-system',
 });
