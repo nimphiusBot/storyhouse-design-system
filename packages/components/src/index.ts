@@ -74,3 +74,15 @@ export type { SocialIconProps, SocialIconType } from './components/SocialIcon';
 
 export { SlideOutPanel } from './components/SlideOutPanel';
 export type { SlideOutPanelProps } from './components/SlideOutPanel';
+
+export { FilterBar } from './components/FilterBar';
+export type { FilterBarProps, FilterConfig, ActiveFilter, FilterPreset } from './components/FilterBar';
+
+export { FormatSelect } from './components/FormatSelect';
+export type { FormatSelectProps, FormatOption } from './components/FormatSelect';
+
+export { ThumbnailLightbox } from './components/ThumbnailLightbox';
+export type { ThumbnailLightboxProps } from './components/ThumbnailLightbox';
+
+export { SlidePanel } from './components/SlidePanel';
+export type { SlidePanelProps } from './components/SlidePanel';

@@ -1,0 +1,93 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveThumbnailLightboxDemo from '../../components/react/LiveThumbnailLightboxDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/thumbnail-lightbox';
+---
+
+<DocLayout
+  title="ThumbnailLightbox"
+  status="stable"
+  description="A full-screen modal for viewing marketing thumbnails at full resolution with metadata headers, download support, and keyboard navigation."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>ThumbnailLightbox</code> is a modal overlay for previewing images at full resolution. It includes
+      orientation and aspect ratio badges, dimension display, download button, and optional metadata footer showing
+      generation date, model, and processing time.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveThumbnailLightboxDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'isOpen', type: 'boolean', default: '-', description: 'Controls visibility.' },
+        { name: 'onClose', type: '() => void', default: '-', description: 'Callback to close the lightbox.' },
+        { name: 'imageUrl', type: 'string', default: '-', description: 'URL of the image to display.' },
+        { name: 'orientation', type: "'landscape' | 'portrait'", default: '-', description: 'Image orientation badge.' },
+        { name: 'aspectRatio', type: "'16:9' | '9:16'", default: '-', description: 'Aspect ratio badge.' },
+        { name: 'dimensions', type: '{ width: number; height: number }', default: '-', description: 'Image dimensions badge.' },
+        { name: 'metadata', type: '{ generatedAt?: string; model?: string; processingTime?: number }', default: '-', description: 'Optional generation metadata footer.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="thumbnail-lightbox-basic.tsx" code={`import { ThumbnailLightbox, Button } from '@storyhouse/components';
+
+export function ThumbnailViewer() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>View Thumbnail</Button>
+      <ThumbnailLightbox
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        imageUrl="https://example.com/thumbnail.jpg"
+        orientation="landscape"
+        aspectRatio="16:9"
+      />
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>Closed State</h3>
+    <p>When <code>isOpen</code> is false, the component returns <code>null</code> — nothing is rendered in the DOM.</p>
+
+    <h3>Escape Key</h3>
+    <p>Pressing Escape closes the lightbox. Event listener is scoped to only fire when <code>isOpen</code> is true.</p>
+
+    <h3>Body Scroll Lock</h3>
+    <p>Body overflow is set to <code>'hidden'</code> when open and restored on close or unmount.</p>
+
+    <h3>Backdrop Click</h3>
+    <p>Clicking the backdrop overlay closes the lightbox. The image container prevents propagation.</p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all variants in Storybook:</p>
+    <StorybookPreview id="components-thumbnail-lightbox--default" title="ThumbnailLightbox — Storybook" height="500" />
+  </section>
+</DocLayout>

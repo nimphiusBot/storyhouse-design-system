@@ -1,0 +1,138 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveFilterBarDemo from '../../components/react/LiveFilterBarDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/filter-bar';
+---
+
+<DocLayout
+  title="FilterBar"
+  status="stable"
+  description="A comprehensive filter bar with search input, select/boolean filters, quick presets, and active filter badges."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>FilterBar</code> component provides a complete filter UI with search, configurable filters (dropdown select and boolean toggle), quick filter presets, and active filter badges. It is responsive — on mobile, filters collapse into an expandable panel.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveFilterBarDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <h3>FilterBar</h3>
+    <PropsTable
+      rows={[
+        { name: 'searchValue', type: 'string', default: "''", description: 'Current search input value.' },
+        { name: 'searchPlaceholder', type: 'string', default: "'Search...'", description: 'Placeholder text for the search input.' },
+        { name: 'onSearchChange', type: '(value: string) => void', default: '-', description: 'Callback when search input changes.' },
+        { name: 'filters', type: 'FilterConfig[]', default: '[]', description: 'Array of filter configurations.' },
+        { name: 'activeFilters', type: 'ActiveFilter[]', default: '[]', description: 'Array of currently active filters.' },
+        { name: 'onClearAll', type: '() => void', default: '-', description: 'Callback to clear all active filters.' },
+        { name: 'onRemoveFilter', type: '(key: string) => void', default: '-', description: 'Callback when a specific filter badge is removed.' },
+        { name: 'presets', type: 'FilterPreset[]', default: '[]', description: 'Quick filter preset buttons.' },
+        { name: 'showFilterCount', type: 'boolean', default: 'true', description: 'Show active filter count badge on mobile toggle.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="types">Types</h2>
+    <h3>FilterConfig</h3>
+    <PropsTable
+      rows={[
+        { name: 'key', type: 'string', default: '-', description: 'Unique identifier for the filter.' },
+        { name: 'label', type: 'string', default: '-', description: 'Display label for the filter.' },
+        { name: 'type', type: "'select' | 'boolean'", default: '-', description: 'Filter type — dropdown select or toggle button.' },
+        { name: 'options', type: '{ value: string; label: string }[]', default: '-', description: 'Options for select type filters.' },
+        { name: 'value', type: 'any', default: '-', description: 'Current filter value.' },
+        { name: 'onChange', type: '(value: any) => void', default: '-', description: 'Callback when filter value changes.' },
+      ]}
+    />
+
+    <h3>ActiveFilter</h3>
+    <PropsTable
+      rows={[
+        { name: 'key', type: 'string', default: '-', description: 'Filter key.' },
+        { name: 'label', type: 'string', default: '-', description: 'Display label.' },
+        { name: 'value', type: 'string', default: '-', description: 'Filter value.' },
+        { name: 'displayValue', type: 'string', default: '-', description: 'Optional human-readable display value.' },
+      ]}
+    />
+
+    <h3>FilterPreset</h3>
+    <PropsTable
+      rows={[
+        { name: 'label', type: 'string', default: '-', description: 'Preset button label.' },
+        { name: 'onClick', type: '() => void', default: '-', description: 'Callback when preset is clicked.' },
+        { name: 'icon', type: 'React.ReactNode', default: '-', description: 'Optional icon element.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="filter-bar-basic.tsx" code={`import { FilterBar, type FilterConfig, type ActiveFilter } from '@storyhouse/components';
+
+export function ProjectFilters() {
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+
+  const filters: FilterConfig[] = [
+    {
+      key: 'status',
+      label: 'Status',
+      type: 'select',
+      options: [
+        { value: 'active', label: 'Active' },
+        { value: 'draft', label: 'Draft' },
+      ],
+      value: status,
+      onChange: (val) => setStatus(val as string),
+    },
+  ];
+
+  return (
+    <FilterBar
+      searchValue={search}
+      onSearchChange={setSearch}
+      filters={filters}
+      activeFilters={activeFilters}
+      onClearAll={() => setActiveFilters([])}
+    />
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>No Filters</h3>
+    <p>When <code>filters</code> is empty, only the search input (if provided) and presets are shown.</p>
+
+    <h3>No Search</h3>
+    <p>When <code>onSearchChange</code> is omitted, the search input is not rendered.</p>
+
+    <h3>Mobile Responsive</h3>
+    <p>Filters are shown inline on desktop (sm+) and collapse into a toggleable panel on mobile.</p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all variants in Storybook:</p>
+    <StorybookPreview id="components-filter-bar--default" title="FilterBar — Storybook" height="400" />
+  </section>
+</DocLayout>

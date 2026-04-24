@@ -1,0 +1,112 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveSlidePanelDemo from '../../components/react/LiveSlidePanelDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/slide-panel';
+---
+
+<DocLayout
+  title="SlidePanel"
+  status="stable"
+  description="A versatile slide-out edge panel with animation, portal rendering, focus trapping, and accessibility support."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>SlidePanel</code> component provides a slide-out panel that appears from any edge of the viewport
+      (left, right, top, bottom). It renders via a portal into <code>document.body</code>, supports animation on
+      open/close, focus trapping, escape key dismissal, and body scroll locking.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveSlidePanelDemo client:load />
+    </div>
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'isOpen', type: 'boolean', default: '-', description: 'Controls visibility.' },
+        { name: 'onClose', type: '() => void', default: '-', description: 'Callback to close the panel.' },
+        { name: 'title', type: 'string', default: '-', description: 'Panel title in the header.' },
+        { name: 'subtitle', type: 'string', default: '-', description: 'Optional subtitle text.' },
+        { name: 'description', type: 'string', default: '-', description: 'Optional description text.' },
+        { name: 'header', type: 'React.ReactNode', default: '-', description: 'Custom header (replaces title/subtitle/description).' },
+        { name: 'footer', type: 'React.ReactNode', default: '-', description: 'Sticky footer content.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Panel body content.' },
+        { name: 'position', type: "'right' | 'left' | 'top' | 'bottom'", default: "'right'", description: 'Edge from which the panel slides in.' },
+        { name: 'size', type: "'sm' | 'md' | 'lg' | 'xl' | 'full'", default: "'md'", description: 'Panel size (width for left/right, height for top/bottom).' },
+        { name: 'closeOnOverlayClick', type: 'boolean', default: 'true', description: 'Close when clicking the backdrop.' },
+        { name: 'closeOnEscape', type: 'boolean', default: 'true', description: 'Close on Escape key.' },
+        { name: 'showCloseButton', type: 'boolean', default: 'true', description: 'Show the close button in header.' },
+        { name: 'preventBodyScroll', type: 'boolean', default: 'true', description: 'Lock background scroll when open.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes for the panel.' },
+        { name: 'overlayClassName', type: 'string', default: '-', description: 'Additional CSS classes for the overlay.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+    <CodeBlock title="slide-panel-basic.tsx" code={`import { SlidePanel, Button } from '@storyhouse/components';
+
+export function SettingsPanel() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Open Settings</Button>
+      <SlidePanel
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Settings"
+        subtitle="Manage your preferences"
+        position="right"
+        size="md"
+      >
+        <p>Panel content here.</p>
+      </SlidePanel>
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="features">Features</h2>
+    <ul>
+      <li><strong>Portal rendering</strong> — Renders into <code>document.body</code> to avoid stacking issues.</li>
+      <li><strong>Animation</strong> — 300ms slide-in/out transitions with overlay opacity fade.</li>
+      <li><strong>Focus trapping</strong> — Tab/Shift+Tab cycles within the panel.</li>
+      <li><strong>Body scroll lock</strong> — Prevents background scrolling with scrollbar width compensation.</li>
+      <li><strong>ARIA</strong> — <code>role="dialog"</code>, <code>aria-modal="true"</code>, labelledby and describedby.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases</h2>
+    <h3>Animation Timing</h3>
+    <p>The component manages mount/unmount with animation delays. It unmounts from DOM 320ms after <code>isOpen</code> becomes false to allow the slide-out animation to complete.</p>
+
+    <h3>Overlay Click Propagation</h3>
+    <p>The overlay click handler does not interfere with clicks inside the panel. Panel content events stop propagation.</p>
+
+    <h3>Scrollbar Width Compensation</h3>
+    <p>When body scroll is locked, <code>paddingRight</code> is added to prevent layout shift from scrollbar disappearance.</p>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all variants in Storybook:</p>
+    <StorybookPreview id="components-slide-panel--default" title="SlidePanel — Storybook" height="500" />
+  </section>
+</DocLayout>
