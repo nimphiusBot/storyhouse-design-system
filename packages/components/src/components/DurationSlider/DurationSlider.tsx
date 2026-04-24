@@ -71,7 +71,7 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
   const displayLabel = isCustomValue ? 'Custom' : DURATION_OPTIONS[safeIndex]!.label;
   const displaySubLabel = isCustomValue ? `${value}s` : DURATION_OPTIONS[safeIndex]!.sublabel;
 
-  // Calculate percentage position
+  // Calculate percentage position (0-100) with evenly-spaced detents
   const calcCustomPercentage = (): number => {
     for (let i = 0; i < DURATION_OPTIONS.length - 1; i++) {
       const current = DURATION_OPTIONS[i]!.value;
@@ -168,15 +168,13 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
   };
 
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-    return undefined;
+    if (!isDragging) return;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
   }, [isDragging, value]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
