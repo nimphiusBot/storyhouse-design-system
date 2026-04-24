@@ -131,6 +131,114 @@ export function BadgeRemovable() {
   </section>
 
   <section>
+    <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+    <h3>Very Long Badge Text</h3>
+    <p>
+      Badges do not wrap text. Long content will stretch the badge horizontally. For text longer than
+      20 characters, consider using a different UI treatment or truncating via <code>className</code>
+      with <code>max-w-[160px] truncate</code>.
+    </p>
+
+    <CodeBlock title="badge-truncated.tsx" code={`import { Badge } from '@storyhouse/components';
+
+export function BadgeTruncated() {
+  return (
+    <Badge className="max-w-[160px] truncate">
+      Very long badge text that should be truncated
+    </Badge>
+  );
+}`} />
+
+    <h3>Multiple Removable Badges — Keyboard Navigation</h3>
+    <p>
+      Each removable badge has an X button that is a focusable <code>&lt;button&gt;</code> element.
+      Users can Tab through multiple remove buttons. The remove button has <code>aria-label="Remove"</code>
+      for screen reader clarity. Ensure <code>onRemove</code> handlers manage focus correctly —
+      move focus to the next remaining badge after removal.
+    </p>
+
+    <h3>Small Size with Dot</h3>
+    <p>
+      The dot indicator works in both <code>sm</code> and <code>md</code> sizes. The dot remains the
+      same 6px diameter regardless of badge size, which keeps it visually consistent across sizes.
+    </p>
+
+    <h3>Accessibility of Dynamic Badges</h3>
+    <p>
+      When badges represent dynamic content (e.g., live status updates), consider wrapping the container
+      with <code>aria-live="polite"</code> or <code>role="status"</code> so screen readers announce
+      changes. Badges themselves don't have built-in live region support because they don't know the
+      context in which they're used.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+    <h3>Semantic Variant Selection</h3>
+    <ul>
+      <li><strong>Default</strong> — Generic labels with no semantic association</li>
+      <li><strong>Primary</strong> — Feature flags, category labels, selected states</li>
+      <li><strong>Success</strong> — Completed actions, active status, available resources</li>
+      <li><strong>Warning</strong> — Pending actions, expiring items, moderate issues</li>
+      <li><strong>Danger</strong> — Errors, blocked states, failed actions</li>
+      <li><strong>Neutral</strong> — Counts, metadata, secondary information</li>
+    </ul>
+
+    <h3>When to Use Dot</h3>
+    <p>
+      The <code>dot</code> prop is ideal for real-time status indicators: online/offline presence,
+      live/unprocessed notifications, active/inactive states. The dot color always matches the variant
+      color for visual coherence. Do not use the dot for static labels — it implies liveness.
+    </p>
+
+    <h3>Layout Considerations</h3>
+    <ul>
+      <li>Use <code>flex flex-wrap gap-2</code> for badge groups — badges wrap naturally on small screens</li>
+      <li>Avoid more than 6-8 badges in a single row — visual overload</li>
+      <li>Place badges near the content they annotate (after titles, next to metrics)</li>
+      <li>Removable badges should have an accessible remove confirmation if the action is destructive</li>
+      <li>Use <code>sm</code> size inside dense data tables and list items</li>
+    </ul>
+
+    <h3>Accessibility</h3>
+    <ul>
+      <li>Badge text is directly readable by assistive technology — no ARIA hiding needed</li>
+      <li>Remove button has <code>aria-label="Remove"</code> — screen readers announce it clearly</li>
+      <li>Dot indicator uses <code>aria-hidden="true"</code> to prevent screen reader distraction</li>
+      <li>All color variants maintain WCAG AA contrast (verified against white backgrounds)</li>
+      <li>Color is not the only indicator of meaning — always pair with text</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+
+    <h3>Dot Color Architecture</h3>
+    <p>
+      The dot indicator color is determined by a <code>dotColors</code> map that mirrors the
+      <code>variantStyles</code> map. This ensures the dot always matches the badge text color
+      scheme. The dot is rendered as a 6px rounded span with <code>aria-hidden="true"</code>.
+    </p>
+
+    <h3>Removable Button Integration</h3>
+    <p>
+      The remove button is a native <code>&lt;button&gt;</code> element inside the badge span,
+      making it keyboard-focusable. It uses a small inline SVG X icon and a hover state with
+      semi-transparent background (<code>hover:bg-black/5</code>). The <code>onRemove</code> callback
+      fires on click — the component does not manage its own state.
+    </p>
+
+    <h3>Dark Mode</h3>
+    <p>
+      All variant background colors have dark mode counterparts via the <code>dark:</code> prefix.
+      For example, <code>bg-green-100</code> becomes <code>dark:bg-green-950</code>. Text colors
+      shift from bright to <code>-300</code> shade for readability on dark backgrounds.
+    </p>
+  </section>
+
+  <section>
     <h2 id="props">Props</h2>
     <PropsTable
       rows={[

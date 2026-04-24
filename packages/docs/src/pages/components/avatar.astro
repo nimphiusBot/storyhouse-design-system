@@ -132,10 +132,160 @@ export function AvatarFallback() {
   return (
     <div className="flex items-center gap-3">
       <Avatar alt="User avatar" />
-      <Avatar fallback={<span>🤖</span>} />
+      <Avatar fallback={<span>&#x1F916;</span>} />
     </div>
   );
 }`} />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+    <h3>Image Load Failure and Recovery</h3>
+    <p>
+      When an image fails to load (broken URL, network error), the component falls back to showing
+      initials (if <code>name</code> is provided) or the default user icon. The error state is tracked
+      via internal <code>imgError</code> state. Note that if the <code>src</code> prop changes after
+      an error, the <code>imgError</code> state is <strong>not</strong> automatically reset — the
+      component will continue showing the fallback. To retry the image, use a <code>key</code> prop
+      to force a remount.
+    </p>
+
+    <CodeBlock title="avatar-retry.tsx" code={`import React from 'react';
+import { Avatar } from '@storyhouse/components';
+
+export function AvatarWithRetry() {
+  const [retryKey, setRetryKey] = React.useState(0);
+
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar
+        key={retryKey}
+        src="https://example.com/photo.jpg"
+        name="Jane Doe"
+        alt="Jane Doe"
+      />
+      <button onClick={() => setRetryKey((k) => k + 1)}>
+        Retry Load
+      </button>
+    </div>
+  );
+}`} />
+
+    <h3>Single-Word Names</h3>
+    <p>
+      A single-word name like <code>"Alice"</code> produces a single initial (<code>"A"</code>).
+      The component splits on spaces and takes the first letter of each word, up to two initials.
+    </p>
+
+    <h3>Names with Special Characters</h3>
+    <p>
+      Names containing special characters (hyphens, apostrophes, diacritics) work correctly for
+      initial generation. For example, <code>"Jean-Claude"</code> produces <code>"JC"</code>.
+      The color hash operates on the full string, including special characters.
+    </p>
+
+    <h3>Very Long Names</h3>
+    <p>
+      The component caps initials at two characters regardless of name length.
+      <code>"Mary Elizabeth Catherine"</code> produces <code>"ME"</code> — only the first two
+      initials are used.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+    <h3>When to Provide Which Props</h3>
+    <ul>
+      <li>
+        <strong>Both src and name</strong> — Best for user lists. Shows the photo on load, falls
+        back to initials if the image fails.
+      </li>
+      <li>
+        <strong>name only</strong> — Good for team lists, comment authors, and user mentions
+        where images aren't guaranteed.
+      </li>
+      <li>
+        <strong>src only (with alt)</strong> — For decorative user photos or when you know images
+        will load reliably.
+      </li>
+      <li>
+        <strong>fallback only</strong> — For anonymous users, bots, system accounts, or
+        placeholder states.
+      </li>
+    </ul>
+
+    <h3>Avatar Groups</h3>
+    <p>
+      For overlapping avatar groups (collaborators, multi-select), use negative margin on adjacent
+      avatars:
+    </p>
+
+    <CodeBlock title="avatar-group.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarGroup() {
+  return (
+    <div className="flex">
+      <Avatar name="Alice" className="-mr-2 ring-2 ring-white" />
+      <Avatar name="Bob" className="-mr-2 ring-2 ring-white" />
+      <Avatar name="Carol" className="-mr-2 ring-2 ring-white" />
+      <Avatar name="Dave" className="ring-2 ring-white" />
+    </div>
+  );
+}`} />
+
+    <h3>Accessibility</h3>
+    <ul>
+      <li>Image avatars use native <code>&lt;img&gt;</code> with <code>alt</code> attribute</li>
+      <li>Always provide <code>alt</code> for image avatars — use the user's name</li>
+      <li>Always provide <code>name</code> — it generates <code>title</code> and <code>aria-label</code></li>
+      <li>Fallback and initials avatars use <code>role="img"</code> with <code>aria-label</code></li>
+      <li>Deterministic colors help users recognize their own avatar across sessions</li>
+      <li>All color backgrounds maintain WCAG AA contrast with white text</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+
+    <h3>Fallback Chain</h3>
+    <p>
+      The component implements a three-tier fallback system with error recovery:
+    </p>
+    <ol>
+      <li><strong>Image</strong> — Rendered when <code>src</code> is provided and <code>imgError</code> is false</li>
+      <li><strong>Initials</strong> — Rendered when no valid image is present but <code>name</code> is provided</li>
+      <li><strong>Default Icon</strong> — Rendered when neither <code>src</code> nor <code>name</code> is available</li>
+    </ol>
+    <p>
+      The <code>imgError</code> state is set to <code>true</code> by the <code>onError</code> handler
+      on the <code>&lt;img&gt;</code> element. This state persists until the component unmounts or
+      receives a new <code>key</code>.
+    </p>
+
+    <h3>Deterministic Name Color</h3>
+    <p>
+      The <code>getNameColor</code> function uses a simple hash algorithm over the name string to
+      pick from 8 background colors (blue, green, purple, pink, yellow, red, indigo, teal). The same
+      name always produces the same color because the hash is purely deterministic — no random
+      component. This is important for consistent UX across page loads and sessions.
+    </p>
+
+    <h3>Size Dimensions</h3>
+    <p>
+      Size is controlled via inline <code>width</code> and <code>height</code> styles using the
+      <code>sizeDimensions</code> lookup table. The table also defines <code>text</code> classes and
+      <code>iconSize</code> for the fallback SVG icon, ensuring text and icons scale proportionally
+      with the avatar container.
+    </p>
+
+    <h3>Dark Mode</h3>
+    <p>
+      Avatar uses deterministic colors that work well on both light and dark backgrounds. The
+      colors are bright enough to contrast with both white and dark gray backgrounds. All text
+      on color backgrounds is white for consistent readability.
+    </p>
   </section>
 
   <section>

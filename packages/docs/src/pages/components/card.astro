@@ -137,7 +137,6 @@ export function CardPadding() {
     <h2 id="use-cases">Common Use Cases</h2>
 
     <div class="my-6 grid gap-4 sm:grid-cols-2">
-      <!-- Settings Panel -->
       <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="mb-3 flex items-center justify-between">
           <h3 class="text-base font-semibold text-gray-900 dark:text-white">Profile</h3>
@@ -145,8 +144,6 @@ export function CardPadding() {
         </div>
         <p class="text-sm text-gray-600 dark:text-gray-400">Settings panels with header, status badge, and action footer.</p>
       </div>
-
-      <!-- Dashboard Widget -->
       <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="mb-3 flex items-center justify-between">
           <h3 class="text-base font-semibold text-gray-900 dark:text-white">Revenue</h3>
@@ -155,6 +152,114 @@ export function CardPadding() {
         <p class="text-sm text-gray-600 dark:text-gray-400">Dashboard widgets with metric display and minimal chrome.</p>
       </div>
     </div>
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+    <h3>Nested Cards</h3>
+    <p>
+      Avoid nesting Cards directly — a Card inside another Card will lose background visibility when
+      using the same variant. If nesting is necessary, use a different variant for the inner card:
+    </p>
+
+    <CodeBlock title="card-nesting.tsx" code={`import { Card } from '@storyhouse/components';
+
+export function CardNesting() {
+  return (
+    <Card variant="default">
+      <h3 className="text-lg font-semibold">Outer Card</h3>
+      {/* Use flat variant inside another card */}
+      <Card variant="flat" padding="sm" className="mt-3">
+        <p className="text-sm text-gray-600">Nested flat card works cleanly inside default.</p>
+      </Card>
+    </Card>
+  );
+}`} />
+
+    <h3>Empty Card (No Children)</h3>
+    <p>
+      A Card with no children renders as an empty container with only padding and background.
+      This is valid but provides no visual benefit. Always provide meaningful content.
+    </p>
+
+    <h3>Overflow Content</h3>
+    <p>
+      Cards don't clip overflow by default. Long content will naturally extend the card height.
+      If you need a fixed-height card, set <code>max-h-*</code> via <code>className</code> and wrap content
+      in a scrollable container inside <code>CardContent</code>.
+    </p>
+
+    <CodeBlock title="card-scrollable.tsx" code={`import { Card, CardHeader, CardTitle, CardContent } from '@storyhouse/components';
+
+export function CardScrollable() {
+  return (
+    <Card className="max-h-80">
+      <CardHeader>
+        <CardTitle>Activity Log</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="max-h-48 space-y-2 overflow-y-auto">
+          {/* Long list of items */}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+    <h3>Heading Hierarchy</h3>
+    <p>
+      Always use the <code>as</code> prop on <code>CardTitle</code> to match the correct heading level
+      for your page structure. If a Card appears under an <code>h2</code> section, the CardTitle should
+      use <code>as="h3"</code> (which is the default).
+    </p>
+
+    <h3>Layout Patterns</h3>
+    <ul>
+      <li>Use card grids with <code>grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3</code> for dashboard layouts</li>
+      <li>Keep card content focused — one concept per card</li>
+      <li>Use <code>CardHeader</code> for titles and actions, <code>CardContent</code> for body, <code>CardFooter</code> for CTAs</li>
+      <li>Add <code>hover:shadow-lg transition-shadow</code> via <code>className</code> for interactive cards</li>
+      <li>Wrap clickable cards in an <code>&lt;a&gt;</code> tag or use <code>role="button"</code></li>
+    </ul>
+
+    <h3>Accessibility</h3>
+    <ul>
+      <li>Cards are semantic <code>&lt;div&gt;</code> elements — use correct heading hierarchy</li>
+      <li>Interactive cards need explicit roles: <code>role="button" tabIndex={0}</code> or wrap in an anchor</li>
+      <li>Keyboard event handlers (onKeyDown for Enter/Space) are required on interactive cards</li>
+      <li>CardFooter uses flex layout with <code>gap-2</code> for proper button spacing</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+
+    <h3>Composable Sub-Component Pattern</h3>
+    <p>
+      Card uses a composable architecture with four sub-components: <code>CardHeader</code>,
+      <code>CardTitle</code>, <code>CardContent</code>, and <code>CardFooter</code>. Each is independently
+      exported and can be used outside a Card parent if needed, though this is uncommon.
+    </p>
+
+    <h3>Padding Propagation</h3>
+    <p>
+      Padding is applied to the outer <code>Card</code> wrapper, not to individual sub-components.
+      This means <code>CardHeader</code> and <code>CardContent</code> naturally inherit the card's padding
+      without needing their own padding classes. The <code>padding="none"</code> variant removes all padding
+      for image-heavy cards or custom layouts.
+    </p>
+
+    <h3>Dark Mode</h3>
+    <ul>
+      <li>All variant backgrounds have <code>dark:</code> counterparts (<code>dark:bg-gray-900</code>, <code>dark:bg-gray-800</code>)</li>
+      <li>Borders use <code>dark:border-gray-800</code> for default/elevated and <code>dark:border-gray-700</code> for bordered</li>
+      <li>Text colors use <code>dark:text-gray-300</code> / <code>dark:text-gray-400</code> for readability</li>
+    </ul>
   </section>
 
   <section>
