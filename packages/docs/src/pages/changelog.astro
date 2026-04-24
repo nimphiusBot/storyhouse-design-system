@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+
+const releases = [
+  {
+    version: '0.1.0',
+    date: '2026-04-24',
+    status: 'alpha',
+    highlights: [
+      'Initial release of the Storyhouse Design System',
+    ],
+    features: [
+      'Button component with 4 variants (primary, secondary, ghost, danger), 3 sizes (sm, md, lg), loading state, full-width mode',
+      'Card component with 4 variants (default, elevated, bordered, flat), 4 padding options, composable sub-components (CardHeader, CardTitle, CardContent, CardFooter)',
+      'Input component with labels, error/helper/disabled states, left/right icons, 3 sizes, full-width, ARIA-native accessibility',
+      'Badge component with 6 semantic variants, 2 sizes, dot indicator, removable tags',
+      'Avatar component with 5 sizes (xs→xl), initials fallback with deterministic colors, 2 shapes (circle/square), image fallback',
+      'Design tokens package with colors (brand orange 50-950, neutral gray, semantic), typography (font families, size scale, weights), spacing (4px grid), and shadows',
+      'Documentation site built with Astro — 15 pages including component docs, token reference, guides, landing, and 404',
+      'Dark mode support with class-based toggle and localStorage persistence',
+      'Storybook integration with interactive component previews',
+      'CI/CD pipeline with GitHub Actions auto-deploying to GitHub Pages',
+    ],
+  },
+];
+---
+
+<Layout title="Changelog" description="Release history for the Storyhouse Design System.">
+  <div class="py-12">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+        Changelog
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+        Track changes, new features, and improvements across Storyhouse releases.
+      </p>
+    </div>
+
+    <div class="mx-auto mt-12 max-w-3xl">
+      {releases.map((release) => (
+        <div class="relative border-l-2 border-gray-200 pl-8 pb-8 dark:border-gray-700">
+          {/* Timeline dot */}
+          <div class="absolute -left-[9px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-white ring-2 ring-orange-500 dark:bg-gray-950" />
+
+          <div class="not-last:mb-12">
+            <div class="flex items-center gap-3">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                v{release.version}
+              </h2>
+              {release.status === 'alpha' && (
+                <span class="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                  Alpha
+                </span>
+              )}
+              {release.status === 'beta' && (
+                <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                  Beta
+                </span>
+              )}
+              {release.status === 'stable' && (
+                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-950 dark:text-green-300">
+                  Stable
+                </span>
+              )}
+            </div>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{release.date}</p>
+
+            {release.highlights && release.highlights.length > 0 && (
+              <div class="mt-4">
+                <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Highlights</h3>
+                <ul class="mt-2 space-y-1">
+                  {release.highlights.map((h, i) => (
+                    <li key={i} class="flex items-start gap-2 text-gray-700 dark:text-gray-300">
+                      <svg class="mt-0.5 h-4 w-4 shrink-0 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div class="mt-4">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Full Changelog</h3>
+              <ul class="mt-2 space-y-1">
+                {release.features.map((f, i) => (
+                  <li key={i} class="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400 dark:bg-gray-600" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Roadmap / Coming Soon */}
+      <div class="relative border-l-2 border-dashed border-gray-300 pl-8 dark:border-gray-600">
+        <div class="absolute -left-[9px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
+          <div class="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-500" />
+        </div>
+
+        <div class="pb-8">
+          <h2 class="text-xl font-bold text-gray-400 dark:text-gray-500">Upcoming</h2>
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-start gap-2 text-sm text-gray-400 dark:text-gray-500">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
+              <span>Component status badges (stable/beta/deprecated)</span>
+            </li>
+            <li class="flex items-start gap-2 text-sm text-gray-400 dark:text-gray-500">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
+              <span>Client-side search across all documentation pages</span>
+            </li>
+            <li class="flex items-start gap-2 text-sm text-gray-400 dark:text-gray-500">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
+              <span>Interactive component playground with real-time prop controls</span>
+            </li>
+            <li class="flex items-start gap-2 text-sm text-gray-400 dark:text-gray-500">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
+              <span>Responsive mobile navigation improvements</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

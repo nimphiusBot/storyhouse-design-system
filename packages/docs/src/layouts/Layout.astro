@@ -1,5 +1,6 @@
 ---
 import '../styles/globals.css';
+import SearchModal from '../components/SearchModal.astro';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 
@@ -17,6 +18,7 @@ const pageTitle = title ? `${title} — Storyhouse Design System` : 'Storyhouse 
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href={base}>
     <link rel="icon" type="image/svg+xml" href={`${base.replace(/\/$/, '')}/favicon.svg`} />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
@@ -69,7 +71,20 @@ const pageTitle = title ? `${title} — Storyhouse Design System` : 'Storyhouse 
               </a>
             </nav>
           </div>
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <!-- Search -->
+            <button
+              onclick="window.__openSearch && window.__openSearch()"
+              class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-500 dark:hover:border-gray-600 dark:hover:text-gray-300"
+              aria-label="Search documentation"
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span>Search</span>
+              <kbd class="hidden rounded-md border border-gray-200 bg-white px-1.5 py-0.5 text-xs text-gray-400 md:inline-block dark:border-gray-600 dark:bg-gray-800">⌘K</kbd>
+            </button>
+            <a
             <a
               href={`${base}storybook/`}
               target="_blank"
@@ -111,6 +126,7 @@ const pageTitle = title ? `${title} — Storyhouse Design System` : 'Storyhouse 
     <main>
       <slot />
     </main>
+    <SearchModal />
     <footer class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
       <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div class="grid gap-8 md:grid-cols-3">
@@ -125,6 +141,7 @@ const pageTitle = title ? `${title} — Storyhouse Design System` : 'Storyhouse 
               <li><a href={`${base}guides/getting-started`} class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Getting Started</a></li>
               <li><a href={`${base}storybook/`} class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Storybook</a></li>
               <li><a href={`${base}tokens`} class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Design Tokens</a></li>
+              <li><a href={`${base}changelog`} class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Changelog</a></li>
             </ul>
           </div>
           <div>

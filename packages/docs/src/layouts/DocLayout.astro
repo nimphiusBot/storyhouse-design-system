@@ -11,9 +11,10 @@ export interface Props {
   description?: string;
   sidebar?: SidebarSection[];
   currentPath?: string;
+  status?: 'stable' | 'beta' | 'deprecated' | 'alpha';
 }
 
-const { title, description, sidebar = [], currentPath = '' } = Astro.props;
+const { title, description, sidebar = [], currentPath = '', status } = Astro.props;
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 
 const defaultSidebar: SidebarSection[] = [
@@ -45,6 +46,13 @@ const defaultSidebar: SidebarSection[] = [
 ];
 
 const sections = sidebar.length > 0 ? sidebar : defaultSidebar;
+
+const statusConfig = {
+  stable: { label: 'Stable', classes: 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300' },
+  beta: { label: 'Beta', classes: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300' },
+  alpha: { label: 'Alpha', classes: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300' },
+  deprecated: { label: 'Deprecated', classes: 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300' },
+};
 ---
 
 <Layout title={title} description={description}>
@@ -88,7 +96,14 @@ const sections = sidebar.length > 0 ? sidebar : defaultSidebar;
       <!-- Content -->
       <article class="min-w-0 flex-1">
         <div class="prose-storyhouse max-w-3xl">
-          <h1 class="!mt-0 text-4xl font-bold tracking-tight sm:text-5xl">{title}</h1>
+          <div class="flex items-center gap-3 !mt-0">
+            <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{title}</h1>
+            {status && statusConfig[status] && (
+              <span class={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConfig[status].classes}`}>
+                {statusConfig[status].label}
+              </span>
+            )}
+          </div>
           {description && <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">{description}</p>}
           <slot />
         </div>

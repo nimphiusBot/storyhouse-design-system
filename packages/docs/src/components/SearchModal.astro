@@ -1,0 +1,188 @@
+---
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+---
+
+<!-- Search modal — powered by Fuse.js via inline script -->
+<div id="search-overlay" class="fixed inset-0 z-[100] hidden">
+  <!-- Backdrop -->
+  <div id="search-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+
+  <!-- Modal -->
+  <div class="relative mx-auto mt-[15vh] max-w-lg px-4">
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+      <!-- Search input -->
+      <div class="flex items-center border-b border-gray-200 px-4 dark:border-gray-700">
+        <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search documentation..."
+          autocomplete="off"
+          class="w-full border-0 bg-transparent px-3 py-4 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0 dark:text-gray-100 dark:placeholder:text-gray-500"
+        />
+        <kbd class="hidden shrink-0 rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-400 sm:inline-block dark:border-gray-700 dark:bg-gray-800">ESC</kbd>
+      </div>
+
+      <!-- Results -->
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
+        <div class="px-3 py-8 text-center text-sm text-gray-400">
+          Type to search components, guides, tokens, and more…
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+(function() {
+  const base = document.querySelector('base')?.getAttribute('href') || '/storyhouse-design-system/';
+
+  // ── Search index ──────────────────────────────────────────────────────────
+  const pages = [
+    { title: 'Home', description: 'Storyhouse Design System landing page', path: base, category: 'page' },
+    { title: 'Components', description: 'Browse all Storyhouse components', path: base + 'components', category: 'page' },
+    { title: 'Button', description: 'Versatile button component with 4 variants, 3 sizes, loading state, and full-width support', path: base + 'components/button', category: 'component' },
+    { title: 'Card', description: 'Flexible card container with 4 variants, composable sub-components', path: base + 'components/card', category: 'component' },
+    { title: 'Input', description: 'Form input with labels, validation, icons, 3 sizes, and accessibility', path: base + 'components/input', category: 'component' },
+    { title: 'Badge', description: 'Status indicators with 6 variants, dot indicator, and removable tags', path: base + 'components/badge', category: 'component' },
+    { title: 'Avatar', description: 'User avatar with image, initials fallback, 5 sizes, and deterministic colors', path: base + 'components/avatar', category: 'component' },
+    { title: 'Guides', description: 'Learn how to use the Storyhouse design system', path: base + 'guides', category: 'page' },
+    { title: 'Getting Started', description: 'Installation, basic usage, CSS tokens, Tailwind config, and project structure', path: base + 'guides/getting-started', category: 'guide' },
+    { title: 'Theming Guide', description: 'Customize the design system with CSS variable overrides, dark mode, and semantic tokens', path: base + 'guides/theming', category: 'guide' },
+    { title: 'Design Tokens', description: 'Browse colors, typography, spacing, and shadow tokens', path: base + 'tokens', category: 'page' },
+    { title: 'Color Tokens', description: 'Brand orange palette, neutral grays, semantic colors with CSS and JS usage', path: base + 'tokens/colors', category: 'token' },
+    { title: 'Typography Tokens', description: 'Font families, size scale, weight spectrum, line height, and letter spacing', path: base + 'tokens/typography', category: 'token' },
+    { title: 'Spacing & Shadow Tokens', description: 'Spacing scale, box shadows, border radius, and opacity tokens', path: base + 'tokens/spacing', category: 'token' },
+    { title: 'Changelog', description: 'Release history and updates for the Storyhouse Design System', path: base + 'changelog', category: 'page' },
+  ];
+
+  // ── Category config ───────────────────────────────────────────────────────
+  const categoryConfig = {
+    component: { label: 'Components', color: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300' },
+    guide:     { label: 'Guides', color: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' },
+    token:     { label: 'Tokens', color: 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300' },
+    page:      { label: 'Pages', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
+  };
+
+  // ── Fuzzy match logic (lightweight, no dependency) ────────────────────────
+  function score(query, text) {
+    if (!query || !text) return 0;
+    const q = query.toLowerCase();
+    const t = text.toLowerCase();
+    // Exact substring match scores highest
+    const idx = t.indexOf(q);
+    if (idx === 0) return 100 - (t.length - q.length); // starts with
+    if (idx > 0) return 80 - (t.length - q.length);     // contains
+    // Word-level prefix matching
+    const words = t.split(/[\s-]+/);
+    let score = 0;
+    for (const w of words) {
+      if (w.startsWith(q)) score += 60;
+    }
+    // Character-by-character fuzzy (abbreviated: "bt" → "Button")
+    let qi = 0;
+    for (const ch of t) {
+      if (ch === q[qi]) {
+        qi++;
+        if (qi === q.length) { score += 40; break; }
+      }
+    }
+    return score;
+  }
+
+  function search(query) {
+    if (!query || query.length < 1) return [];
+    const results = [];
+    for (const page of pages) {
+      const titleScore = score(query, page.title);
+      const descScore = score(query, page.description);
+      const total = Math.max(titleScore, descScore);
+      if (total > 0) {
+        results.push({ ...page, score: total });
+      }
+    }
+    return results.sort((a, b) => b.score - a.score).slice(0, 10);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  const overlay = document.getElementById('search-overlay');
+  const backdrop = document.getElementById('search-backdrop');
+
+  function renderResults(q) {
+    const hits = search(q);
+    const categoryOrder = ['component', 'guide', 'token', 'page'];
+    const grouped = {};
+    for (const h of hits) {
+      if (!grouped[h.category]) grouped[h.category] = [];
+      grouped[h.category].push(h);
+    }
+
+    if (hits.length === 0) {
+      results.innerHTML = '<div class="px-3 py-8 text-center text-sm text-gray-400">No results found for "' + q + '"</div>';
+      return;
+    }
+
+    let html = '';
+    for (const cat of categoryOrder) {
+      const items = grouped[cat];
+      if (!items || items.length === 0) continue;
+      const cfg = categoryConfig[cat] || { label: cat, color: 'bg-gray-100 text-gray-600' };
+      html += '<div class="mb-2">';
+      html += '<div class="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-500">' + cfg.label + '</div>';
+      for (const item of items) {
+        html += '<a href="' + item.path + '" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">';
+        html += '<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ' + cfg.color + '">' + cfg.label + '</span>';
+        html += '<span class="flex-1 text-gray-900 dark:text-white">' + item.title + '</span>';
+        html += '</a>';
+      }
+      html += '</div>';
+    }
+    results.innerHTML = html;
+  }
+
+  // ── Event listeners ──────────────────────────────────────────────────────
+  input.addEventListener('input', function() {
+    renderResults(this.value);
+  });
+
+  overlay.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      overlay.classList.add('hidden');
+      input.value = '';
+    }
+  });
+
+  backdrop.addEventListener('click', function() {
+    overlay.classList.add('hidden');
+    input.value = '';
+  });
+
+  // ── Open/close helpers ────────────────────────────────────────────────────
+  window.__openSearch = function() {
+    overlay.classList.remove('hidden');
+    setTimeout(function() { input.focus(); input.select(); }, 50);
+  };
+
+  window.__closeSearch = function() {
+    overlay.classList.add('hidden');
+    input.value = '';
+  };
+
+  // ── Keyboard shortcut ─────────────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      window.__openSearch();
+    }
+    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+      overlay.classList.remove('hidden');
+      input.value = '';
+      window.__closeSearch();
+    }
+  });
+})();
+</script>
