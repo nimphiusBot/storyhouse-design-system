@@ -1,0 +1,160 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveTextareaDemo from '../../components/react/LiveTextareaDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/textarea';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Textarea';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-textarea--docs';
+
+const props = [
+  { name: 'variant', type: '"default" | "filled" | "error" | "success"', default: '"default"', description: 'Visual variant of the textarea' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the textarea' },
+  { name: 'focusRing', type: '"default" | "none" | "subtle"', default: '"default"', description: 'Focus ring style' },
+  { name: 'label', type: 'ReactNode', default: '-', description: 'Label text displayed above the textarea' },
+  { name: 'error', type: 'string', default: '-', description: 'Error message displayed below the textarea' },
+  { name: 'helpText', type: 'string', default: '-', description: 'Help text displayed below the textarea' },
+  { name: 'fullWidth', type: 'boolean', default: 'true', description: 'Whether the textarea spans full width' },
+  { name: 'resize', type: 'boolean', default: 'false', description: 'Whether textarea can be manually resized vertically' },
+  { name: 'autoResize', type: 'boolean', default: 'false', description: 'Whether textarea auto-resizes based on content height' },
+  { name: 'showCharCount', type: 'boolean', default: 'false', description: 'Show character count' },
+  { name: 'minRows', type: 'number', default: '3', description: 'Minimum number of rows' },
+  { name: 'maxRows', type: 'number', default: '-', description: 'Maximum number of rows before scrolling' },
+];
+---
+
+<DocLayout
+  title="Textarea"
+  currentPath={currentPath}
+  description="A styled multi-line text input component with support for variants, sizes, validation states, auto-resizing, and character counting."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Textarea</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A styled multi-line text input component with support for variants, sizes, validation states,
+        auto-resizing, character counting, and labels. Follows accessibility best practices.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveTextareaDemo client:load />
+      </div>
+    </section>
+
+    <!-- Variants -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Standard textarea with white background and border.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Filled</p>
+          <p class="text-sm text-gray-500">Gray background that turns white on focus.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success</p>
+          <p class="text-sm text-gray-500">Green border indicating a valid state.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">Red border with error message for validation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Textarea</h3>
+      <CodeBlock lang="tsx" code={`import { Textarea } from '@storyhouse/components';
+
+export function DescriptionInput() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <Textarea
+      label="Description"
+      placeholder="Enter a description..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Validation and Counter</h3>
+      <CodeBlock lang="tsx" code={`import { Textarea } from '@storyhouse/components';
+
+export function LimitedTextarea() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <Textarea
+      label="Bio"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      maxLength={200}
+      showCharCount
+      autoResize
+      minRows={3}
+      maxRows={10}
+      placeholder="Tell us about yourself..."
+    />
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Auto-resize</strong> — Textarea adjusts its height automatically based on content.</li>
+          <li><strong>Character count</strong> — Warns visually when approaching the maxLength limit (>90%).</li>
+          <li><strong>ARIA attributes</strong> — Uses aria-invalid for errors and aria-describedby for descriptions.</li>
+          <li><strong>Disabled state</strong> — Reduces opacity and prevents user interaction.</li>
+          <li><strong>Error escalation</strong> — Setting the error prop automatically switches to the error variant.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="Textarea Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>

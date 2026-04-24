@@ -1,0 +1,192 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveRadioDemo from '../../components/react/LiveRadioDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/radio';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Radio';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-radio--docs';
+
+const props = [
+  { name: 'variant', type: '"default" | "primary" | "success" | "error"', default: '"default"', description: 'Visual variant of the radio button' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the radio button' },
+  { name: 'label', type: 'ReactNode', default: '-', description: 'Label text displayed next to the radio button' },
+  { name: 'description', type: 'string', default: '-', description: 'Additional description text shown below the label' },
+  { name: 'error', type: 'string', default: '-', description: 'Error message displayed below the radio' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the radio button' },
+];
+
+const groupProps = [
+  { name: 'label', type: 'string', default: '-', description: 'Label for the group' },
+  { name: 'description', type: 'string', default: '-', description: 'Group description text' },
+  { name: 'error', type: 'string', default: '-', description: 'Error state for the group' },
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Radio components to group' },
+  { name: 'orientation', type: '"vertical" | "horizontal"', default: '"vertical"', description: 'Orientation of radio options' },
+  { name: 'name', type: 'string', default: '-', description: 'Name attribute shared by all radio children' },
+  { name: 'value', type: 'string', default: '-', description: 'Currently selected value' },
+  { name: 'onChange', type: '(value: string) => void', default: '-', description: 'Callback when selected value changes' },
+];
+
+const cardProps = [
+  { name: 'title', type: 'string', default: '-', description: 'Title text for the card' },
+  { name: 'description', type: 'string', default: '-', description: 'Description text for the card' },
+  { name: 'icon', type: 'ReactNode', default: '-', description: 'Icon element to display on the left side' },
+  { name: 'badge', type: 'ReactNode', default: '-', description: 'Badge element to display on the right side' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the radio card' },
+  { name: 'checked', type: 'boolean', default: 'false', description: 'Whether the card is selected' },
+];
+---
+
+<DocLayout
+  title="Radio"
+  currentPath={currentPath}
+  description="A form input component for single selection from a set, with support for individual radios, RadioGroup, RadioCard, and validation."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Radio</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A styled radio button component for selecting one option from a set. Supports multiple sizes,
+        color variants, grouped selection via RadioGroup, card-style radio buttons via RadioCard,
+        and validation error states.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveRadioDemo client:load />
+      </div>
+    </section>
+
+    <!-- Variants -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Standard radio button with border styling.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Primary</p>
+          <p class="text-sm text-gray-500">Radio with orange accent for emphasized selections.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success</p>
+          <p class="text-sm text-gray-500">Green styling for positive/validated selection.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">Red styling for validation error states.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Radio</h3>
+      <PropsTable rows={props} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">RadioGroup</h3>
+      <PropsTable rows={groupProps} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">RadioCard</h3>
+      <PropsTable rows={cardProps} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">RadioGroup</h3>
+      <CodeBlock lang="tsx" code={`import { Radio, RadioGroup } from '@storyhouse/components';
+
+export function PlanSelector() {
+  const [selected, setSelected] = useState('free');
+
+  return (
+    <RadioGroup
+      label="Select a plan"
+      description="Choose the best plan for your needs."
+      name="plan"
+      value={selected}
+      onChange={setSelected}
+    >
+      <Radio value="free" label="Free" description="Basic features" />
+      <Radio value="pro" label="Pro" description="Advanced features" />
+    </RadioGroup>
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">RadioCard</h3>
+      <CodeBlock lang="tsx" code={`import { RadioCard } from '@storyhouse/components';
+
+export function BillingSelector() {
+  const [selected, setSelected] = useState('basic');
+
+  return (
+    <div>
+      <RadioCard
+        title="Basic"
+        description="\$10/mo - Essential features"
+        name="billing"
+        value="basic"
+        checked={selected === 'basic'}
+        onChange={() => setSelected('basic')}
+      />
+      <RadioCard
+        title="Pro"
+        description="\$29/mo - Full access"
+        name="billing"
+        value="pro"
+        checked={selected === 'pro'}
+        onChange={() => setSelected('pro')}
+      />
+    </div>
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Keyboard navigation</strong> — Radios are focusable via Tab and navigable via arrow keys within a group.</li>
+          <li><strong>Screen readers</strong> — Labels are properly associated via htmlFor/id attributes.</li>
+          <li><strong>RadioGroup</strong> — Uses role="radiogroup" and injects name/checked/onChange to children.</li>
+          <li><strong>Error states</strong> — Errors are announced via aria-describedby and role="alert".</li>
+          <li><strong>RadioCard</strong> — Card-style variant with icon and badge support for richer UIs.</li>
+          <li><strong>Disabled state</strong> — Disabled radios reduce opacity and prevent interaction.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="Radio Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>

@@ -10,6 +10,9 @@ export type { CardProps, CardHeaderProps, CardTitleProps, CardContentProps, Card
 export { Badge } from './components/Badge';
 export type { BadgeProps } from './components/Badge';
 
+export { AutoRefreshIndicator } from './components/AutoRefreshIndicator';
+export type { AutoRefreshIndicatorProps } from './components/AutoRefreshIndicator';
+
 export { Avatar } from './components/Avatar';
 export type { AvatarProps } from './components/Avatar';
 
@@ -18,6 +21,12 @@ export type { CheckboxProps, CheckboxGroupProps } from './components/Checkbox';
 
 export { Select } from './components/Select';
 export type { SelectProps, SelectOption, SelectOptionGroup } from './components/Select';
+
+export { Textarea } from './components/Textarea';
+export type { TextareaProps } from './components/Textarea';
+
+export { ToggleSwitch } from './components/ToggleSwitch';
+export type { ToggleSwitchProps } from './components/ToggleSwitch';
 
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
 export type { TabsProps, TabItem, TabsListProps, TabsTriggerProps, TabsContentProps } from './components/Tabs';
@@ -44,3 +53,9 @@ export { FileUpload } from './components/FileUpload';
 export type { FileUploadProps } from './components/FileUpload';
 
 export { ErrorBoundary } from './components/ErrorBoundary';
+
+export { ProgressBar, progressBarVariants, progressFillVariants } from './components/ProgressBar';
+export type { ProgressBarProps } from './components/ProgressBar';
+
+export { Radio, RadioGroup, RadioCard } from './components/Radio';
+export type { RadioProps, RadioGroupProps, RadioCardProps } from './components/Radio';

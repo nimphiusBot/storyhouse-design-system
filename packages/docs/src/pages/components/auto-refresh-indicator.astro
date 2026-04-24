@@ -1,0 +1,153 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveAutoRefreshIndicatorDemo from '../../components/react/LiveAutoRefreshIndicatorDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/auto-refresh-indicator';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/AutoRefreshIndicator';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-auto-refresh-indicator--docs';
+
+const props = [
+  { name: 'enabled', type: 'boolean', default: '-', description: 'Whether the auto-refresh is enabled' },
+  { name: 'isPolling', type: 'boolean', default: '-', description: 'Whether a poll is currently in-flight' },
+  { name: 'intervalLabel', type: 'string', default: '-', description: 'Human-readable label for the current interval (e.g., "30s")' },
+  { name: 'tabHidden', type: 'boolean', default: 'false', description: 'Whether the page tab is currently hidden' },
+  { name: 'lastPolledLabel', type: 'string', default: '-', description: 'Relative time string for last poll time' },
+  { name: 'lastPolledAt', type: 'number | null', default: '-', description: 'Exact timestamp (epoch ms) for tooltip' },
+  { name: 'lastPollFailed', type: 'boolean', default: 'false', description: 'Whether the last poll attempt failed' },
+  { name: 'dataJustRefreshed', type: 'boolean', default: 'false', description: 'Whether data was just refreshed (triggers highlight animation)' },
+  { name: 'effectiveIntervalLabel', type: 'string', default: '-', description: 'The effective interval label (with backoff info)' },
+  { name: 'className', type: 'string', default: '-', description: 'Optional class name override' },
+];
+---
+
+<DocLayout
+  title="AutoRefreshIndicator"
+  currentPath={currentPath}
+  description="A compact UI badge that shows auto-refresh state for dashboards, with support for polling, errors, tab-hidden awareness, and data-change highlights."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">AutoRefreshIndicator</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A compact UI badge that shows the auto-refresh state of a dashboard or data view.
+        Displays enabled/disabled state with a pulsing dot, active polling spinner,
+        tab-hidden awareness, last-polled timestamp, error/stale state, and data-change highlight animation.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveAutoRefreshIndicatorDemo client:load />
+      </div>
+    </section>
+
+    <!-- States -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">States</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Enabled</p>
+          <p class="text-sm text-gray-500">Green badge with pulsing dot and interval label.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Polling</p>
+          <p class="text-sm text-gray-500">Orange badge with spinning refresh icon.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Tab Hidden</p>
+          <p class="text-sm text-gray-500">Yellow badge with Wi-Fi off icon indicating paused state.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Failed</p>
+          <p class="text-sm text-gray-500">Red badge with alert triangle indicating poll failure.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Usage</h3>
+      <CodeBlock lang="tsx" code={`import { AutoRefreshIndicator } from '@storyhouse/components';
+
+export function DashboardHeader() {
+  return (
+    <AutoRefreshIndicator
+      enabled={true}
+      isPolling={false}
+      intervalLabel="30s"
+      lastPolledLabel="2m ago"
+      lastPolledAt={Date.now() - 120000}
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Backoff</h3>
+      <CodeBlock lang="tsx" code={`import { AutoRefreshIndicator } from '@storyhouse/components';
+
+export function PollingIndicator() {
+  return (
+    <AutoRefreshIndicator
+      enabled={true}
+      isPolling={false}
+      intervalLabel="30s"
+      effectiveIntervalLabel="60s (backoff)"
+      lastPollFailed={true}
+      lastPolledLabel="1m ago"
+    />
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Hidden state</strong> — Returns null when both disabled and no lastPolledLabel is available.</li>
+          <li><strong>Tooltip</strong> — Hovering shows a combined tooltip with interval, backoff, timestamp, and error info.</li>
+          <li><strong>Screen readers</strong> — Uses role="status" and aria-live="polite" for live region announcements.</li>
+          <li><strong>Highlight animation</strong> — dataJustRefreshed triggers a pulse animation and orange ring.</li>
+          <li><strong>State priority</strong> — Error state takes precedence over all others, then polling, tab-hidden, enabled.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="AutoRefreshIndicator Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>

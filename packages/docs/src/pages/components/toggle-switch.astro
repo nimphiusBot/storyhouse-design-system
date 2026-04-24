@@ -1,0 +1,149 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveToggleSwitchDemo from '../../components/react/LiveToggleSwitchDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/toggle-switch';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/ToggleSwitch';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-toggle-switch--docs';
+
+const props = [
+  { name: 'checked', type: 'boolean', default: '-', description: 'Whether the toggle is checked/on' },
+  { name: 'onChange', type: '(checked: boolean) => void', default: '-', description: 'Callback fired when the toggle state changes' },
+  { name: 'id', type: 'string', default: '-', description: 'Unique id for the toggle element' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Whether the toggle is disabled' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the toggle' },
+  { name: 'className', type: 'string', default: '-', description: 'Optional class name override' },
+];
+---
+
+<DocLayout
+  title="ToggleSwitch"
+  currentPath={currentPath}
+  description="A toggle switch component for binary on/off states with support for multiple sizes, disabled state, and keyboard accessibility."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ToggleSwitch</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A toggle switch component for binary on/off states. Supports three sizes (sm, md, lg),
+        disabled state, keyboard navigation (Enter/Space), and full accessibility via
+        role="switch" and aria-checked.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveToggleSwitchDemo client:load />
+      </div>
+    </section>
+
+    <!-- Sizes -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Sizes</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Small (sm)</p>
+          <p class="text-sm text-gray-500">Compact size for dense layouts. 32x16px.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Medium (md)</p>
+          <p class="text-sm text-gray-500">Default size for standard forms. 40x20px.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Large (lg)</p>
+          <p class="text-sm text-gray-500">Prominent size for settings panels. 48x24px.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Toggle</h3>
+      <CodeBlock lang="tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
+
+export function DarkModeToggle() {
+  const [enabled, setEnabled] = useState(false);
+  
+  return (
+    <ToggleSwitch
+      checked={enabled}
+      onChange={setEnabled}
+      size="md"
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Label</h3>
+      <CodeBlock lang="tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
+
+export function SettingsToggle() {
+  const [notifications, setNotifications] = useState(true);
+  
+  return (
+    <div className="flex items-center gap-3">
+      <ToggleSwitch
+        checked={notifications}
+        onChange={setNotifications}
+        id="notifications"
+      />
+      <label htmlFor="notifications" className="text-sm font-medium">
+        Enable Notifications
+      </label>
+    </div>
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Keyboard navigation</strong> — Toggle is focusable via Tab and activates on Enter/Space.</li>
+          <li><strong>Screen readers</strong> — Uses role="switch" and aria-checked for accessibility.</li>
+          <li><strong>Disabled state</strong> — Reduces opacity and prevents interaction.</li>
+          <li><strong>Smooth animation</strong> — Thumb slides with a 200ms ease-in-out transition.</li>
+          <li><strong>Focus ring</strong> — Orange focus ring with offset for keyboard users.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="ToggleSwitch Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>

@@ -1,0 +1,145 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveProgressBarDemo from '../../components/react/LiveProgressBarDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/progress-bar';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/ProgressBar';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-progress-bar--docs';
+
+const props = [
+  { name: 'value', type: 'number', default: '-', description: 'Current numeric value' },
+  { name: 'max', type: 'number', default: '100', description: 'Maximum value' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Height of the progress bar' },
+  { name: 'variant', type: '"default" | "success" | "warning" | "error" | "info" | "primary"', default: '"default"', description: 'Color variant of the progress fill' },
+  { name: 'showLabel', type: 'boolean', default: 'false', description: 'Show percentage or value label' },
+  { name: 'labelPosition', type: '"top" | "bottom" | "inline"', default: '"top"', description: 'Position of the label relative to the bar' },
+  { name: 'label', type: 'string', default: '-', description: 'Custom label text (overrides percentage)' },
+  { name: 'thresholds', type: '{ success?: number; warning?: number }', default: '-', description: 'Auto-calculate variant based on percentage thresholds' },
+  { name: 'showValues', type: 'boolean', default: 'false', description: 'Show used/max values instead of percentage' },
+  { name: 'formatValue', type: '(value: number) => string', default: '-', description: 'Custom value formatter function' },
+];
+---
+
+<DocLayout
+  title="ProgressBar"
+  currentPath={currentPath}
+  description="A horizontal progress bar component with support for multiple sizes, color variants, threshold-based color coding, and labels."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ProgressBar</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Displays the progress of a task or operation as a horizontal bar with support for
+        multiple sizes, color variants, automatic threshold-based variant selection,
+        percentage/value labels, and full accessibility via ARIA progressbar role.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveProgressBarDemo client:load />
+      </div>
+    </section>
+
+    <!-- Variants -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success</p>
+          <p class="text-sm text-gray-500">Green styling for values below the success threshold.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Warning</p>
+          <p class="text-sm text-gray-500">Yellow/orange styling for moderate progress levels.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">Red styling for values above the warning threshold.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Primary / Info</p>
+          <p class="text-sm text-gray-500">Orange accent for primary progress indication.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic ProgressBar</h3>
+      <CodeBlock lang="tsx" code={`import { ProgressBar } from '@storyhouse/components';
+
+export function UploadProgress() {
+  return (
+    <ProgressBar value={65} size="md" variant="primary" showLabel />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Threshold-based Variants</h3>
+      <CodeBlock lang="tsx" code={`import { ProgressBar } from '@storyhouse/components';
+
+export function StorageUsage() {
+  return (
+    <ProgressBar
+      value={85}
+      thresholds={{ success: 50, warning: 80 }}
+      showLabel
+      labelPosition="bottom"
+    />
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>ARIA progressbar</strong> — Uses role="progressbar" with aria-valuenow, aria-valuemin, and aria-valuemax.</li>
+          <li><strong>Clamped values</strong> — Percentages are clamped between 0% and 100%.</li>
+          <li><strong>Custom formatter</strong> — Use formatValue for localized or custom value display.</li>
+          <li><strong>Threshold auto-detection</strong> — Automatically switches between success/warning/error based on value.</li>
+          <li><strong>Smooth transitions</strong> — All width changes animate with a 300ms transition.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="ProgressBar Component"
+      currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>
