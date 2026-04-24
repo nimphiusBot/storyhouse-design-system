@@ -101,7 +101,7 @@ export function DataTable<T>({
   dense = false,
   className,
   onRowClick,
-}: DataTableProps<T>) {
+}: DataTableProps<T>): React.ReactElement | null {
   const [sortKey, setSortKey] = useState<string | undefined>(defaultSortKey);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(
     defaultSortDirection

@@ -185,8 +185,8 @@ export const Modal: React.FC<ModalProps> = ({
         }
       }
     };
-    modal.addEventListener('keydown', handleTab as any);
-    return () => modal.removeEventListener('keydown', handleTab as any);
+    modal.addEventListener('keydown', handleTab as unknown as EventListener);
+    return () => modal.removeEventListener('keydown', handleTab as unknown as EventListener);
   }, [isOpen, shouldRender]);
 
   if (!shouldRender) return null;

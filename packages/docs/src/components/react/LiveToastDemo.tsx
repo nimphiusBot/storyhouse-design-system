@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function DemoToast({ message, type, onClose }: { message: string; type: 'success' | 'error' | 'warning' | 'info'; onClose: () => void }) {
+function DemoToast({ message, type, onClose }: { message: string; type: 'success' | 'error' | 'warning' | 'info'; onClose: () => void }): React.ReactElement {
   const configs: Record<string, { bg: string; text: string; border: string }> = {
     success: { bg: 'bg-green-50', text: 'text-green-800', border: 'border-green-200' },
     error: { bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200' },
@@ -31,12 +31,12 @@ function DemoToast({ message, type, onClose }: { message: string; type: 'success
 export default function LiveToastDemo(): React.ReactNode {
   const [toasts, setToasts] = useState<Array<{ id: number; message: string; type: 'success' | 'error' | 'warning' | 'info' }>>([]);
 
-  const addToast = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
+  const addToast = (message: string, type: 'success' | 'error' | 'warning' | 'info'): void => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
   };
 
-  const removeToast = (id: number) => {
+  const removeToast = (id: number): void => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 

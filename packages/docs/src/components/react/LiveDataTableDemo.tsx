@@ -22,7 +22,7 @@ const columns: Column[] = [
   { key: 'status', label: 'Status', align: 'center' },
 ];
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: { status: string }): React.ReactElement {
   const colorMap: Record<string, string> = {
     Active: 'bg-green-100 text-green-800 border-green-200',
     Inactive: 'bg-gray-100 text-gray-800 border-gray-200',
@@ -40,7 +40,7 @@ export default function LiveDataTableDemo(): React.ReactNode {
   const [sortAsc, setSortAsc] = React.useState(true);
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: string): void => {
     if (sortKey === key) {
       setSortAsc(!sortAsc);
     } else {
@@ -103,7 +103,7 @@ export default function LiveDataTableDemo(): React.ReactNode {
                       checked={selected.has(idx)}
                       onChange={() => {
                         const s = new Set(selected);
-                        s.has(idx) ? s.delete(idx) : s.add(idx);
+                        if (s.has(idx)) { s.delete(idx); } else { s.add(idx); }
                         setSelected(s);
                       }}
                       className="rounded border-gray-300 text-orange-600 focus:ring-orange-500 h-4 w-4"

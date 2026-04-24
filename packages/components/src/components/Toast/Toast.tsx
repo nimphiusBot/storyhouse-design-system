@@ -99,7 +99,12 @@ export const Toast: React.FC<ToastProps> = ({
   );
 };
 
-export const useToast = () => {
+interface ToastContext {
+  showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info', duration?: number) => void;
+  ToastContainer: React.FC;
+}
+
+export const useToast = (): ToastContext => {
   const [toasts, setToasts] = React.useState<
     Array<{
       id: string;

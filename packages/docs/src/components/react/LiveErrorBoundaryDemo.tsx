@@ -3,7 +3,7 @@ import React from 'react';
 export default function LiveErrorBoundaryDemo(): React.ReactNode {
   const [hasError, setHasError] = React.useState(false);
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     setHasError(true);
   };
 

@@ -4,7 +4,7 @@ export default function LivePaginationDemo(): React.ReactNode {
   const [page, setPage] = useState(1);
   const totalPages = 20;
 
-  const getPageNumbers = () => {
+  const getPageNumbers = (): (number | string)[] => {
     if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
     const pages: (number | string)[] = [1];
     if (page > 3) pages.push('...');
