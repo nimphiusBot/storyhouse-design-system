@@ -60,9 +60,35 @@ const statusConfig = {
 <Layout title={title} description={description}>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex gap-12 py-10">
+      <!-- Mobile sidebar toggle button -->
+      <button
+        id="sidebar-toggle"
+        class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition-all hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 lg:hidden"
+        aria-label="Toggle navigation"
+      >
+        <svg id="sidebar-icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="sidebar-icon-close" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Overlay backdrop for mobile -->
+      <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/40 backdrop-blur-sm lg:hidden" />
+
       <!-- Sidebar -->
-      <aside class="hidden w-56 shrink-0 lg:block">
-        <nav class="sticky top-24 space-y-8">
+      <aside id="doc-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform border-r border-gray-200 bg-white p-6 shadow-xl transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-56 lg:translate-x-0 lg:border-r-0 lg:bg-transparent lg:p-0 lg:shadow-none dark:border-gray-800 dark:bg-gray-950 dark:lg:bg-transparent">
+        <div class="flex items-center justify-between lg:hidden">
+          <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Navigation</span>
+          <button id="sidebar-close-btn" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800" aria-label="Close navigation">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <nav class="mt-4 space-y-8 lg:mt-0 lg:sticky lg:top-24">
           {
             sections.map((section) => (
               <div>
@@ -113,3 +139,47 @@ const statusConfig = {
     </div>
   </div>
 </Layout>
+
+<script is:inline>
+(function() {
+  const toggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('doc-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const iconOpen = document.getElementById('sidebar-icon-open');
+  const iconClose = document.getElementById('sidebar-icon-close');
+
+  function openSidebar() {
+    sidebar?.classList.remove('-translate-x-full');
+    overlay?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.add('-translate-x-full');
+    overlay?.classList.add('hidden');
+    document.body.style.overflow = '';
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+  }
+
+  toggle?.addEventListener('click', function() {
+    if (sidebar?.classList.contains('-translate-x-full')) {
+      openSidebar();
+    } else {
+      closeSidebar();
+    }
+  });
+  overlay?.addEventListener('click', closeSidebar);
+  closeBtn?.addEventListener('click', closeSidebar);
+
+  // Close on link click (mobile)
+  sidebar?.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      if (window.innerWidth < 1024) closeSidebar();
+    });
+  });
+})();
+</script>
