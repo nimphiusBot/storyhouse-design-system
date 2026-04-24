@@ -1,0 +1,67 @@
+name: Deploy Design System Site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Docs (Astro)
+        run: |
+          cd packages/docs
+          npm run build
+
+      - name: Build Storybook
+        run: |
+          cd packages/storybook
+          npm run build-storybook
+
+      - name: Prepare GitHub Pages output
+        run: |
+          mkdir -p _site/storybook
+          cp -r packages/docs/dist/* _site/
+          cp -r packages/storybook/storybook-static/* _site/storybook/
+          # Add redirect from /storybook/index.html to prevent 404 on direct nav
+          echo '<!DOCTYPE html><meta http-equiv="refresh" content="0;url=/storybook/">' > _site/storybook/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
