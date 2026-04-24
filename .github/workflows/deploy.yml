@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build workspace packages (tokens, utils, components)
+        run: npm run build
+
       - name: Build Docs (Astro)
         run: |
           cd packages/docs
