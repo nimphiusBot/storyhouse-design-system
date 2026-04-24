@@ -1,3 +1,30 @@
 // Re-export components from the package for Storybook stories
 // Storybook will resolve these through the monorepo workspace
-export { Button, Input, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge, Avatar } from '@storyhouse/components';
+export {
+  Button,
+  Input,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  Badge,
+  Avatar,
+  Checkbox,
+  CheckboxGroup,
+  Select,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  Modal,
+  ConfirmModal,
+  Toast,
+  useToast,
+  Tooltip,
+  Pagination,
+  DataTable,
+  EmptyState,
+  FileUpload,
+  ErrorBoundary,
+} from '@storyhouse/components';

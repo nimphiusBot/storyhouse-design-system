@@ -1,0 +1,137 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveToastDemo from '../../components/react/LiveToastDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/toast';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Toast';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-toast--docs';
+
+const props = [
+  { name: 'message', type: 'string', default: '-', description: 'Toast message text' },
+  { name: 'type', type: '"success" | "error" | "warning" | "info"', default: '"success"', description: 'Toast visual type' },
+  { name: 'show', type: 'boolean', default: 'false', description: 'Controls toast visibility' },
+  { name: 'onClose', type: '() => void', default: '-', description: 'Callback when toast is dismissed' },
+  { name: 'duration', type: 'number', default: '3000', description: 'Auto-dismiss duration in milliseconds' },
+  { name: 'position', type: '"top-right" | "top-left" | "bottom-right" | "bottom-left" | "top-center" | "bottom-center"', default: '"top-right"', description: 'Toast position on screen' },
+];
+
+const hookRet = [
+  { name: 'showToast', type: '(message: string, type: ToastType, duration?: number) => void', default: '-', description: 'Function to show a toast' },
+  { name: 'ToastContainer', type: 'ComponentType', default: '-', description: 'Component to render toast container' },
+];
+---
+
+<DocLayout
+  title="Toast"
+  currentPath={currentPath}
+  description="A notification component for displaying non-intrusive feedback messages, with support for success, error, warning, and info types."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Toast</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Lightweight notification messages that display temporarily and auto-dismiss.
+        Supports four types and a composable hook-based API.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveToastDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Types</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-green-200 dark:border-green-800 rounded-lg p-4 bg-green-50 dark:bg-green-900/20">
+          <p class="font-medium text-green-800 dark:text-green-200 mb-2">Success</p>
+          <p class="text-sm text-green-600 dark:text-green-400">Green styling for success confirmations.</p>
+        </div>
+        <div class="border border-red-200 dark:border-red-800 rounded-lg p-4 bg-red-50 dark:bg-red-900/20">
+          <p class="font-medium text-red-800 dark:text-red-200 mb-2">Error</p>
+          <p class="text-sm text-red-600 dark:text-red-400">Red styling for error notifications.</p>
+        </div>
+        <div class="border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/20">
+          <p class="font-medium text-yellow-800 dark:text-yellow-200 mb-2">Warning</p>
+          <p class="text-sm text-yellow-600 dark:text-yellow-400">Yellow styling for warning messages.</p>
+        </div>
+        <div class="border border-orange-200 dark:border-orange-800 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/20">
+          <p class="font-medium text-orange-800 dark:text-orange-200 mb-2">Info</p>
+          <p class="text-sm text-orange-600 dark:text-orange-400">Orange styling for informational messages.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">API</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Toast Props</h3>
+      <PropsTable rows={props} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">useToast Return</h3>
+      <PropsTable rows={hookRet} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { useToast } from '@storyhouse/components';
+
+export function SaveButton() {
+  const { showToast, ToastContainer } = useToast();
+
+  const handleSave = async () => {
+    try {
+      await save();
+      showToast('Saved successfully!', 'success');
+    } catch {
+      showToast('Failed to save.', 'error', 5000);
+    }
+  };
+
+  return (
+    <>
+      <button onClick={handleSave}>Save</button>
+      <ToastContainer />
+    </>
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases</h2>
+      <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+        <li><strong>Auto-dismiss</strong> — Toasts auto-dismiss after duration (default 3s).</li>
+        <li><strong>Manual dismiss</strong> — Close button allows immediate dismissal.</li>
+        <li><strong>Multiple toasts</strong> — Stacked appearance when multiple toasts are shown.</li>
+        <li><strong>Responsive</strong> — Positions adapt on mobile screens.</li>
+        <li><strong>Focus management</strong> — Non-blocking; doesn't steal focus.</li>
+      </ul>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Toast Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

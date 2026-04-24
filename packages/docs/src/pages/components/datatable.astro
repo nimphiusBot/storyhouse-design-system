@@ -1,0 +1,165 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveDataTableDemo from '../../components/react/LiveDataTableDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/datatable';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/DataTable';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-datatable--docs';
+
+const props = [
+  { name: 'data', type: 'T[]', default: '-', description: 'Array of data items to display' },
+  { name: 'columns', type: 'Column<T>[]', default: '-', description: 'Column definitions with key, label, render, sortable' },
+  { name: 'selectable', type: 'boolean', default: 'false', description: 'Enables row selection checkboxes' },
+  { name: 'selectedRows', type: 'Set<string | number>', default: '-', description: 'Controlled selected row keys' },
+  { name: 'onSelectionChange', type: '(selected: Set<string | number>) => void', default: '-', description: 'Callback when selection changes' },
+  { name: 'sortable', type: 'boolean', default: 'false', description: 'Enables column sorting' },
+  { name: 'onSort', type: '(key: string, direction: "asc" | "desc") => void', default: '-', description: 'Callback when sort changes' },
+  { name: 'striped', type: 'boolean', default: 'false', description: 'Alternates row background colors' },
+  { name: 'dense', type: 'boolean', default: 'false', description: 'Compact padding for high-density data' },
+  { name: 'loading', type: 'boolean', default: 'false', description: 'Shows loading skeleton' },
+  { name: 'empty', type: '{ title?: string; description?: string }', default: '-', description: 'Empty state configuration' },
+  { name: 'expandable', type: 'boolean', default: 'false', description: 'Enables expandable rows' },
+  { name: 'renderExpandedRow', type: '(row: T) => ReactNode', default: '-', description: 'Renders expanded row content' },
+];
+
+const columnProps = [
+  { name: 'key', type: 'string', default: '-', description: 'Data key for the column' },
+  { name: 'label', type: 'string', default: '-', description: 'Column header label' },
+  { name: 'sortable', type: 'boolean', default: 'false', description: 'Makes the column sortable' },
+  { name: 'render', type: '(row: T, index: number) => ReactNode', default: '-', description: 'Custom cell renderer' },
+  { name: 'align', type: '"left" | "center" | "right"', default: '"left"', description: 'Text alignment for the column' },
+];
+---
+
+<DocLayout
+  title="DataTable"
+  currentPath={currentPath}
+  description="A data table component for displaying structured data with sorting, selection, expandable rows, and custom cell rendering."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">DataTable</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A feature-rich data table component with sorting, row selection, expandable rows,
+        striped rows, loading skeleton, empty state, and custom cell rendering.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 overflow-x-auto">
+        <LiveDataTableDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Sorting</p>
+          <p class="text-sm text-gray-500">Click column headers to sort ascending/descending.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Selection</p>
+          <p class="text-sm text-gray-500">Checkbox-based row selection with "select all" header.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Expandable Rows</p>
+          <p class="text-sm text-gray-500">Click to expand rows with custom detail content.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Loading / Empty</p>
+          <p class="text-sm text-gray-500">Skeleton loading and customizable empty state.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">API</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">DataTable Props</h3>
+      <PropsTable rows={props} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Column Props</h3>
+      <PropsTable rows={columnProps} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { DataTable } from '@storyhouse/components';
+import type { Column } from '@storyhouse/components';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
+const columns: Column<User>[] = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
+  { key: 'role', label: 'Role' },
+  {
+    key: 'actions',
+    label: 'Actions',
+    align: 'right',
+    render: (user) => <button onClick={() => edit(user.id)}>Edit</button>,
+  },
+];
+
+export function UsersTable({ data }: { data: User[] }) {
+  const [selected, setSelected] = useState<Set<string | number>>(new Set());
+
+  return (
+    <DataTable
+      data={data}
+      columns={columns}
+      selectable
+      selectedRows={selected}
+      onSelectionChange={setSelected}
+      striped
+    />
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Empty data</strong> — Renders customizable empty state.</li>
+          <li><strong>Loading state</strong> — Shows animated skeleton rows.</li>
+          <li><strong>Long text</strong> — Cell text truncates with tooltip on hover.</li>
+          <li><strong>Keyboard navigation</strong> — Tab navigates through cells and controls.</li>
+          <li><strong>Responsive</strong> — Horizontal scroll for wide tables on mobile.</li>
+          <li><strong>ARIA</strong> — Uses <code>role="table"</code> with proper scope attributes.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="DataTable Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

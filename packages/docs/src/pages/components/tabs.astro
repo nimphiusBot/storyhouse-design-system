@@ -1,0 +1,149 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveTabsDemo from '../../components/react/LiveTabsDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/tabs';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Tabs';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-tabs--docs';
+
+const props = [
+  { name: 'tabs', type: 'TabItem[]', default: '-', description: 'Array of tab definitions with label, value, icon, badge, disabled' },
+  { name: 'activeTab', type: 'string', default: '-', description: 'Currently active tab value' },
+  { name: 'onTabChange', type: '(value: string) => void', default: '-', description: 'Callback when tab selection changes' },
+  { name: 'variant', type: '"default" | "pills"', default: '"default"', description: 'Visual variant of the tabs' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the tabs' },
+  { name: 'children', type: 'ReactNode', default: '-', description: 'TabsContent children for each tab panel' },
+  { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes' },
+];
+
+const tabItemProps = [
+  { name: 'label', type: 'string', default: '-', description: 'Display label for the tab' },
+  { name: 'value', type: 'string', default: '-', description: 'Unique value identifier for the tab' },
+  { name: 'icon', type: 'ReactNode', default: '-', description: 'Optional icon element' },
+  { name: 'badge', type: 'number', default: '-', description: 'Optional badge count' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the tab' },
+];
+---
+
+<DocLayout
+  title="Tabs"
+  currentPath={currentPath}
+  description="A tab navigation component for organizing content into switchable panels, with support for icons, badges, and pills variant."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tabs</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Organize related content into switchable panels. Supports default underlined and pill
+        variants, with icons, badges, and disabled state.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveTabsDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Underlined active tab indicator with bottom border.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Pills</p>
+          <p class="text-sm text-gray-500">Filled pill-style active state on gray background.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Tabs</h3>
+      <PropsTable rows={props} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">TabItem</h3>
+      <PropsTable rows={tabItemProps} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Tabs</h3>
+      <CodeBlock lang="tsx" code={`import { Tabs, TabsContent } from '@storyhouse/components';
+
+const tabs = [
+  { label: 'Account', value: 'account' },
+  { label: 'Notifications', value: 'notifications' },
+  { label: 'Settings', value: 'settings' },
+];
+
+export function SettingsTabs() {
+  const [active, setActive] = useState('account');
+
+  return (
+    <Tabs tabs={tabs} activeTab={active} onTabChange={setActive}>
+      <TabsContent value="account" activeTab={active}>
+        Account settings content...
+      </TabsContent>
+      <TabsContent value="notifications" activeTab={active}>
+        Notification preferences...
+      </TabsContent>
+    </Tabs>
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Icons and Badges</h3>
+      <CodeBlock lang="tsx" code={`import { Tabs, TabsContent } from '@storyhouse/components';
+import { Mail, Settings, Bell } from 'lucide-react';
+
+const tabs = [
+  { label: 'Inbox', value: 'inbox', icon: <Mail />, badge: 12 },
+  { label: 'Updates', value: 'updates', icon: <Bell />, badge: 3 },
+  { label: 'Settings', value: 'settings', icon: <Settings /> },
+];`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Disabled tabs</strong> — Visually dimmed, not clickable, skipped in keyboard navigation.</li>
+          <li><strong>Single tab</strong> — Renders as a single item with no interactive switching.</li>
+          <li><strong>Long labels</strong> — Truncated with ellipsis; use concise labels.</li>
+          <li><strong>ARIA roles</strong> — Uses <code>role="tablist"</code>, <code>role="tab"</code>, <code>role="tabpanel"</code>.</li>
+          <li><strong>Keyboard</strong> — Left/Right arrow keys navigate between tabs.</li>
+          <li><strong>Focus management</strong> — Focus ring on active tab for keyboard users.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Tabs Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

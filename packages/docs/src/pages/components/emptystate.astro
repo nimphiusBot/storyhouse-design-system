@@ -1,0 +1,142 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveEmptyStateDemo from '../../components/react/LiveEmptyStateDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/emptystate';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/EmptyState';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-emptystate--docs';
+
+const props = [
+  { name: 'title', type: 'string', default: '-', description: 'Main heading text' },
+  { name: 'description', type: 'string', default: '-', description: 'Supporting description text' },
+  { name: 'icon', type: 'ReactNode', default: '-', description: 'Custom icon element' },
+  { name: 'variant', type: '"no-data" | "no-results" | "error" | "no-permission" | "loading"', default: '"no-data"', description: 'Preset variant with predefined icon and colors' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the empty state display' },
+  { name: 'primaryAction', type: '{ label: string; onClick: () => void }', default: '-', description: 'Primary action button' },
+  { name: 'secondaryAction', type: '{ label: string; onClick: () => void }', default: '-', description: 'Secondary action button' },
+  { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes' },
+];
+---
+
+<DocLayout
+  title="EmptyState"
+  currentPath={currentPath}
+  description="A flexible empty state component for displaying no data, no results, errors, permission denials, and loading states with optional actions."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">EmptyState</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        An empty state component for handling edge cases: no data, no search results, errors,
+        missing permissions, and loading states. Supports custom icons and action buttons.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveEmptyStateDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">No Data</p>
+          <p class="text-sm text-gray-500">Initial state when no items exist.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">No Results</p>
+          <p class="text-sm text-gray-500">After filtering yields no matches.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">When data loading fails.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">No Permission</p>
+          <p class="text-sm text-gray-500">Access denied state.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Loading</p>
+          <p class="text-sm text-gray-500">Shows loading indicator.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { EmptyState } from '@storyhouse/components';
+import { Search, Lock, AlertTriangle } from 'lucide-react';
+
+// No data
+<EmptyState
+  title="No projects yet"
+  currentPath={currentPath}
+  description="Create your first project to get started."
+  primaryAction={{ label: 'Create Project', onClick: handleCreate }}
+/>
+
+// No results
+<EmptyState
+  variant="no-results"
+  title="No results found"
+  currentPath={currentPath}
+  description="Try adjusting your search query."
+  icon={<Search className="w-6 h-6" />}
+/>
+
+// Error
+<EmptyState
+  variant="error"
+  title="Failed to load"
+  currentPath={currentPath}
+  description="An error occurred. Please try again."
+  primaryAction={{ label: 'Retry', onClick: handleRetry }}
+/>`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases</h2>
+      <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+        <li><strong>No icon provided</strong> — Falls back to variant default icon.</li>
+        <li><strong>No actions</strong> — Renders without action buttons.</li>
+        <li><strong>Single action</strong> — Only primary button shows.</li>
+        <li><strong>Custom content</strong> — Icon + text can be entirely custom.</li>
+        <li><strong>Loading variant</strong> — Shows animated spinner instead of icon.</li>
+      </ul>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="EmptyState Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

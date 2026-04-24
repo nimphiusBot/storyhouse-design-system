@@ -1,0 +1,146 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveFileUploadDemo from '../../components/react/LiveFileUploadDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/file-upload';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/FileUpload';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-fileupload--docs';
+
+const props = [
+  { name: 'label', type: 'string', default: '-', description: 'Label text above the upload area' },
+  { name: 'error', type: 'string', default: '-', description: 'Error message to display' },
+  { name: 'helpText', type: 'string', default: '-', description: 'Help text below the upload area' },
+  { name: 'onFilesChange', type: '(files: File[]) => void', default: '-', description: 'Callback when file selection changes' },
+  { name: 'maxSize', type: 'number', default: '-', description: 'Maximum file size in bytes' },
+  { name: 'maxFiles', type: 'number', default: '1', description: 'Maximum number of files (when multiple)' },
+  { name: 'multiple', type: 'boolean', default: 'false', description: 'Enables multi-file selection' },
+  { name: 'accept', type: 'string', default: '-', description: 'Accepted file types (e.g., "image/*,.pdf")' },
+  { name: 'showPreview', type: 'boolean', default: 'true', description: 'Shows preview thumbnails for images' },
+  { name: 'showFileList', type: 'boolean', default: 'true', description: 'Shows list of selected files' },
+  { name: 'variant', type: '"default" | "primary" | "error" | "success"', default: '"default"', description: 'Visual variant' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the upload area' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables file upload' },
+  { name: 'dragText', type: 'string', default: '"Drag and drop files here"', description: 'Custom drag prompt text' },
+  { name: 'browseText', type: 'string', default: '"or click to browse"', description: 'Custom browse prompt text' },
+];
+---
+
+<DocLayout
+  title="FileUpload"
+  currentPath={currentPath}
+  description="A drag-and-drop file upload component with validation, preview thumbnails, and multi-file support."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">FileUpload</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A drag-and-drop file upload component with file validation, preview thumbnails,
+        file size limits, accept type filtering, and multi-file support.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveFileUploadDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Drag & Drop</p>
+          <p class="text-sm text-gray-500">Visual feedback while dragging with scale animation.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">File Validation</p>
+          <p class="text-sm text-gray-500">Type filtering, size limits, max file count.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Preview Thumbnails</p>
+          <p class="text-sm text-gray-500">Image preview and file type icons.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">File Management</p>
+          <p class="text-sm text-gray-500">Remove individual files from selection.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { FileUpload } from '@storyhouse/components';
+
+// Single image upload
+<FileUpload
+  label="Upload Profile Image"
+  accept="image/*"
+  maxSize={5 * 1024 * 1024}
+  onFilesChange={(files) => console.log(files)}
+/>
+
+// Multi-file document upload
+<FileUpload
+  label="Upload Documents"
+  multiple
+  maxFiles={5}
+  accept=".pdf,.doc,.docx"
+  helpText="Upload up to 5 documents (PDF, DOC, DOCX)."
+/>
+
+// With error state
+<FileUpload
+  label="Required Document"
+  error="This file is required."
+  helpText="Upload your signed document."
+/>`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>File type validation</strong> — Rejects invalid types with error message.</li>
+          <li><strong>Size validation</strong> — Shows size limit exceeded error per file.</li>
+          <li><strong>Max files reached</strong> — Shows error and prevents further selection.</li>
+          <li><strong>Disabled state</strong> — Reduces opacity, prevents all interactions.</li>
+          <li><strong>Keyboard support</strong> — Focusable and clickable; Enter/Space to browse.</li>
+          <li><strong>Screen readers</strong> — Hidden input with proper aria attributes.</li>
+          <li><strong>Error variant</strong> — Visual feedback when error prop is set.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="FileUpload Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

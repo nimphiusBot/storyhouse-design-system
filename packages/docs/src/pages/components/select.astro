@@ -1,0 +1,172 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveSelectDemo from '../../components/react/LiveSelectDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/select';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Select';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-select--docs';
+
+const props = [
+  { name: 'options', type: 'SelectOption[] | SelectOptionGroup[]', default: '-', description: 'Array of options or grouped options' },
+  { name: 'value', type: 'string | string[]', default: '-', description: 'Controlled value of the select' },
+  { name: 'defaultValue', type: 'string', default: '-', description: 'Default value for uncontrolled usage' },
+  { name: 'onChange', type: '(value: string) => void', default: '-', description: 'Callback when selection changes' },
+  { name: 'label', type: 'string', default: '-', description: 'Label text above the select' },
+  { name: 'placeholder', type: 'string', default: '"Select..."', description: 'Placeholder text when no option is selected' },
+  { name: 'error', type: 'string', default: '-', description: 'Error message to display' },
+  { name: 'helpText', type: 'string', default: '-', description: 'Help text below the select' },
+  { name: 'variant', type: '"default" | "filled" | "error" | "success"', default: '"default"', description: 'Visual variant of the select' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the select' },
+  { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Expands to fill container width' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the select' },
+  { name: 'required', type: 'boolean', default: 'false', description: 'Marks the select as required' },
+];
+---
+
+<DocLayout
+  title="Select"
+  currentPath={currentPath}
+  description="A styled select dropdown component with support for option groups, validation states, and keyboard navigation."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Select</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A styled native select component that supports single selection, grouped options,
+        validation states, and keyboard navigation.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveSelectDemo client:load />
+      </div>
+    </section>
+
+    <!-- Variants -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Standard border select with white background.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Filled</p>
+          <p class="text-sm text-gray-500">Gray background for a softer appearance.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success</p>
+          <p class="text-sm text-gray-500">Green border indicating successful validation.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">Red border with error message for validation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <!-- Usage -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Select</h3>
+      <CodeBlock lang="tsx" code={`import { Select } from '@storyhouse/components';
+
+const options = [
+  { value: 'react', label: 'React' },
+  { value: 'vue', label: 'Vue' },
+  { value: 'angular', label: 'Angular' },
+];
+
+export function FrameworkSelect() {
+  return (
+    <Select
+      label="Choose a framework"
+      options={options}
+      placeholder="Select framework..."
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Grouped Options</h3>
+      <CodeBlock lang="tsx" code={`import { Select } from '@storyhouse/components';
+
+const groupedOptions = [
+  {
+    label: 'Frontend',
+    options: [
+      { value: 'react', label: 'React' },
+      { value: 'vue', label: 'Vue' },
+    ],
+  },
+  {
+    label: 'Backend',
+    options: [
+      { value: 'node', label: 'Node.js' },
+      { value: 'python', label: 'Python' },
+    ],
+  },
+];
+
+export function LanguageSelect() {
+  return (
+    <Select
+      label="Choose a language"
+      options={groupedOptions}
+      placeholder="Select..."
+    />
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>No options</strong> — Renders with placeholder, visually indicates empty state.</li>
+          <li><strong>Long option text</strong> — Text truncates with ellipsis; tooltip on full hover.</li>
+          <li><strong>Grouped options</strong> — Uses native <code>&lt;optgroup&gt;</code> with bold labels.</li>
+          <li><strong>Keyboard navigation</strong> — Arrow keys navigate options, Enter selects, Escape closes.</li>
+          <li><strong>Screen reader support</strong> — Labels, values, and error states use aria attributes.</li>
+          <li><strong>Focus management</strong> — Focus ring uses orange-500 ring on focus visible.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Select Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

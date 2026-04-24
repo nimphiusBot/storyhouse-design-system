@@ -1,0 +1,180 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveCheckboxDemo from '../../components/react/LiveCheckboxDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/checkbox';
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Checkbox';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-checkbox--docs';
+
+const props = [
+  { name: 'checked', type: 'boolean', default: 'false', description: 'Whether the checkbox is checked' },
+  { name: 'onChange', type: '(checked: boolean) => void', default: '-', description: 'Callback when checkbox state changes' },
+  { name: 'label', type: 'string', default: '-', description: 'Label text for the checkbox' },
+  { name: 'description', type: 'string', default: '-', description: 'Additional description text' },
+  { name: 'error', type: 'string', default: '-', description: 'Error message to display' },
+  { name: 'variant', type: '"default" | "primary" | "success" | "error"', default: '"default"', description: 'Visual variant of the checkbox' },
+  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the checkbox' },
+  { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Shows an indeterminate state' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the checkbox' },
+  { name: 'required', type: 'boolean', default: 'false', description: 'Marks the checkbox as required' },
+];
+
+const groupProps = [
+  { name: 'label', type: 'string', default: '-', description: 'Label for the group' },
+  { name: 'description', type: 'string', default: '-', description: 'Group description text' },
+  { name: 'error', type: 'string', default: '-', description: 'Error state for the group' },
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Checkbox components to group' },
+];
+---
+
+<DocLayout
+  title="Checkbox"
+  currentPath={currentPath}
+  description="A form input component for selection, with support for individual and grouped checkboxes, indeterminate states, and validation."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Checkbox</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A form input component for toggling selections. Supports individual and grouped checkboxes,
+        indeterminate states, validation errors, and keyboard navigation.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Demo -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveCheckboxDemo client:load />
+      </div>
+    </section>
+
+    <!-- Variants -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Standard checkbox with border styling.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Primary</p>
+          <p class="text-sm text-gray-500">Checkbox with orange accent for emphasized selections.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success</p>
+          <p class="text-sm text-gray-500">Green styling to indicate a positive state.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error</p>
+          <p class="text-sm text-gray-500">Red styling for validation error states.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Props Table -->
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Checkbox</h3>
+      <PropsTable rows={props} />
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">CheckboxGroup</h3>
+      <PropsTable rows={groupProps} />
+    </section>
+
+    <!-- Usage Examples -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Checkbox</h3>
+      <CodeBlock lang="tsx" code={`import { Checkbox } from '@storyhouse/components';
+
+export function TermsCheckbox() {
+  const [accepted, setAccepted] = useState(false);
+  
+  return (
+    <Checkbox
+      label="I accept the terms and conditions"
+      checked={accepted}
+      onChange={setAccepted}
+    />
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Checkbox Group</h3>
+      <CodeBlock lang="tsx" code={`import { Checkbox, CheckboxGroup } from '@storyhouse/components';
+
+export function InterestsForm() {
+  const [selected, setSelected] = useState<string[]>([]);
+  
+  const toggle = (value: string) => {
+    setSelected(prev =>
+      prev.includes(value)
+        ? prev.filter(v => v !== value)
+        : [...prev, value]
+    );
+  };
+
+  return (
+    <CheckboxGroup
+      label="Select your interests"
+      description="Choose all that apply."
+    >
+      <Checkbox
+        label="Technology"
+        checked={selected.includes('tech')}
+        onChange={() => toggle('tech')}
+      />
+      <Checkbox
+        label="Design"
+        checked={selected.includes('design')}
+        onChange={() => toggle('design')}
+      />
+    </CheckboxGroup>
+  );
+}`} />
+    </section>
+
+    <!-- Edge Cases & Accessibility -->
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Indeterminate state</strong> — Use for "select all" patterns where some but not all child checkboxes are selected.</li>
+          <li><strong>Keyboard navigation</strong> — Checkboxes are focusable via Tab and toggle via Spacebar.</li>
+          <li><strong>Screen readers</strong> — Labels are properly associated via htmlFor/id attributes.</li>
+          <li><strong>Error states</strong> — Errors are announced via aria-describedby and role="alert".</li>
+          <li><strong>Disabled state</strong> — Disabled checkboxes reduce opacity and prevent interaction.</li>
+          <li><strong>Required validation</strong> — Required indicator (*) shown next to label.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Storybook Preview -->
+    <StorybookPreview
+      url={storybookUrl}
+      title="Checkbox Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+
+</script>

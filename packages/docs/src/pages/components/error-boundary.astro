@@ -1,0 +1,142 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveErrorBoundaryDemo from '../../components/react/LiveErrorBoundaryDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/error-boundary';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/ErrorBoundary';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-errorboundary--docs';
+
+const props = [
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Child components to wrap with error handling' },
+  { name: 'fallback', type: 'ReactNode', default: '-', description: 'Custom fallback UI when an error is caught' },
+  { name: 'onError', type: '(error: Error, errorInfo: React.ErrorInfo) => void', default: '-', description: 'Error callback for logging/reporting' },
+];
+---
+
+<DocLayout
+  title="ErrorBoundary"
+  currentPath={currentPath}
+  description="A React error boundary component for gracefully handling rendering errors with customizable fallback UI."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ErrorBoundary</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A React error boundary that catches JavaScript errors in its child component tree,
+        gracefully falls back to a UI, and logs the error. Prevents crashes from propagating
+        to the entire application.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveErrorBoundaryDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default Fallback</p>
+          <p class="text-sm text-gray-500">Built-in error UI with icon, message, and reload button.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Custom Fallback</p>
+          <p class="text-sm text-gray-500">Pass your own ReactNode as fallback prop.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Error Logging</p>
+          <p class="text-sm text-gray-500">onError callback for integration with logging services.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Class Component</p>
+          <p class="text-sm text-gray-500">Uses React class-based componentDidCatch lifecycle.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { ErrorBoundary } from '@storyhouse/components';
+
+// Basic usage - wraps a component with default fallback
+export function App() {
+  return (
+    <ErrorBoundary>
+      <DataFetchingComponent />
+    </ErrorBoundary>
+  );
+}
+
+// With custom fallback UI
+<ErrorBoundary
+  fallback={
+    <div className="p-4 bg-yellow-50 rounded-lg">
+      <p>Something went wrong.</p>
+      <button onClick={() => window.location.reload()}>
+        Reload Page
+      </button>
+    </div>
+  }
+>
+  <Dashboard />
+</ErrorBoundary>
+
+// With error logging
+<ErrorBoundary
+  onError={(error) => {
+    console.error('Caught by boundary:', error);
+    // Send to error tracking service
+  }}
+>
+  <Widget />
+</ErrorBoundary>`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Best Practices</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Granular boundaries</strong> — Wrap individual sections, not the entire app.</li>
+          <li><strong>Meaningful fallback</strong> — Provide context-aware fallback UI.</li>
+          <li><strong>Log errors</strong> — Always use onError for error reporting.</li>
+          <li><strong>Recovery option</strong> — Include a "Try Again" or "Reload" button.</li>
+          <li><strong>Reset state</strong> — Allow users to dismiss the fallback when possible.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="ErrorBoundary Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

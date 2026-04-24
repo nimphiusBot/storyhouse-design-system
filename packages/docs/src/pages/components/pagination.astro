@@ -1,0 +1,131 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LivePaginationDemo from '../../components/react/LivePaginationDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/pagination';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Pagination';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-pagination--docs';
+
+const props = [
+  { name: 'currentPage', type: 'number', default: '-', description: 'Currently active page (1-indexed)' },
+  { name: 'totalPages', type: 'number', default: '-', description: 'Total number of pages' },
+  { name: 'onPageChange', type: '(page: number) => void', default: '-', description: 'Callback when page is changed' },
+  { name: 'pageSize', type: 'number', default: '-', description: 'Items per page' },
+  { name: 'totalItems', type: 'number', default: '-', description: 'Total number of items for display' },
+  { name: 'onPageSizeChange', type: '(size: number) => void', default: '-', description: 'Callback when page size changes' },
+  { name: 'variant', type: '"default" | "compact"', default: '"default"', description: 'Display variant' },
+  { name: 'showFirstLast', type: 'boolean', default: 'true', description: 'Shows first/last page buttons' },
+  { name: 'showPageSize', type: 'boolean', default: 'true', description: 'Shows page size selector' },
+  { name: 'showPageInput', type: 'boolean', default: 'false', description: 'Shows direct page input field' },
+  { name: 'showTotal', type: 'boolean', default: 'true', description: 'Shows total items count' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables all pagination controls' },
+  { name: 'pageSizeOptions', type: 'number[]', default: '[10, 20, 50, 100]', description: 'Available page size options' },
+];
+---
+
+<DocLayout
+  title="Pagination"
+  currentPath={currentPath}
+  description="A pagination component for navigating large datasets with page numbers, page size control, and compact variant."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Pagination</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Navigate large datasets with page numbers, first/last buttons, and a compact variant.
+        Supports page size customization and direct page input.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LivePaginationDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Intelligent Truncation</p>
+          <p class="text-sm text-gray-500">Ellipsis gaps for large page counts with surrounding context.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Page Size Control</p>
+          <p class="text-sm text-gray-500">Configurable page size selector (10, 20, 50, 100).</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Compact Variant</p>
+          <p class="text-sm text-gray-500">Minimal layout for space-constrained areas.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Edge Cases</p>
+          <p class="text-sm text-gray-500">Handles 0 pages, 1 page, disabled state gracefully.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { Pagination } from '@storyhouse/components';
+
+export function DataPagination() {
+  const [page, setPage] = useState(1);
+
+  return (
+    <Pagination
+      currentPage={page}
+      totalPages={25}
+      totalItems={500}
+      pageSize={20}
+      onPageChange={setPage}
+      onPageSizeChange={(size) => console.log('Page size:', size)}
+    />
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases</h2>
+      <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+        <li><strong>Zero pages</strong> — Renders nothing when totalPages is 0.</li>
+        <li><strong>Single page</strong> — Hides pagination controls when only 1 page.</li>
+        <li><strong>Disabled</strong> — All controls disabled, reduced opacity.</li>
+        <li><strong>Loading</strong> — Use with sibling loading indicator for async data.</li>
+        <li><strong>Responsive</strong> — Collapses to compact viewport variant on mobile.</li>
+      </ul>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Pagination Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

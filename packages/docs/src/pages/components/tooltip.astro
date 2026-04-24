@@ -1,0 +1,120 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveTooltipDemo from '../../components/react/LiveTooltipDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/tooltip';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Tooltip';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-tooltip--docs';
+
+const props = [
+  { name: 'content', type: 'string', default: '-', description: 'Tooltip text content to display' },
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Element that triggers the tooltip on hover' },
+  { name: 'position', type: '"top" | "bottom" | "left" | "right"', default: '"top"', description: 'Position relative to the trigger element' },
+  { name: 'delay', type: 'number', default: '200', description: 'Show delay in milliseconds' },
+  { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes' },
+];
+---
+
+<DocLayout
+  title="Tooltip"
+  currentPath={currentPath}
+  description="A lightweight tooltip component that displays contextual information on hover, with support for four positions and configurable delay."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tooltip</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A lightweight tooltip component that provides contextual information on hover.
+        Supports top, bottom, left, and right positions with configurable delay.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveTooltipDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Positions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Top (default)</p>
+          <p class="text-sm text-gray-500">Tooltip appears above the element.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Bottom</p>
+          <p class="text-sm text-gray-500">Tooltip appears below the element.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Left</p>
+          <p class="text-sm text-gray-500">Tooltip appears to the left of the element.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Right</p>
+          <p class="text-sm text-gray-500">Tooltip appears to the right of the element.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+      <CodeBlock lang="tsx" code={`import { Tooltip } from '@storyhouse/components';
+
+export function IconWithTooltip() {
+  return (
+    <Tooltip content="Edit profile information" position="top">
+      <button className="...">
+        <PencilIcon />
+      </button>
+    </Tooltip>
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Delay</strong> — Default 200ms prevents flickering during quick hovers.</li>
+          <li><strong>Arrow indicator</strong> — Small arrow points to the trigger element.</li>
+          <li><strong>Content overflow</strong> — Long text wraps to multiple lines, max-width 250px.</li>
+          <li><strong>Disabled elements</strong> — Tooltip won't show on disabled elements.</li>
+          <li><strong>Responsive</strong> — Positions auto-adjust on viewport edge collision.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Tooltip Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>

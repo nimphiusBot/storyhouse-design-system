@@ -1,0 +1,165 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveModalDemo from '../../components/react/LiveModalDemo';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = base + 'components/modal';
+
+const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/Modal';
+const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components-modal--docs';
+
+const props = [
+  { name: 'isOpen', type: 'boolean', default: 'false', description: 'Controls modal visibility' },
+  { name: 'onClose', type: '() => void', default: '-', description: 'Callback when modal is dismissed' },
+  { name: 'title', type: 'string', default: '-', description: 'Modal title text' },
+  { name: 'description', type: 'string', default: '-', description: 'Description text below the title' },
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Modal body content' },
+  { name: 'footer', type: 'ReactNode', default: '-', description: 'Footer content with action buttons' },
+  { name: 'size', type: '"sm" | "md" | "lg" | "xl" | "2xl" | "full"', default: '"md"', description: 'Modal width' },
+  { name: 'variant', type: '"default" | "danger" | "success" | "info" | "warning"', default: '"default"', description: 'Visual variant with colored top border' },
+  { name: 'showCloseButton', type: 'boolean', default: 'true', description: 'Shows the close X button' },
+  { name: 'closeOnOverlayClick', type: 'boolean', default: 'true', description: 'Closes modal when clicking overlay' },
+  { name: 'closeOnEsc', type: 'boolean', default: 'true', description: 'Closes modal on Escape key' },
+  { name: 'loading', type: 'boolean', default: 'false', description: 'Shows loading spinner instead of content' },
+];
+---
+
+<DocLayout
+  title="Modal"
+  currentPath={currentPath}
+  description="A modal dialog component for focused interactions, with support for sizes, variants, loading state, and confirm dialogs."
+>
+  <div class="space-y-12">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Modal</h1>
+        <StatusBadge status="stable" />
+      </div>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        A modal dialog component for focused interactions. Supports multiple sizes, variants,
+        keyboard dismissal, overlay click-to-close, and a pre-built <strong>ConfirmModal</strong>.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Source →
+        </a>
+        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
+          View Storybook →
+        </a>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <LiveModalDemo client:load />
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Variants</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Default</p>
+          <p class="text-sm text-gray-500">Standard modal with orange top accent bar.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Danger</p>
+          <p class="text-sm text-gray-500">Red accent for destructive action confirmations.</p>
+        </div>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+          <p class="font-medium text-gray-900 dark:text-white mb-2">Success / Info / Warning</p>
+          <p class="text-sm text-gray-500">Color-coded top borders for context-specific dialogs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
+      <PropsTable rows={props} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Modal</h3>
+      <CodeBlock lang="tsx" code={`import { Modal, Button } from '@storyhouse/components';
+
+export function ExampleModal() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Modal Title"
+  currentPath={currentPath}
+        description="Description of this dialog."
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button variant="primary" onClick={() => setIsOpen(false)}>Save</Button>
+          </>
+        }
+      >
+        <p>Your modal content goes here.</p>
+      </Modal>
+    </>
+  );
+}`} />
+
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">Confirm Modal</h3>
+      <CodeBlock lang="tsx" code={`import { ConfirmModal, Button } from '@storyhouse/components';
+
+export function DeleteConfirm() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="danger" onClick={() => setIsOpen(true)}>Delete</Button>
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onConfirm={() => { /* delete logic */ }}
+        title="Delete Account"
+  currentPath={currentPath}
+        message="This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+      />
+    </>
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
+      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
+        <ul class="space-y-3">
+          <li><strong>Focus trap</strong> — Focus is trapped inside the modal while open.</li>
+          <li><strong>Body scroll lock</strong> — Body scroll is prevented when modal is open.</li>
+          <li><strong>ARIA</strong> — Uses <code>role="dialog"</code>, <code>aria-modal="true"</code>, <code>aria-labelledby</code>.</li>
+          <li><strong>Keyboard</strong> — Escape key closes the modal.</li>
+          <li><strong>Long content</strong> — Modal body is scrollable for long content.</li>
+          <li><strong>Loading state</strong> — Shows a spinner and prevents interaction.</li>
+          <li><strong>Portal rendering</strong> — Modal renders in a portal at document body level.</li>
+        </ul>
+      </div>
+    </section>
+
+    <StorybookPreview
+      url={storybookUrl}
+      title="Modal Component"
+  currentPath={currentPath}
+    />
+  </div>
+</DocLayout>
+
+<script>
+</script>
