@@ -18,7 +18,7 @@ const currentPath = `${base}components/card`;
     <p>
       The <code>Card</code> component provides a composable content container with four visual variants and four padding sizes.
       It ships with <code>CardHeader</code>, <code>CardTitle</code>, <code>CardContent</code>, and <code>CardFooter</code> sub-components
-      for consistent layout patterns.
+      for consistent layout patterns. The Card is the foundation for dashboards, settings panels, and content sections.
     </p>
   </section>
 
@@ -27,21 +27,21 @@ const currentPath = `${base}components/card`;
     <p>Four variants give you flexibility from subtle backgrounds to elevated surfaces.</p>
 
     <div class="my-6 grid gap-4 sm:grid-cols-2">
-      <div class="rounded-xl bg-white p-6 shadow-sm border border-gray-200">
-        <p class="text-sm font-medium text-gray-500">Default</p>
-        <p class="mt-1 text-sm text-gray-700">White background with subtle shadow and light border.</p>
+      <div class="rounded-xl bg-white p-6 shadow-sm border border-gray-200 dark:bg-gray-900 dark:border-gray-800">
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Default</p>
+        <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">White background with subtle shadow and light border.</p>
       </div>
-      <div class="rounded-xl bg-white p-6 shadow-md border border-gray-100">
-        <p class="text-sm font-medium text-gray-500">Elevated</p>
-        <p class="mt-1 text-sm text-gray-700">Deeper shadow for emphasis — great for modals or dropdowns.</p>
+      <div class="rounded-xl bg-white p-6 shadow-md border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Elevated</p>
+        <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Deeper shadow for emphasis — great for modals or dropdowns.</p>
       </div>
-      <div class="rounded-xl bg-white p-6 border-2 border-gray-200">
-        <p class="text-sm font-medium text-gray-500">Bordered</p>
-        <p class="mt-1 text-sm text-gray-700">Heavy 2px border for clear visual separation.</p>
+      <div class="rounded-xl bg-white p-6 border-2 border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Bordered</p>
+        <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Heavy 2px border for clear visual separation.</p>
       </div>
-      <div class="rounded-xl bg-gray-50 p-6">
-        <p class="text-sm font-medium text-gray-500">Flat</p>
-        <p class="mt-1 text-sm text-gray-700">No shadow or border — subtle background tint.</p>
+      <div class="rounded-xl bg-gray-50 p-6 dark:bg-gray-800">
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Flat</p>
+        <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">No shadow or border — subtle background tint.</p>
       </div>
     </div>
 
@@ -77,8 +77,8 @@ export function CardVariants() {
         <button class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">Edit</button>
       </div>
       <p class="text-gray-700 dark:text-gray-300">Manage your account preferences and notification settings from one place.</p>
-      <div class="mt-4 flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
-        <button class="inline-flex items-center justify-center rounded-lg bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300">Cancel</button>
+      <div class="mt-4 flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-700">
+        <button class="inline-flex items-center justify-center rounded-lg bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Cancel</button>
         <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700">Save</button>
       </div>
     </div>
@@ -121,6 +121,30 @@ export function CardPadding() {
     </>
   );
 }`} />
+  </section>
+
+  <section>
+    <h2 id="use-cases">Common Use Cases</h2>
+
+    <div class="my-6 grid gap-4 sm:grid-cols-2">
+      <!-- Settings Panel -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-base font-semibold text-gray-900 dark:text-white">Profile</h3>
+          <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-950 dark:text-green-300">Active</span>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Settings panels with header, status badge, and action footer.</p>
+      </div>
+
+      <!-- Dashboard Widget -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="text-base font-semibold text-gray-900 dark:text-white">Revenue</h3>
+          <p class="text-2xl font-bold text-green-600 dark:text-green-400">$12.4k</p>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Dashboard widgets with metric display and minimal chrome.</p>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -176,12 +200,13 @@ export function CardPadding() {
       <li>Card is a semantic <code>&lt;div&gt;</code> — use heading hierarchy correctly with <code>CardTitle as="h2"</code></li>
       <li>Interactive cards should use <code>role="button"</code> or wrap in an anchor</li>
       <li>CardFooter uses <code>flex gap-2</code> to properly space action buttons</li>
+      <li>Use <code>CardHeader</code> with proper heading levels for screen reader navigation</li>
     </ul>
   </section>
 
   <section>
     <h2 id="storybook-preview">Interactive Preview</h2>
     <p>Explore all Card variants and props interactively in Storybook:</p>
-    <StorybookPreview id="components-card--docs" title="Card — Storybook" height="500" />
+    <StorybookPreview id="components-card--withheaderandfooter" title="Card — Storybook" height="500" />
   </section>
 </DocLayout>

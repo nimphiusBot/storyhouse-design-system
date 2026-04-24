@@ -3,6 +3,7 @@ import DocLayout from '../../layouts/DocLayout.astro';
 import PropsTable from '../../components/PropsTable.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveBadgeDemo from '../../components/react/LiveBadgeDemo';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 const currentPath = `${base}components/badge`;
@@ -18,8 +19,16 @@ const currentPath = `${base}components/badge`;
     <p>
       The <code>Badge</code> component is used for status indicators, labels, tags, counts, and other small
       pieces of metadata. It supports six color variants, two sizes, a dot indicator mode, and removable
-      tag functionality.
+      tag functionality. Badges are fully accessible with proper ARIA attributes.
     </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Interact with the Badge component — try clicking the X buttons on removable tags.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveBadgeDemo client:load />
+    </div>
   </section>
 
   <section>
@@ -27,12 +36,12 @@ const currentPath = `${base}components/badge`;
     <p>Six visual variants map to different semantic meanings.</p>
 
     <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-700">Default</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">Primary</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">Success</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700">Warning</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700">Danger</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600">Neutral</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">Default</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">Primary</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700 dark:bg-green-950 dark:text-green-300">Success</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">Warning</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700 dark:bg-red-950 dark:text-red-300">Danger</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400">Neutral</span>
     </div>
 
     <CodeBlock title="badge-variants.tsx" code={`import { Badge } from '@storyhouse/components';
@@ -55,8 +64,8 @@ export function BadgeVariants() {
     <h2 id="sizes">Sizes</h2>
 
     <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">Small</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">Medium</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">Small</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">Medium</span>
     </div>
 
     <CodeBlock title="badge-sizes.tsx" code={`import { Badge } from '@storyhouse/components';
@@ -76,9 +85,9 @@ export function BadgeSizes() {
     <p>Add <code>dot</code> to show a small colored circle before the text — useful for live status indicators.</p>
 
     <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700"><span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>Online</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700"><span class="h-1.5 w-1.5 rounded-full bg-yellow-500"></span>Away</span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700"><span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>Offline</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700 dark:bg-green-950 dark:text-green-300"><span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>Online</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"><span class="h-1.5 w-1.5 rounded-full bg-yellow-500"></span>Away</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700 dark:bg-red-950 dark:text-red-300"><span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>Offline</span>
     </div>
 
     <CodeBlock title="badge-dot.tsx" code={`import { Badge } from '@storyhouse/components';
@@ -97,24 +106,6 @@ export function BadgeDot() {
   <section>
     <h2 id="removable">Removable Tags</h2>
     <p>Use <code>removable</code> with an <code>onRemove</code> callback for tag-like badges that can be dismissed.</p>
-
-    <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">React
-        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
-          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">TypeScript
-        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
-          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </span>
-      <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-100 px-2.5 py-1 text-sm font-medium text-purple-700">Design
-        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
-          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </span>
-    </div>
 
     <CodeBlock title="badge-removable.tsx" code={`import { Badge } from '@storyhouse/components';
 
@@ -159,12 +150,13 @@ export function BadgeRemovable() {
       <li>Remove button has <code>aria-label="Remove"</code> for screen readers</li>
       <li>Dot indicator uses <code>aria-hidden="true"</code> to prevent screen reader distraction</li>
       <li>Badge text is directly readable by assistive technology</li>
+      <li>Color variants maintain sufficient contrast ratio (all pass WCAG AA)</li>
     </ul>
   </section>
 
   <section>
     <h2 id="storybook-preview">Interactive Preview</h2>
     <p>Explore all Badge variants and props interactively in Storybook:</p>
-    <StorybookPreview id="components-badge--docs" title="Badge — Storybook" height="500" />
+    <StorybookPreview id="components-badge--default" title="Badge — Storybook" height="500" />
   </section>
 </DocLayout>

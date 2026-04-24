@@ -3,6 +3,7 @@ import DocLayout from '../../layouts/DocLayout.astro';
 import PropsTable from '../../components/PropsTable.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import StorybookPreview from '../../components/StorybookPreview.astro';
+import LiveButtonDemo from '../../components/react/LiveButtonDemo';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 const currentPath = `${base}components/button`;
@@ -20,6 +21,14 @@ const currentPath = `${base}components/button`;
       three sizes, loading state, and full-width mode. Every button is built with accessibility as a first-class concern —
       focus-visible rings, proper ARIA attributes, and keyboard navigation are built in.
     </p>
+  </section>
+
+  <section>
+    <h2 id="live-demo">Live Demo</h2>
+    <p>Click the buttons below to see the component in action. The loading button simulates a 2-second async operation.</p>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <LiveButtonDemo client:load />
+    </div>
   </section>
 
   <section>
@@ -154,12 +163,13 @@ export function ButtonDisabled() {
       <li>Disabled state reduces opacity and removes pointer events</li>
       <li>Loading state prevents double-submission of forms</li>
       <li>Spinner animation respects <code>prefers-reduced-motion</code></li>
+      <li>Button text is clearly readable for all color variants (high contrast ratio)</li>
     </ul>
   </section>
 
   <section>
     <h2 id="storybook-preview">Interactive Preview</h2>
     <p>Explore all Button variants and props interactively in Storybook:</p>
-    <StorybookPreview id="components-button--docs" title="Button — Storybook" height="500" />
+    <StorybookPreview id="components-button--primary" title="Button — Storybook" height="500" />
   </section>
 </DocLayout>
