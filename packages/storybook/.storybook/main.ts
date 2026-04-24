@@ -28,4 +28,10 @@ const config: StorybookConfig = {
   },
 };
 
-export default config;
+export default {
+  ...config,
+  managerHead: (head) => `
+    ${head}
+    <base href="/storyhouse-design-system/storybook/">
+  `,
+};

@@ -57,8 +57,8 @@ jobs:
           mkdir -p _site/storybook
           cp -r packages/docs/dist/* _site/
           cp -r packages/storybook/storybook-static/* _site/storybook/
-          # Add redirect from /storybook/index.html to prevent 404 on direct nav
-          echo '<!DOCTYPE html><meta http-equiv="refresh" content="0;url=/storybook/">' > _site/storybook/index.html
+          # Copy index.html as 404.html so GitHub Pages serves it on 404 (SPA-like)
+          cp _site/index.html _site/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
