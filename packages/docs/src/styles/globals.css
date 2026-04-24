@@ -1,3 +1,132 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgb(251 146 60 / 0.2);
+    color: inherit;
+  }
+
+  /* Code block styling */
+  pre {
+    overflow-x: auto;
+    tab-size: 2;
+  }
+
+  code {
+    font-feature-settings: "calt" 1, "liga" 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .prose-storyhouse {
+    /* Inline code */
+    :not(pre) > code {
+      @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-sm font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-200;
+    }
+
+    /* Links */
+    a {
+      @apply font-medium text-orange-600 underline underline-offset-2 decoration-orange-300 decoration-2 transition-colors hover:text-orange-700 hover:decoration-orange-500 dark:text-orange-400 dark:decoration-orange-700 dark:hover:text-orange-300;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      @apply scroll-mt-24 font-bold tracking-tight text-gray-900 dark:text-white;
+    }
+
+    h1 { @apply text-4xl; }
+    h2 { @apply mt-10 text-2xl; }
+    h3 { @apply mt-8 text-xl; }
+    h4 { @apply mt-6 text-lg; }
+
+    h2, h3, h4 {
+      > a.anchor {
+        @apply ml-2 text-gray-300 no-underline opacity-0 transition-opacity hover:text-gray-500 dark:text-gray-600 dark:hover:text-gray-400;
+      }
+      &:hover > a.anchor {
+        @apply opacity-100;
+      }
+    }
+
+    p {
+      @apply mt-4 leading-7 text-gray-600 dark:text-gray-400;
+    }
+
+    ul, ol {
+      @apply mt-4 space-y-2 pl-6 text-gray-600 dark:text-gray-400;
+    }
+
+    ul { @apply list-disc; }
+    ol { @apply list-decimal; }
+
+    li {
+      @apply leading-7;
+    }
+
+    hr {
+      @apply my-8 border-gray-200 dark:border-gray-800;
+    }
+
+    blockquote {
+      @apply my-6 border-l-4 border-orange-300 bg-orange-50 py-3 pl-4 pr-4 text-gray-700 dark:border-orange-700 dark:bg-orange-950/30 dark:text-gray-300;
+    }
+
+    table {
+      @apply mt-6 w-full border-collapse text-sm;
+    }
+
+    th {
+      @apply border-b-2 border-gray-200 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:border-gray-700 dark:text-gray-400;
+    }
+
+    td {
+      @apply border-b border-gray-100 px-4 py-3 text-gray-700 dark:border-gray-800 dark:text-gray-300;
+    }
+
+    tbody tr {
+      @apply transition-colors hover:bg-gray-50 dark:hover:bg-gray-900/50;
+    }
+
+    /* Tables with code */
+    td code {
+      @apply rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-200;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Prism-like code theme overrides for code blocks */
+.astro-code,
+pre.astro-code {
+  @apply rounded-xl border border-gray-200 bg-gray-50 !px-4 !py-4 text-sm leading-relaxed shadow-sm dark:border-gray-800 dark:bg-gray-900;
+}
+
+.astro-code code {
+  @apply text-sm leading-relaxed;
+}

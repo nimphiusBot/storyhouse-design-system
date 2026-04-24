@@ -1,0 +1,185 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/input`;
+---
+
+<DocLayout
+  title="Input"
+  description="Form input component with labels, validation states, icons, and full accessibility support."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Input</code> component provides a feature-rich form input with built-in label support, error states,
+      helper text, optional icon slots, and comprehensive ARIA attributes for accessibility.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="basic">Basic Usage</h2>
+    <p>A simple text input with a label and placeholder.</p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col gap-1.5 w-fit">
+        <label for="input-basic-example" class="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+        <input id="input-basic-example" type="email" placeholder="you@example.com" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50" />
+      </div>
+    </div>
+
+    <CodeBlock title="input-basic.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputBasic() {
+  return (
+    <Input
+      label="Email"
+      type="email"
+      placeholder="you@example.com"
+    />
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+
+    <div class="my-6 flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col gap-1.5 w-fit">
+        <label for="input-size-sm" class="text-sm font-medium text-gray-700 dark:text-gray-300">Small</label>
+        <input id="input-size-sm" placeholder="Small" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+      </div>
+      <div class="flex flex-col gap-1.5 w-fit">
+        <label for="input-size-md" class="text-sm font-medium text-gray-700 dark:text-gray-300">Medium</label>
+        <input id="input-size-md" placeholder="Medium" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+      </div>
+      <div class="flex flex-col gap-1.5 w-fit">
+        <label for="input-size-lg" class="text-sm font-medium text-gray-700 dark:text-gray-300">Large</label>
+        <input id="input-size-lg" placeholder="Large" class="w-full rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+      </div>
+    </div>
+
+    <CodeBlock title="input-sizes.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputSizes() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Input size="sm" placeholder="Small" />
+      <Input size="md" placeholder="Medium" />
+      <Input size="lg" placeholder="Large" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="states">States</h2>
+
+    <h3>Error State</h3>
+    <p>Use the <code>error</code> prop to show validation feedback.</p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col gap-1.5 w-fit">
+        <label for="input-error-example" class="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+        <input id="input-error-example" type="email" value="invalid" aria-invalid="true" class="w-full rounded-lg border border-red-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20" />
+        <p id="input-error-example-error" role="alert" class="text-sm text-red-600">Please enter a valid email address.</p>
+      </div>
+    </div>
+
+    <CodeBlock title="input-error.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputError() {
+  return (
+    <Input
+      label="Email"
+      type="email"
+      value="invalid"
+      error="Please enter a valid email address."
+    />
+  );
+}`} />
+
+    <h3>Helper Text</h3>
+    <p>Use the <code>helperText</code> prop for contextual guidance below the input.</p>
+
+    <CodeBlock title="input-helper.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputHelper() {
+  return (
+    <Input
+      label="Password"
+      type="password"
+      helperText="Must be at least 8 characters."
+    />
+  );
+}`} />
+
+    <h3>Disabled State</h3>
+
+    <CodeBlock title="input-disabled.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputDisabled() {
+  return (
+    <Input
+      label="Username"
+      value="johndoe"
+      disabled
+    />
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="full-width">Full Width</h2>
+    <p>Set <code>fullWidth</code> to make the input span its container.</p>
+
+    <CodeBlock title="input-fullwidth.tsx" code={`import { Input } from '@storyhouse/components';
+
+export function InputFullWidth() {
+  return (
+    <div className="w-full">
+      <Input label="Search" placeholder="Type to search..." fullWidth />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'label', type: 'string', default: '-', description: 'Label text rendered above the input. Auto-generates an id.' },
+        { name: 'error', type: 'string', default: '-', description: 'Error message. Shows red border and alert text when set.' },
+        { name: 'helperText', type: 'string', default: '-', description: 'Helper text shown below the input (hidden when error is set).' },
+        { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Input height and text size.' },
+        { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Spans 100% of parent width.' },
+        { name: 'leftIcon', type: 'React.ReactNode', default: '-', description: 'Icon rendered inside the input on the left side.' },
+        { name: 'rightIcon', type: 'React.ReactNode', default: '-', description: 'Icon rendered inside the input on the right side.' },
+        { name: 'id', type: 'string', default: '-', description: 'Custom id. Auto-generated from label if not provided.' },
+        { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables input and reduces opacity.' },
+      ]}
+    />
+    <p class="mt-2 text-sm text-gray-500">All standard <code>&lt;input&gt;</code> attributes (type, placeholder, value, onChange, etc.) are also supported.</p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Label is properly associated via <code>htmlFor</code> matching the input <code>id</code></li>
+      <li>Error messages use <code>aria-describedby</code> linking and <code>role="alert"</code></li>
+      <li><code>aria-invalid</code> is set when the <code>error</code> prop is provided</li>
+      <li>Helper text and error are properly differentiated via <code>aria-describedby</code></li>
+      <li>Disabled state uses <code>cursor-not-allowed</code> and reduced opacity</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Input variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-input--docs" title="Input — Storybook" height="500" />
+  </section>
+</DocLayout>

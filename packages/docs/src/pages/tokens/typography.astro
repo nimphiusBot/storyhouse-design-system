@@ -1,0 +1,177 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}tokens/typography`;
+---
+
+<DocLayout
+  title="Typography"
+  description="Font families, size scale, weight spectrum, line height, and letter spacing tokens."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="font-families">Font Families</h2>
+    <p>Three font families for different use cases — sans-serif for UI, monospace for code, serif for long-form reading.</p>
+
+    <div class="my-6 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Sans-serif (UI)</p>
+        <p class="mt-1 font-sans text-2xl dark:text-white" style="font-family: Inter, system-ui, sans-serif">
+          The quick brown fox jumps over the lazy dog. 1234567890
+        </p>
+        <code class="mt-1 block text-xs text-gray-500 dark:text-gray-400">--font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif</code>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Monospace (Code)</p>
+        <p class="mt-1 font-mono text-xl dark:text-white" style="font-family: 'JetBrains Mono', monospace">
+          const hello = "world"; // fn() => 42
+        </p>
+        <code class="mt-1 block text-xs text-gray-500 dark:text-gray-400">--font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace</code>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Serif (Reading)</p>
+        <p class="mt-1 font-serif text-2xl dark:text-white" style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+        <code class="mt-1 block text-xs text-gray-500 dark:text-gray-400">--font-family-serif: Georgia, Cambria, 'Times New Roman', Times, serif</code>
+      </div>
+    </div>
+
+    <CodeBlock lang="css" title="tokens.css" code={`--font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+--font-family-serif: Georgia, Cambria, 'Times New Roman', Times, serif;`} />
+  </section>
+
+  <section>
+    <h2 id="font-sizes">Font Sizes</h2>
+    <p>A 10-step scale from <code>xs</code> (0.75rem) to <code>6xl</code> (3.75rem).</p>
+
+    <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {[
+            { token: 'xs', size: '0.75rem', px: '12px', example: 'Captions & metadata' },
+            { token: 'sm', size: '0.875rem', px: '14px', example: 'Small text & labels' },
+            { token: 'base', size: '1rem', px: '16px', example: 'Body text' },
+            { token: 'lg', size: '1.125rem', px: '18px', example: 'Large body' },
+            { token: 'xl', size: '1.25rem', px: '20px', example: 'Sub-headings' },
+            { token: '2xl', size: '1.5rem', px: '24px', example: 'Section headings' },
+            { token: '3xl', size: '1.875rem', px: '30px', example: 'Page headings' },
+            { token: '4xl', size: '2.25rem', px: '36px', example: 'Hero headings' },
+            { token: '5xl', size: '3rem', px: '48px', example: 'Large hero' },
+            { token: '6xl', size: '3.75rem', px: '60px', example: 'Display text' },
+          ].map((s) => (
+            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+              <td class="px-4 py-3">
+                <code class="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">--font-size-{s.token}</code>
+              </td>
+              <td class="px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400">{s.size}</td>
+              <td class="hidden px-4 py-3 font-mono text-sm text-gray-500 sm:table-cell dark:text-gray-500">{s.px}</td>
+              <td class="hidden px-4 py-3 text-sm text-gray-600 lg:table-cell dark:text-gray-400">{s.example}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="my-8 space-y-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      {[
+        { token: '6xl', text: 'Display (6xl)' },
+        { token: '4xl', text: 'Hero (4xl)' },
+        { token: '3xl', text: 'Page Heading (3xl)' },
+        { token: '2xl', text: 'Section Heading (2xl)' },
+        { token: 'lg', text: 'Large Body (lg)' },
+        { token: 'base', text: 'Body Text (base)' },
+        { token: 'sm', text: 'Caption (sm)' },
+      ].map((s) => (
+        <p style={`font-size: var(--font-size-${s.token})`} class="font-semibold text-gray-900 dark:text-white">{s.text}</p>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 id="font-weights">Font Weights</h2>
+    <p>A complete weight spectrum from thin (100) to black (900).</p>
+
+    <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {[
+            { name: 'thin', weight: '100' },
+            { name: 'extralight', weight: '200' },
+            { name: 'light', weight: '300' },
+            { name: 'normal', weight: '400' },
+            { name: 'medium', weight: '500' },
+            { name: 'semibold', weight: '600' },
+            { name: 'bold', weight: '700' },
+            { name: 'extrabold', weight: '800' },
+            { name: 'black', weight: '900' },
+          ].map((w) => (
+            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+              <td class="px-4 py-3 font-mono text-sm text-gray-700 dark:text-gray-300">
+                <code>--font-weight-{w.name}</code>
+              </td>
+              <td class="px-4 py-3 font-mono text-sm text-gray-500">{w.weight}</td>
+              <td class="px-4 py-3">
+                <span style={`font-weight: ${w.weight}`} class="text-lg text-gray-900 dark:text-white">
+                  The quick brown fox {w.name}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="line-height">Line Height &amp; Letter Spacing</h2>
+
+    <h3>Line Heights</h3>
+    <div class="my-4 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {[
+            { name: 'none', value: '1' },
+            { name: 'tight', value: '1.25' },
+            { name: 'snug', value: '1.375' },
+            { name: 'normal', value: '1.5' },
+            { name: 'relaxed', value: '1.625' },
+            { name: 'loose', value: '2' },
+          ].map((lh) => (
+            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+              <td class="px-4 py-3 font-mono text-sm"><code>--line-height-{lh.name}</code></td>
+              <td class="px-4 py-3 font-mono text-sm text-gray-500 dark:text-gray-400">{lh.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Letter Spacing</h3>
+    <div class="my-4 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {[
+            { name: 'tighter', value: '-0.05em' },
+            { name: 'tight', value: '-0.025em' },
+            { name: 'normal', value: '0em' },
+            { name: 'wide', value: '0.025em' },
+            { name: 'wider', value: '0.05em' },
+            { name: 'widest', value: '0.1em' },
+          ].map((ls) => (
+            <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+              <td class="px-4 py-3 font-mono text-sm"><code>--letter-spacing-{ls.name}</code></td>
+              <td class="px-4 py-3 font-mono text-sm text-gray-500 dark:text-gray-400">{ls.value}</td>
+              <td class="px-4 py-3">
+                <span style={`letter-spacing: ${ls.value}`} class="text-gray-900 dark:text-white">Tracking</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DocLayout>

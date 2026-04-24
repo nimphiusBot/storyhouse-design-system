@@ -1,0 +1,165 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/button`;
+---
+
+<DocLayout
+  title="Button"
+  description="Versatile button component with multiple variants, sizes, and states. Supports loading, icons, and full-width layouts."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Button</code> component is the primary action trigger in the design system. It supports multiple visual variants,
+      three sizes, loading state, and full-width mode. Every button is built with accessibility as a first-class concern —
+      focus-visible rings, proper ARIA attributes, and keyboard navigation are built in.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>
+      Buttons come in four visual variants to match different levels of emphasis and purpose.
+    </p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Primary</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-gray-200 px-4 py-2 text-base font-medium text-gray-900 transition-colors hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2">Secondary</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-transparent px-4 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2">Ghost</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2">Danger</button>
+    </div>
+
+    <CodeBlock title="button-variants.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function ButtonVariants() {
+  return (
+    <div className="flex gap-3">
+      <Button variant="primary">Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="danger">Danger</Button>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+    <p>Three sizes cover most use cases: small for tight spaces, medium as the default, and large for primary CTAs.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700">Small</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700">Medium</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors hover:bg-blue-700">Large</button>
+    </div>
+
+    <CodeBlock title="button-sizes.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function ButtonSizes() {
+  return (
+    <div className="flex items-center gap-3">
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="loading">Loading State</h2>
+    <p>
+      The <code>isLoading</code> prop shows a spinner and disables interaction, which is critical for async actions
+      like form submissions or API calls to prevent duplicate operations.
+    </p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none"><span class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>Saving...</button>
+    </div>
+
+    <CodeBlock title="button-loading.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function ButtonLoading() {
+  return (
+    <Button isLoading>
+      Saving...
+    </Button>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="full-width">Full Width</h2>
+    <p>Use <code>fullWidth</code> for buttons that should span their container — ideal for mobile layouts and form submissions.</p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <button class="w-full inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700">Submit</button>
+    </div>
+
+    <CodeBlock title="button-fullwidth.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function ButtonFullWidth() {
+  return (
+    <Button fullWidth>
+      Submit
+    </Button>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="disabled">Disabled State</h2>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none">Cannot Click</button>
+    </div>
+
+    <CodeBlock title="button-disabled.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function ButtonDisabled() {
+  return (
+    <Button disabled>
+      Cannot Click
+    </Button>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'variant', type: '"primary" | "secondary" | "ghost" | "danger"', default: '"primary"', description: 'Visual style variant for different emphasis levels.' },
+        { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Button size. Use sm for compact UIs, lg for primary CTAs.' },
+        { name: 'isLoading', type: 'boolean', default: 'false', description: 'Shows a spinner and disables interaction during async operations.' },
+        { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Makes the button span 100% of its parent container width.' },
+        { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the button, reducing opacity and preventing interaction.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes to merge with default styles (uses tailwind-merge).' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Content to render inside the button. Can include icons or text.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Uses native <code>&lt;button&gt;</code> element for correct keyboard semantics</li>
+      <li>Focus-visible ring styles ensure keyboard users see focus indicators</li>
+      <li>Disabled state reduces opacity and removes pointer events</li>
+      <li>Loading state prevents double-submission of forms</li>
+      <li>Spinner animation respects <code>prefers-reduced-motion</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Button variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-button--docs" title="Button — Storybook" height="500" />
+  </section>
+</DocLayout>

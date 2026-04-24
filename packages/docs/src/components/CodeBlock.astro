@@ -1,0 +1,45 @@
+---
+export interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { code, lang = 'tsx', title } = Astro.props;
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+---
+
+<div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+  {title && (
+    <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900">
+      <span class="flex h-3 w-3 rounded-full bg-red-400" />
+      <span class="flex h-3 w-3 rounded-full bg-yellow-400" />
+      <span class="flex h-3 w-3 rounded-full bg-green-400" />
+      <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">{title}</span>
+    </div>
+  )}
+  <button
+    class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+    data-code={code}
+  >
+    Copy
+  </button>
+  <pre class="astro-code"><code class={`language-${lang}`}>{code}</code></pre>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const code = btn.getAttribute('data-code');
+      if (!code) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      } catch {
+        btn.textContent = 'Error';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      }
+    });
+  });
+</script>

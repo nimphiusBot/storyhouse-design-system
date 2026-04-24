@@ -1,0 +1,197 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/avatar`;
+---
+
+<DocLayout
+  title="Avatar"
+  description="User avatar component with image support, name-based initials fallback, multiple sizes and shapes."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Avatar</code> component renders user profile images with intelligent fallbacks. It gracefully
+      degrades from image → name initials → default icon. Each avatar uses a deterministic color based on
+      the user's name, making grouped avatars visually distinct without manual color assignment.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+    <p>Five sizes from extra-small (24px) to extra-large (72px).</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:24px;height:24px;background:#3b82f6">
+        <span class="text-xs font-medium text-white" style="font-size:0.75rem;line-height:1rem">JD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:32px;height:32px;background:#22c55e">
+        <span class="text-sm font-medium text-white">JD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#a855f7">
+        <span class="text-base font-medium text-white">JD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:56px;height:56px;background:#ec4899">
+        <span class="text-lg font-medium text-white">JD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:72px;height:72px;background:#eab308">
+        <span class="text-xl font-medium text-white">JD</span>
+      </div>
+    </div>
+
+    <CodeBlock title="avatar-sizes.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarSizes() {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar name="Jane Doe" size="xs" />
+      <Avatar name="Jane Doe" size="sm" />
+      <Avatar name="Jane Doe" size="md" />
+      <Avatar name="Jane Doe" size="lg" />
+      <Avatar name="Jane Doe" size="xl" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="image">Image Avatar</h2>
+    <p>Provide a <code>src</code> prop to show a user photo. Falls back to initials on image error.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px">
+        <div class="h-full w-full bg-gradient-to-br from-orange-400 to-pink-500"></div>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#10b981">
+        <span class="text-base font-medium text-white">JS</span>
+      </div>
+    </div>
+
+    <CodeBlock title="avatar-image.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarImage() {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar src="/path/to/photo.jpg" alt="Jane Doe" />
+      <Avatar name="John Smith" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="initials">Initials Fallback</h2>
+    <p>
+      When no <code>src</code> is provided, the avatar extracts up to 2 initials from the <code>name</code> prop
+      and assigns a deterministic background color based on the name hash. This means the same name always
+      gets the same color.
+    </p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#3b82f6">
+        <span class="text-base font-medium text-white">AD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#22c55e">
+        <span class="text-base font-medium text-white">BK</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#a855f7">
+        <span class="text-base font-medium text-white">CL</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#ec4899">
+        <span class="text-base font-medium text-white">DM</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#eab308">
+        <span class="text-base font-medium text-white">EN</span>
+      </div>
+    </div>
+
+    <CodeBlock title="avatar-initials.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarInitials() {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar name="Alice Doe" />
+      <Avatar name="Bob King" />
+      <Avatar name="Carol Lee" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="shape">Shape</h2>
+    <p>Choose between <code>circle</code> (default) and <code>square</code> variants.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="relative inline-flex items-center justify-center rounded-full overflow-hidden" style="width:40px;height:40px;background:#8b5cf6">
+        <span class="text-base font-medium text-white">JD</span>
+      </div>
+      <div class="relative inline-flex items-center justify-center rounded-lg overflow-hidden" style="width:40px;height:40px;background:#ec4899">
+        <span class="text-base font-medium text-white">JD</span>
+      </div>
+    </div>
+
+    <CodeBlock title="avatar-shape.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarShape() {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar name="Jane Doe" variant="circle" />
+      <Avatar name="Jane Doe" variant="square" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="fallback-icon">Fallback Icon</h2>
+    <p>When neither <code>src</code> nor <code>name</code> is provided, a default user icon is rendered. You can override it with <code>fallback</code>.</p>
+
+    <CodeBlock title="avatar-fallback.tsx" code={`import { Avatar } from '@storyhouse/components';
+
+export function AvatarFallback() {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar alt="User avatar" />
+      <Avatar fallback={<span>🤖</span>} />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'src', type: 'string', default: '-', description: 'Image URL. Falls back to initials on error.' },
+        { name: 'alt', type: 'string', default: '""', description: 'Alt text for the image. Used as aria-label on fallback.' },
+        { name: 'name', type: 'string', default: '-', description: 'User name for initials extraction and color generation.' },
+        { name: 'size', type: '"xs" | "sm" | "md" | "lg" | "xl"', default: '"md"', description: 'Avatar dimensions from 24px to 72px.' },
+        { name: 'variant', type: '"circle" | "square"', default: '"circle"', description: 'Shape variant.' },
+        { name: 'fallback', type: 'React.ReactNode', default: '-', description: 'Custom fallback icon when no image or name is provided.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Image avatars use native <code>&lt;img&gt;</code> with <code>alt</code> attribute</li>
+      <li>Fallback avatars use <code>role="img"</code> and <code>aria-label</code> with the alt or name text</li>
+      <li>Initials avatars have a <code>title</code> attribute for hover tooltip</li>
+      <li>Deterministic colors mean users always recognize their avatar</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Avatar variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-avatar--docs" title="Avatar — Storybook" height="500" />
+  </section>
+</DocLayout>

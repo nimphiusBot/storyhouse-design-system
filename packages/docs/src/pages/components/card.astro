@@ -1,0 +1,187 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/card`;
+---
+
+<DocLayout
+  title="Card"
+  description="Flexible card container for grouping related content with multiple variants, padding options, and composable sub-components."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Card</code> component provides a composable content container with four visual variants and four padding sizes.
+      It ships with <code>CardHeader</code>, <code>CardTitle</code>, <code>CardContent</code>, and <code>CardFooter</code> sub-components
+      for consistent layout patterns.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>Four variants give you flexibility from subtle backgrounds to elevated surfaces.</p>
+
+    <div class="my-6 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-xl bg-white p-6 shadow-sm border border-gray-200">
+        <p class="text-sm font-medium text-gray-500">Default</p>
+        <p class="mt-1 text-sm text-gray-700">White background with subtle shadow and light border.</p>
+      </div>
+      <div class="rounded-xl bg-white p-6 shadow-md border border-gray-100">
+        <p class="text-sm font-medium text-gray-500">Elevated</p>
+        <p class="mt-1 text-sm text-gray-700">Deeper shadow for emphasis — great for modals or dropdowns.</p>
+      </div>
+      <div class="rounded-xl bg-white p-6 border-2 border-gray-200">
+        <p class="text-sm font-medium text-gray-500">Bordered</p>
+        <p class="mt-1 text-sm text-gray-700">Heavy 2px border for clear visual separation.</p>
+      </div>
+      <div class="rounded-xl bg-gray-50 p-6">
+        <p class="text-sm font-medium text-gray-500">Flat</p>
+        <p class="mt-1 text-sm text-gray-700">No shadow or border — subtle background tint.</p>
+      </div>
+    </div>
+
+    <CodeBlock title="card-variants.tsx" code={`import { Card } from '@storyhouse/components';
+
+export function CardVariants() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <Card variant="default">
+        <p>Default card content</p>
+      </Card>
+      <Card variant="elevated">
+        <p>Elevated card content</p>
+      </Card>
+      <Card variant="bordered">
+        <p>Bordered card content</p>
+      </Card>
+      <Card variant="flat">
+        <p>Flat card content</p>
+      </Card>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="composition">Composition Pattern</h2>
+    <p>The recommended way to build card UIs is using the composable sub-components.</p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Account Settings</h3>
+        <button class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400">Edit</button>
+      </div>
+      <p class="text-gray-700 dark:text-gray-300">Manage your account preferences and notification settings from one place.</p>
+      <div class="mt-4 flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+        <button class="inline-flex items-center justify-center rounded-lg bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-300">Cancel</button>
+        <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700">Save</button>
+      </div>
+    </div>
+
+    <CodeBlock title="card-composition.tsx" code={`import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@storyhouse/components';
+import { Button } from '@storyhouse/components';
+
+export function CardComposition() {
+  return (
+    <Card variant="default" padding="md">
+      <CardHeader>
+        <CardTitle>Account Settings</CardTitle>
+        <Button variant="ghost" size="sm">Edit</Button>
+      </CardHeader>
+      <CardContent>
+        Manage your account preferences and notification settings.
+      </CardContent>
+      <CardFooter>
+        <Button variant="secondary" size="sm">Cancel</Button>
+        <Button variant="primary" size="sm">Save</Button>
+      </CardFooter>
+    </Card>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="padding">Padding Options</h2>
+    <p>Four padding levels — <code>none</code>, <code>sm</code>, <code>md</code>, and <code>lg</code> — give you precise control over spacing.</p>
+
+    <CodeBlock title="card-padding.tsx" code={`import { Card } from '@storyhouse/components';
+
+export function CardPadding() {
+  return (
+    <>
+      <Card padding="none">No padding — for image-heavy cards</Card>
+      <Card padding="sm">Compact spacing</Card>
+      <Card padding="md">Default spacing (1.5rem)</Card>
+      <Card padding="lg">Spacious layout (2rem)</Card>
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+
+    <h3>Card</h3>
+    <PropsTable
+      rows={[
+        { name: 'variant', type: '"default" | "elevated" | "bordered" | "flat"', default: '"default"', description: 'Visual style variant.' },
+        { name: 'padding', type: '"none" | "sm" | "md" | "lg"', default: '"md"', description: 'Internal padding amount.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Content rendered inside the card.' },
+      ]}
+    />
+
+    <h3>CardHeader</h3>
+    <PropsTable
+      rows={[
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Header content. Typically a title and an action.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+
+    <h3>CardTitle</h3>
+    <PropsTable
+      rows={[
+        { name: 'as', type: '"h1" | "h2" | "h3" | "h4" | "h5" | "h6"', default: '"h3"', description: 'HTML heading tag to render.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Title text or content.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+
+    <h3>CardContent</h3>
+    <PropsTable
+      rows={[
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Content rendered in the body area.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+
+    <h3>CardFooter</h3>
+    <PropsTable
+      rows={[
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Footer content. Typically buttons or actions.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Card is a semantic <code>&lt;div&gt;</code> — use heading hierarchy correctly with <code>CardTitle as="h2"</code></li>
+      <li>Interactive cards should use <code>role="button"</code> or wrap in an anchor</li>
+      <li>CardFooter uses <code>flex gap-2</code> to properly space action buttons</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Card variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-card--docs" title="Card — Storybook" height="500" />
+  </section>
+</DocLayout>

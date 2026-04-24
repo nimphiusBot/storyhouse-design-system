@@ -1,0 +1,166 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}tokens/colors`;
+---
+
+<DocLayout
+  title="Colors"
+  description="Brand orange palette, neutral grays, and semantic color tokens for the Storyhouse design system."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="brand-orange">Brand Orange</h2>
+    <p>The primary brand palette — a warm orange spectrum from light backgrounds to deep accents.</p>
+
+    <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {
+            [
+              { name: '50', hex: '#fff7ed' },
+              { name: '100', hex: '#ffedd5' },
+              { name: '200', hex: '#fed7aa' },
+              { name: '300', hex: '#fdba74' },
+              { name: '400', hex: '#fb923c' },
+              { name: '500', hex: '#f97316' },
+              { name: '600', hex: '#ea580c' },
+              { name: '700', hex: '#c2410c' },
+              { name: '800', hex: '#9a3412' },
+              { name: '900', hex: '#7c2d12' },
+              { name: '950', hex: '#431407' },
+            ].map((c) => (
+              <tr class="border-b border-gray-100 last:border-0 dark:border-gray-800">
+                <td class="w-24 px-4 py-3">
+                  <div class="h-10 w-10 rounded-lg shadow-inner" style={`background: ${c.hex}`}></div>
+                </td>
+                <td class="px-4 py-3 font-mono text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <code>--color-brand-orange-{c.name}</code>
+                </td>
+                <td class="px-4 py-3 font-mono text-sm text-gray-500 dark:text-gray-400">{c.hex}</td>
+                <td class="hidden px-4 py-3 text-sm text-gray-600 sm:table-cell dark:text-gray-400">
+                  {c.name === '500' ? 'Primary brand color' : c.name === '50' ? 'Lightest background' : c.name === '950' ? 'Darkest accent' : `Shade ${c.name}`}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="neutral-gray">Neutral Gray</h2>
+    <p>A cool gray scale for surfaces, borders, and text.</p>
+
+    <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <table class="min-w-full">
+        <tbody>
+          {
+            [
+              { name: '50', hex: '#fafafa' },
+              { name: '100', hex: '#f5f5f5' },
+              { name: '200', hex: '#e5e5e5' },
+              { name: '300', hex: '#d4d4d4' },
+              { name: '400', hex: '#a3a3a3' },
+              { name: '500', hex: '#737373' },
+              { name: '600', hex: '#525252' },
+              { name: '700', hex: '#404040' },
+              { name: '800', hex: '#262626' },
+              { name: '900', hex: '#171717' },
+              { name: '950', hex: '#0a0a0a' },
+            ].map((c) => (
+              <tr class="border-b border-gray-100 last:border-0 dark:border-gray-700 dark:bg-transparent" class:list={[{ 'bg-gray-50 dark:bg-gray-900': parseInt(c.name) >= 500 }]}>
+                <td class="w-24 px-4 py-3">
+                  <div class="h-10 w-10 rounded-lg shadow-inner" style={`background: ${c.hex}`}></div>
+                </td>
+                <td class="px-4 py-3 font-mono text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <code>--color-gray-{c.name}</code>
+                </td>
+                <td class="px-4 py-3 font-mono text-sm text-gray-500 dark:text-gray-400">{c.hex}</td>
+                <td class="hidden px-4 py-3 text-sm text-gray-600 sm:table-cell dark:text-gray-400">
+                  {c.name === '50' ? 'Page background' : c.name === '100' ? 'Surface background' : c.name === '200' ? 'Border color' : c.name === '500' ? 'Muted text' : c.name === '700' ? 'Body text' : c.name === '900' ? 'Heading text' : c.name === '950' ? 'Darkest text' : `Shade ${c.name}`}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="semantic">Semantic Colors</h2>
+    <p>Semantic color scales for status and feedback — success, warning, danger, and info.</p>
+
+    <h3>Success (Green)</h3>
+    <div class="my-4 flex flex-wrap gap-2">
+      {['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'].map((s) => (
+        <div class="flex flex-col items-center">
+          <div class="h-8 w-8 rounded-lg" style={`background: var(--color-success-${s})`} title={`Success ${s}`}></div>
+          <span class="mt-1 text-xs text-gray-500">{s}</span>
+        </div>
+      ))}
+    </div>
+
+    <h3>Warning (Amber)</h3>
+    <div class="my-4 flex flex-wrap gap-2">
+      {['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'].map((s) => (
+        <div class="flex flex-col items-center">
+          <div class="h-8 w-8 rounded-lg" style={`background: var(--color-warning-${s})`} title={`Warning ${s}`}></div>
+          <span class="mt-1 text-xs text-gray-500">{s}</span>
+        </div>
+      ))}
+    </div>
+
+    <h3>Danger (Red)</h3>
+    <div class="my-4 flex flex-wrap gap-2">
+      {['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'].map((s) => (
+        <div class="flex flex-col items-center">
+          <div class="h-8 w-8 rounded-lg" style={`background: var(--color-danger-${s})`} title={`Danger ${s}`}></div>
+          <span class="mt-1 text-xs text-gray-500">{s}</span>
+        </div>
+      ))}
+    </div>
+
+    <h3>Info (Blue)</h3>
+    <div class="my-4 flex flex-wrap gap-2">
+      {['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'].map((s) => (
+        <div class="flex flex-col items-center">
+          <div class="h-8 w-8 rounded-lg" style={`background: var(--color-info-${s})`} title={`Info ${s}`}></div>
+          <span class="mt-1 text-xs text-gray-500">{s}</span>
+        </div>
+      ))}
+    </div>
+
+    <CodeBlock lang="css" title="tokens.css" code={`/* Semantic color CSS custom properties */
+--color-success-500: #22c55e;
+--color-warning-500: #f59e0b;
+--color-danger-500: #ef4444;
+--color-info-500: #3b82f6;
+
+/* Each color has 10 shades (50-900) for flexibility */`} />
+  </section>
+
+  <section>
+    <h2 id="css-usage">Using Color Tokens</h2>
+
+    <CodeBlock lang="css" title="styles.css" code={`.my-element {
+  background: var(--color-brand-orange-500);
+  color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+}
+
+.status-badge {
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+}`} />
+
+    <CodeBlock lang="ts" title="typescript.ts" code={`import { colors } from '@storyhouse/tokens';
+
+console.log(colors.brand.orange[500]); // '#f97316'
+console.log(colors.semantic.success[500]); // '#22c55e'`} />
+  </section>
+</DocLayout>

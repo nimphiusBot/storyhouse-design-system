@@ -1,0 +1,170 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/badge`;
+---
+
+<DocLayout
+  title="Badge"
+  description="Small status indicators for counts, labels, tags, and states. Supports variants, sizes, dot indicators, and removable tags."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Badge</code> component is used for status indicators, labels, tags, counts, and other small
+      pieces of metadata. It supports six color variants, two sizes, a dot indicator mode, and removable
+      tag functionality.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>Six visual variants map to different semantic meanings.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-700">Default</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">Primary</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">Success</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700">Warning</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700">Danger</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-sm font-medium text-gray-600">Neutral</span>
+    </div>
+
+    <CodeBlock title="badge-variants.tsx" code={`import { Badge } from '@storyhouse/components';
+
+export function BadgeVariants() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Badge variant="default">Default</Badge>
+      <Badge variant="primary">Primary</Badge>
+      <Badge variant="success">Success</Badge>
+      <Badge variant="warning">Warning</Badge>
+      <Badge variant="danger">Danger</Badge>
+      <Badge variant="neutral">Neutral</Badge>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+
+    <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">Small</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">Medium</span>
+    </div>
+
+    <CodeBlock title="badge-sizes.tsx" code={`import { Badge } from '@storyhouse/components';
+
+export function BadgeSizes() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Badge size="sm">Small</Badge>
+      <Badge size="md">Medium</Badge>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="dot-indicator">Dot Indicator</h2>
+    <p>Add <code>dot</code> to show a small colored circle before the text — useful for live status indicators.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700"><span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>Online</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-2.5 py-1 text-sm font-medium text-yellow-700"><span class="h-1.5 w-1.5 rounded-full bg-yellow-500"></span>Away</span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-1 text-sm font-medium text-red-700"><span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>Offline</span>
+    </div>
+
+    <CodeBlock title="badge-dot.tsx" code={`import { Badge } from '@storyhouse/components';
+
+export function BadgeDot() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Badge variant="success" dot>Online</Badge>
+      <Badge variant="warning" dot>Away</Badge>
+      <Badge variant="danger" dot>Offline</Badge>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="removable">Removable Tags</h2>
+    <p>Use <code>removable</code> with an <code>onRemove</code> callback for tag-like badges that can be dismissed.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-700">React
+        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
+          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-sm font-medium text-green-700">TypeScript
+        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
+          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-100 px-2.5 py-1 text-sm font-medium text-purple-700">Design
+        <button type="button" class="ml-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full hover:bg-black/5" aria-label="Remove">
+          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </span>
+    </div>
+
+    <CodeBlock title="badge-removable.tsx" code={`import { Badge } from '@storyhouse/components';
+
+export function BadgeRemovable() {
+  const [tags, setTags] = React.useState(['React', 'TypeScript', 'Design']);
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <Badge
+          key={tag}
+          variant="primary"
+          removable
+          onRemove={() => setTags((prev) => prev.filter((t) => t !== tag))}
+        >
+          {tag}
+        </Badge>
+      ))}
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'variant', type: '"default" | "primary" | "success" | "warning" | "danger" | "neutral"', default: '"default"', description: 'Semantic color variant for different contexts.' },
+        { name: 'size', type: '"sm" | "md"', default: '"md"', description: 'Badge size. Use sm for compact layouts.' },
+        { name: 'dot', type: 'boolean', default: 'false', description: 'Shows a small colored circle indicator before the text.' },
+        { name: 'removable', type: 'boolean', default: 'false', description: 'Shows an X button for dismissing the badge.' },
+        { name: 'onRemove', type: '() => void', default: '-', description: 'Callback fired when the remove button is clicked.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Content inside the badge.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Remove button has <code>aria-label="Remove"</code> for screen readers</li>
+      <li>Dot indicator uses <code>aria-hidden="true"</code> to prevent screen reader distraction</li>
+      <li>Badge text is directly readable by assistive technology</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Badge variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-badge--docs" title="Badge — Storybook" height="500" />
+  </section>
+</DocLayout>

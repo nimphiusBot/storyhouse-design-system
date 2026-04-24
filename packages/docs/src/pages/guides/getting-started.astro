@@ -1,0 +1,168 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}guides/getting-started`;
+---
+
+<DocLayout
+  title="Getting Started"
+  description="Install the Storyhouse design system and start building with production-ready components."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="installation">Installation</h2>
+    <p>Install the packages you need via npm. The design system is distributed as multiple packages within the <code>@storyhouse</code> scope.</p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`npm install @storyhouse/components @storyhouse/tokens`} />
+
+    <p>Or install individually if you only need specific packages:</p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`# Core components
+npm install @storyhouse/components
+
+# Design tokens (colors, typography, spacing)
+npm install @storyhouse/tokens
+
+# Utility helpers
+npm install @storyhouse/utils`} />
+  </section>
+
+  <section>
+    <h2 id="peer-dependencies">Peer Dependencies</h2>
+    <p>
+      The design system requires <code>react</code> and <code>react-dom</code> v18+ as peer dependencies.
+      Make sure they're installed in your project:
+    </p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`npm install react react-dom`} />
+  </section>
+
+  <section>
+    <h2 id="basic-usage">Basic Usage</h2>
+    <p>Once installed, import and use components directly in your React application:</p>
+
+    <CodeBlock title="app.tsx" code={`import { Button, Card, Badge, Avatar } from '@storyhouse/components';
+import '@storyhouse/tokens/tokens.css'; // Import design tokens
+
+function App() {
+  return (
+    <Card>
+      <div className="flex items-center gap-4">
+        <Avatar name="Jane Doe" />
+        <div>
+          <h2 className="text-lg font-semibold">Welcome to Storyhouse</h2>
+          <p className="text-gray-600">
+            Your design system is ready to use.
+          </p>
+        </div>
+      </div>
+      <div className="mt-4 flex gap-2">
+        <Button variant="primary">Get Started</Button>
+        <Button variant="ghost">Learn More</Button>
+      </div>
+    </Card>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="css-tokens">Importing CSS Tokens</h2>
+    <p>
+      Design tokens are available as CSS custom properties. Import <code>@storyhouse/tokens/tokens.css</code>
+      in your app's entry point to make all tokens available globally:
+    </p>
+
+    <CodeBlock title="main.tsx" code={`import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import '@storyhouse/tokens/tokens.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);`} />
+
+    <p>Once imported, you can use tokens in your CSS:</p>
+
+    <CodeBlock lang="css" title="styles.css" code={`.my-element {
+  color: var(--color-brand-orange-500);
+  font-family: var(--font-family-sans);
+  padding: var(--spacing-4);
+  box-shadow: var(--shadow-md);
+}`} />
+  </section>
+
+  <section>
+    <h2 id="tailwind-config">Tailwind CSS Configuration</h2>
+    <p>
+      If you use Tailwind CSS, extend your config to use the design system tokens:
+    </p>
+
+    <CodeBlock lang="js" title="tailwind.config.js" code={`/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './src/**/*.{ts,tsx}',
+    './node_modules/@storyhouse/components/**/*.{ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
+          300: '#fdba74',
+          400: '#fb923c',
+          500: '#f97316',
+          600: '#ea580c',
+          700: '#c2410c',
+          800: '#9a3412',
+          900: '#7c2d12',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+    },
+  },
+  plugins: [],
+};`} />
+  </section>
+
+  <section>
+    <h2 id="project-structure">Project Structure</h2>
+    <p>
+      The design system monorepo is organized as follows:
+    </p>
+
+    <CodeBlock lang="text" title="Directory Layout" code={`packages/
+├── components/    # React component library
+│   ├── Button
+│   ├── Card
+│   ├── Input
+│   ├── Badge
+│   └── Avatar
+├── tokens/        # Design tokens (CSS + JS)
+│   ├── colors
+│   ├── typography
+│   ├── spacing
+│   └── shadows
+├── utils/         # Shared utilities
+├── docs/          # Documentation site (Astro)
+└── storybook/     # Interactive component playground`} />
+  </section>
+
+  <section>
+    <h2 id="next-steps">Next Steps</h2>
+    <ul>
+      <li>Browse the <a href={`${base}components`}>component library</a> to see what's available</li>
+      <li>Explore <a href={`${base}tokens`}>design tokens</a> for colors, typography, and spacing</li>
+      <li>Visit the <a href={`${base}storybook/`}>Storybook</a> for interactive component previews</li>
+      <li>Read the <a href={`${base}guides/theming`}>theming guide</a> to customize the system</li>
+    </ul>
+  </section>
+</DocLayout>

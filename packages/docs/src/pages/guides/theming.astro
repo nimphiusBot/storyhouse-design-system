@@ -1,0 +1,159 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}guides/theming`;
+---
+
+<DocLayout
+  title="Theming Guide"
+  description="Customize the Storyhouse design system to match your brand with CSS custom properties and design tokens."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      Storyhouse uses CSS custom properties for all design tokens, making theming straightforward and powerful.
+      Override any token value to customize the system for your brand — no JavaScript runtime needed.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="token-override">Overriding Tokens</h2>
+    <p>
+      To customize tokens, define your overrides in your CSS after importing the design system's tokens. CSS
+      custom properties cascade, so your values take precedence:
+    </p>
+
+    <CodeBlock lang="css" title="theme.css" code={`/* Import base tokens first */
+@import '@storyhouse/tokens/tokens.css';
+
+/* Then override with your brand values */
+:root {
+  --color-brand-orange-50: #fef7ee;
+  --color-brand-orange-100: #fdedd3;
+  --color-brand-orange-200: #fbdba7;
+  --color-brand-orange-300: #f9c97c;
+  --color-brand-orange-400: #f7b751;
+  --color-brand-orange-500: #f5a623;
+  --color-brand-orange-600: #d48919;
+  --color-brand-orange-700: #a66c13;
+  --color-brand-orange-800: #78500e;
+  --color-brand-orange-900: #4a3308;
+
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'Fira Code', 'JetBrains Mono', monospace;
+
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+}`} />
+  </section>
+
+  <section>
+    <h2 id="dark-mode">Dark Mode</h2>
+    <p>
+      The design system supports dark mode out of the box. Components use Tailwind's <code>dark:</code> modifier
+      for dark mode styles. The documentation site uses a class-based dark mode strategy:
+    </p>
+
+    <CodeBlock lang="css" title="dark-mode.css" code={`/* Add to your app entry point */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-50: #0a0a0a;
+    --color-gray-100: #171717;
+    --color-gray-200: #262626;
+    /* ... override other tokens for dark mode */
+  }
+}
+
+/* Or use class-based dark mode */
+html.dark {
+  --color-gray-50: #0a0a0a;
+  --color-gray-100: #171717;
+  --color-gray-200: #262626;
+}`} />
+
+    <p>The toggle implementation is straightforward:</p>
+
+    <CodeBlock lang="js" title="dark-mode-toggle.js" code={`// Toggle dark mode
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const isDark = html.classList.toggle('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+// Initialize from stored preference
+const stored = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+if (stored === 'dark' || (!stored && prefersDark)) {
+  document.documentElement.classList.add('dark');
+}`} />
+  </section>
+
+  <section>
+    <h2 id="component-styles">Component Styles</h2>
+    <p>
+      Components use Tailwind CSS for styling and <code>tailwind-merge</code> for className merging.
+      This means you can override styles by passing custom classes:
+    </p>
+
+    <CodeBlock title="custom-styles.tsx" code={`import { Button } from '@storyhouse/components';
+
+export function CustomButton() {
+  return (
+    <Button
+      variant="primary"
+      className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
+    >
+      Custom Styled
+    </Button>
+  );
+}`} />
+
+    <p>
+      The <code>cn()</code> utility uses Tailwind class merging, so your custom classes override
+      defaults correctly without specificity battles.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="semantic-tokens">Semantic Token Patterns</h2>
+    <p>
+      For advanced theming, create semantic token mappings that reference your brand tokens:
+    </p>
+
+    <CodeBlock lang="css" title="semantic-tokens.css" code={`:root {
+  /* Map brand tokens to semantic aliases */
+  --color-primary: var(--color-brand-orange-500);
+  --color-primary-hover: var(--color-brand-orange-600);
+  --color-primary-active: var(--color-brand-orange-700);
+
+  --color-surface: var(--color-white);
+  --color-surface-secondary: var(--color-gray-50);
+  --color-border: var(--color-gray-200);
+
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-disabled: var(--color-gray-400);
+}
+
+html.dark {
+  --color-surface: var(--color-gray-950);
+  --color-surface-secondary: var(--color-gray-900);
+  --color-border: var(--color-gray-800);
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-gray-400);
+}`} />
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices</h2>
+    <ul>
+      <li><strong>Override tokens at the <code>:root</code> level</strong> — token overrides cascade to all components</li>
+      <li><strong>Use semantic tokens</strong> — create aliases like <code>--color-primary</code> that map to your brand colors</li>
+      <li><strong>Keep tokens in a separate CSS file</strong> — maintain <code>theme.css</code> separate from component styles</li>
+      <li><strong>Test both modes</strong> — always verify your theme works in light and dark mode</li>
+      <li><strong>Don't override component internals</strong> — use <code>className</code> for per-instance overrides</li>
+    </ul>
+  </section>
+</DocLayout>

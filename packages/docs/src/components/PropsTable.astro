@@ -1,0 +1,46 @@
+---
+export interface PropsTableRow {
+  name: string;
+  type: string;
+  default?: string;
+  required?: boolean;
+  description: string;
+}
+
+export interface Props {
+  rows: PropsTableRow[];
+}
+const { rows } = Astro.props;
+---
+
+<div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+  <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+    <thead>
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Prop</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Type</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Default</th>
+        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Description</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+      {
+        rows.map((row) => (
+          <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="whitespace-nowrap px-4 py-3">
+              <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">{row.name}</code>
+              {row.required && <span class="ml-1.5 rounded bg-red-50 px-1.5 py-0.5 text-xs font-medium text-red-600 dark:bg-red-950 dark:text-red-400">required</span>}
+            </td>
+            <td class="whitespace-nowrap px-4 py-3">
+              <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">{row.type}</code>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400">
+              {row.default ? <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">{row.default}</code> : <span class="text-gray-400">—</span>}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{row.description}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
