@@ -1,0 +1,145 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}guides/utilities`;
+---
+
+<DocLayout
+  title="Utilities"
+  description="Utility functions and helpers that ship with the Storyhouse design system — class merging, type utilities, and more."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>@storyhouse/utils</code> package provides lightweight utility functions used internally
+      across Storyhouse components and available for your own projects. These utilities reduce
+      boilerplate and help maintain consistent patterns.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="cn">cn() — Class Merge Utility</h2>
+    <p>
+      The <code>cn()</code> function is the foundation of Storyhouse's styling approach. It combines
+      <code>clsx</code> (conditional class joining) with <code>tailwind-merge</code> (intelligent Tailwind
+      class deduplication), so you never have to worry about class order or specificity battles.
+    </p>
+
+    <CodeBlock title="basic-usage.tsx" code={`import { cn } from '@storyhouse/utils';
+
+// Conditional classes
+cn('base-class', true && 'conditional', false && 'never-applied');
+// → 'base-class conditional'
+
+// Object syntax
+cn('btn', { 'btn-primary': isPrimary, 'btn-disabled': isDisabled });
+// → 'btn btn-primary btn-disabled'
+
+// Multiple arguments
+cn('px-4', 'py-2', 'text-sm');
+// → 'px-4 py-2 text-sm'`} />
+
+    <h3>Tailwind Conflict Resolution</h3>
+    <p>
+      This is where <code>cn()</code> really shines. Tailwind classes that conflict are automatically resolved
+      — the last one wins, regardless of order in the generated string:
+    </p>
+
+    <CodeBlock title="conflict-resolution.tsx" code={`import { cn } from '@storyhouse/utils';
+
+// Tailwind-merge resolves conflicting properties
+cn('px-4 px-6');
+// → 'px-6'  (px-4 is removed, px-6 wins)
+
+cn('text-red-500 text-blue-500');
+// → 'text-blue-500'  (blue wins over red)
+
+cn('p-2 p-4');
+// → 'p-4'  (larger padding wins)
+
+// Great for component overrides
+function MyButton({ className }) {
+  return (
+    <button className={cn(
+      'inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-white',
+      className  // Consumer overrides work without breaking defaults
+    )}>
+      Click me
+    </button>
+  );
+}`} />
+
+    <h3>Real Component Usage</h3>
+    <p>
+      Every Storyhouse component uses <code>cn()</code> internally to merge props with default styles.
+      This is why you can pass <code>className</code> to any component and it just works:
+    </p>
+
+    <CodeBlock title="button-override.tsx" code={`import { Button } from '@storyhouse/components';
+
+// These customizations work because Button internally uses cn():
+<Button className="rounded-full">
+  Rounded Button
+</Button>
+
+<Button className="shadow-lg">
+  Elevated Button
+</Button>
+
+<Button className="uppercase tracking-wider">
+  Brand Styled
+</Button>`} />
+  </section>
+
+  <section>
+    <h2 id="installation">Installation</h2>
+    <p>
+      The utils package is included when you install <code>@storyhouse/components</code>, but you can
+      also install it standalone:
+    </p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`npm install @storyhouse/utils`} />
+
+    <p className="mt-4">
+      <strong>Note:</strong> <code>cn()</code> requires <code>clsx</code> and <code>tailwind-merge</code>
+      as peer dependencies. Install them alongside:
+    </p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`npm install @storyhouse/utils clsx tailwind-merge`} />
+  </section>
+
+  <section>
+    <h2 id="api">API Reference</h2>
+
+    <table class="min-w-full overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">
+      <thead class="bg-gray-50 dark:bg-gray-900">
+        <tr>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Function</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Type Signature</th>
+          <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="px-4 py-3 font-mono text-sm"><code>cn</code></td>
+          <td class="px-4 py-3 font-mono text-xs text-gray-500 dark:text-gray-400"><code>(...inputs: ClassValue[]) => string</code></td>
+          <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+            Merges Tailwind CSS classes with intelligent conflict resolution. Combines <code>clsx</code> and <code>tailwind-merge</code>.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2 id="tailwind">Tailwind Integration</h2>
+    <p>
+      The <code>cn()</code> utility was designed alongside Storyhouse's Tailwind configuration. When combined
+      with the recommended Tailwind setup in <a href={`${base}guides/getting-started#tailwind-config`}>Getting Started</a>,
+      it handles all class conflicts automatically — including custom tokens.
+    </p>
+  </section>
+</DocLayout>

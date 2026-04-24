@@ -1,0 +1,262 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}guides/contributing`;
+
+const cmpDir = `packages/components/src/components/{Name}/`;
+const cmpDirLayout = [
+  `packages/components/src/components/{Name}/`,
+  `├── {Name}.tsx              # Main component implementation`,
+  `├── {Name}.stories.tsx      # Storybook stories`,
+  `├── {Name}.test.tsx         # Unit tests (optional)`,
+  `└── index.ts               # Re-export (optional)`,
+].join('\n');
+const componentTemplate = [
+  `import React from 'react';`,
+  `import { cn } from '@storyhouse/utils';`,
+  ``,
+  `export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {`,
+  `  variant?: 'default' | 'elevated';`,
+  `  padding?: 'sm' | 'md';`,
+  `}`,
+  ``,
+  `const variantStyles = {`,
+  `  default: 'bg-white border border-gray-200 shadow-sm',`,
+  `  elevated: 'bg-white border border-gray-100 shadow-md',`,
+  `};`,
+  ``,
+  `const paddingStyles = {`,
+  `  sm: 'p-4',`,
+  `  md: 'p-6',`,
+  `};`,
+  ``,
+  `export const Card = React.forwardRef<HTMLDivElement, CardProps>(`,
+  `  ({ variant = 'default', padding = 'md', className, children, ...props }, ref) => {`,
+  `    return (`,
+  `      <div`,
+  `        ref={ref}`,
+  `        className={cn(`,
+  `          'rounded-xl dark:bg-gray-900',`,
+  `          variantStyles[variant],`,
+  `          paddingStyles[padding],`,
+  `          className`,
+  `        )}`,
+  `        {...props}`,
+  `      >`,
+  `        {children}`,
+  `      </div>`,
+  `    );`,
+  `  }`,
+  `);`,
+  ``,
+  `Card.displayName = 'Card';`,
+].join('\n');
+const storybookTemplate = [
+  `import type { Meta, StoryObj } from '@storybook/react';`,
+  `import { Button } from './Button';`,
+  ``,
+  `const meta = {`,
+  `  title: 'Components/Button',`,
+  `  component: Button,`,
+  `  tags: ['autodocs'],`,
+  `  argTypes: {`,
+  `    variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'danger'] },`,
+  `    size: { control: 'select', options: ['sm', 'md', 'lg'] }`,
+  `  },`,
+  `} satisfies Meta<typeof Button>;`,
+  ``,
+  `export default meta;`,
+  `type Story = StoryObj<typeof meta>;`,
+  ``,
+  `export const Primary: Story = {`,
+  `  args: { variant: 'primary', children: 'Button' },`,
+  `};`,
+].join('\n');
+---
+
+<DocLayout
+  title="Contributing"
+  description="Learn how to contribute to the Storyhouse Design System — from component development to documentation."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      Storyhouse is built for teams. Whether you're adding a new component, fixing a bug, or improving
+      documentation, this guide covers the workflow, conventions, and standards you need to know.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="prerequisites">Prerequisites</h2>
+    <ul>
+      <li>Node.js v20+ and npm v10+</li>
+      <li>Familiarity with <strong>React 18+</strong>, <strong>TypeScript</strong> (strict mode), and <strong>Tailwind CSS</strong></li>
+      <li>Understanding of <strong>design token</strong> concepts (CSS custom properties, spacing scales)</li>
+      <li>Access to the <strong>Figma design file</strong> for component specs</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="setup">Local Development Setup</h2>
+
+    <CodeBlock lang="bash" title="Terminal" code={`# Clone the repository
+git clone git@github.com:nimphiusBot/storyhouse-design-system.git
+cd storyhouse-design-system
+
+# Install all dependencies
+npm install
+
+# Build all packages (verify everything works)
+npm run build`} />
+
+    <h3>Working with packages</h3>
+    <p>
+      The monorepo uses npm workspaces. To develop a specific package, you can run its dev server:
+    </p>
+
+    <CodeBlock lang="bash" title="Terminal" code={`# Start Storybook (component development)
+cd packages/storybook
+npm run storybook
+
+# Start docs site (documentation development)
+cd packages/docs
+npm run dev`} />
+  </section>
+
+  <section>
+    <h2 id="component-structure">Component Structure</h2>
+    <p>
+      Each component lives in its own directory under <code>{cmpDir}</code>.
+      Follow this structure when creating new components:
+    </p>
+
+    <CodeBlock lang="text" title="Directory Layout" code={cmpDirLayout} />
+  </section>
+
+  <section>
+    <h2 id="standards">Coding Standards</h2>
+
+    <h3>TypeScript</h3>
+    <ul>
+      <li>Use <strong>strict TypeScript</strong> — no <code>any</code>, no <code>@ts-ignore</code></li>
+      <li>Export a typed props interface named <code>NameProps</code></li>
+      <li>Use <code>React.forwardRef</code> for all interactive components (wrapping native elements)</li>
+      <li>Spread remaining props onto the underlying DOM element</li>
+    </ul>
+
+    <h3>Styling</h3>
+    <ul>
+      <li>Use <strong>Tailwind CSS</strong> for all styling — no CSS modules or styled-components</li>
+      <li>Use <code>cn()</code> from <code>@storyhouse/utils</code> for className merging</li>
+      <li>Support dark mode via <code>dark:</code> prefix on every color/style class</li>
+      <li>Use design tokens (<code>--color-*</code>, <code>--spacing-*</code>) where possible</li>
+      <li>Support <code>className</code> prop on every component for consumer overrides</li>
+    </ul>
+
+    <h3>Component Template</h3>
+
+    <CodeBlock title="component-name.tsx" code={componentTemplate} />
+
+    <h3>Accessibility</h3>
+    <ul>
+      <li>Use semantic HTML elements (<code>&lt;button&gt;</code>, <code>&lt;input&gt;</code>, etc.)</li>
+      <li>Include <code>aria-*</code> attributes for dynamic states</li>
+      <li>Support keyboard navigation (<code>onKeyDown</code>, <code>tabIndex</code>)</li>
+      <li>Ensure color contrast ratios meet WCAG AA (4.5:1 for text)</li>
+      <li>Test with screen readers (VoiceOver, NVDA)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook">Storybook Stories</h2>
+    <p>
+      Every component needs Storybook stories for interactive development and documentation.
+      Follow the CSF3 (Component Story Format 3) pattern:
+    </p>
+
+    <CodeBlock title="button.stories.tsx" code={storybookTemplate} />
+  </section>
+
+  <section>
+    <h2 id="testing">Testing</h2>
+    <p>
+      Components are tested with <strong>Vitest</strong> and <strong>React Testing Library</strong>.
+      Focus on behavior, not implementation:
+    </p>
+
+    <ul>
+      <li>Render tests — verify component renders without crashing</li>
+      <li>Prop tests — each variant, size, and state renders correctly</li>
+      <li>Interaction tests — click handlers, keyboard events</li>
+      <li>Accessibility tests — use <code>@testing-library/jest-dom</code> for accessible queries</li>
+      <li>Aim for <strong>90%+ coverage</strong> on all components</li>
+    </ul>
+
+    <CodeBlock lang="bash" title="Terminal" code={`# Run tests
+npm run test
+
+# Run tests with coverage
+npm run test -- --coverage`} />
+  </section>
+
+  <section>
+    <h2 id="pull-requests">Pull Request Process</h2>
+    <ol>
+      <li>
+        <strong>Create a feature branch</strong> from <code>main</code>:
+        <CodeBlock lang="bash" title="" code={`git checkout -b feat/my-component`} />
+      </li>
+      <li>
+        <strong>Implement your changes</strong> following the standards above
+      </li>
+      <li>
+        <strong>Add a changeset</strong> for package versioning:
+        <CodeBlock lang="bash" title="" code={`npx changeset\n# Select packages and describe changes`} />
+      </li>
+      <li>
+        <strong>Write a clear PR description</strong> covering:
+        <ul>
+          <li>What changed and why</li>
+          <li>Screenshots (for UI changes)</li>
+          <li>Test plan / how to verify</li>
+          <li>Breaking changes (if any)</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Request review</strong> from at least one maintainer
+      </li>
+      <li>
+        Address review feedback and <strong>squash merge</strong> when approved
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2 id="documentation">Documentation</h2>
+    <p>
+      When adding or updating components, always update the docs site:
+    </p>
+    <ul>
+      <li>Create a new page at <code>packages/docs/src/pages/components/name.astro</code></li>
+      <li>Add the page to the sidebar in <code>DocLayout.astro</code></li>
+      <li>Add a component card to <code>packages/docs/src/pages/components.astro</code></li>
+      <li>Add a search entry in <code>SearchModal.astro</code></li>
+      <li>Add documentation for any new props in a <code>PropsTable</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="versioning">Versioning</h2>
+    <p>
+      Storyhouse follows <strong>Semantic Versioning</strong> (semver):
+    </p>
+    <ul>
+      <li><strong>Major</strong> — breaking changes, redesigns, removed APIs</li>
+      <li><strong>Minor</strong> — new components, new features, token additions</li>
+      <li><strong>Patch</strong> — bug fixes, documentation, minor style tweaks</li>
+    </ul>
+  </section>
+</DocLayout>
