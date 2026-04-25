@@ -1,13 +1,25 @@
 import React, { useEffect } from 'react';
 import { X, CheckCircle, XCircle, AlertCircle, Info } from 'lucide-react';
 
+export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
+
 export interface ToastProps {
   message: string;
   type?: 'success' | 'error' | 'warning' | 'info';
   show?: boolean;
   duration?: number;
+  position?: ToastPosition;
   onClose?: () => void;
 }
+
+const positionClasses: Record<ToastPosition, string> = {
+  'top-right': 'top-4 right-4',
+  'top-left': 'top-4 left-4',
+  'bottom-right': 'bottom-4 right-4',
+  'bottom-left': 'bottom-4 left-4',
+  'top-center': 'top-4 left-1/2 -translate-x-1/2',
+  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2',
+};
 
 export const Toast: React.FC<ToastProps> = ({
   message,
@@ -75,7 +87,7 @@ export const Toast: React.FC<ToastProps> = ({
   const Icon = config.icon;
 
   return (
-    <div className="animate-in slide-in-from-right duration-300">
+    <div className="animate-in fade-in duration-300">
       <div
         className={`rounded-lg shadow-lg p-4 border max-w-sm ${config.bgColor} ${config.textColor} ${config.borderColor}`}
       >
@@ -101,7 +113,7 @@ export const Toast: React.FC<ToastProps> = ({
 
 interface ToastContext {
   showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info', duration?: number) => void;
-  ToastContainer: React.FC;
+  ToastContainer: React.FC<{ position?: ToastPosition }>;
 }
 
 export const useToast = (): ToastContext => {
@@ -127,13 +139,14 @@ export const useToast = (): ToastContext => {
   }, []);
 
   const ToastContainer = React.useCallback(
-    () => (
-      <div className="fixed top-4 right-4 z-[60] space-y-2">
+    ({ position = 'top-right' }: { position?: ToastPosition } = {}) => (
+      <div className={`fixed z-[60] space-y-2 ${positionClasses[position]}`}>
         {toasts.map((toast) => (
           <Toast
             key={toast.id}
             message={toast.message}
             type={toast.type}
+            position={position}
             {...(typeof toast.duration !== 'undefined' ? { duration: toast.duration } : {})}
             onClose={() => hideToast(toast.id)}
           />
