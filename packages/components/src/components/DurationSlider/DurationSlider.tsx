@@ -103,11 +103,20 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     setInputValue('');
   };
 
-  // Confirm editing
+  // Confirm editing — snap to nearest valid duration option
   const handleConfirmEdit = () => {
     const numValue = parseInt(inputValue, 10);
     if (!isNaN(numValue) && numValue > 0 && numValue <= 900) {
-      onChange(numValue as 20 | 60 | 90 | 900);
+      const valid = DURATION_OPTIONS.find((o: DurationOption) => o.value === numValue);
+      if (valid) {
+        onChange(valid.value);
+      } else {
+        // Snap to nearest valid value
+        const snapped = DURATION_OPTIONS.reduce((prev: DurationOption, curr: DurationOption) =>
+          Math.abs(curr.value - numValue) < Math.abs(prev.value - numValue) ? curr : prev
+        );
+        onChange(snapped.value);
+      }
     }
     setIsEditing(false);
     setInputValue('');
