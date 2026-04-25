@@ -80,6 +80,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       fullWidth = true,
       disabled,
       children,
+      value,
+      onChange,
       ...props
     },
     ref
@@ -87,9 +89,53 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const id = props.id || `select-${Math.random().toString(36).substring(2, 9)}`;
     const effectiveVariant = error ? 'error' : variant;
 
+    /**
+     * Track uncontrolled state so the component behaves consistently
+     * regardless of whether options are flat or grouped.
+     */
+    const [internalValue, setInternalValue] = React.useState<string | undefined>(
+      value ?? undefined
+    );
+
+    // Sync controlled value
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setInternalValue(value);
+      }
+    }, [value]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newValue = e.target.value;
+      setInternalValue(newValue);
+      onChange?.(e);
+    };
+
     const renderOptions = () => {
+      // If children are provided, render them directly (with placeholder if given)
+      if (children) {
+        return (
+          <>
+            {placeholder && (
+              <option value="" disabled>
+                {placeholder}
+              </option>
+            )}
+            {children}
+          </>
+        );
+      }
+
+      // If no options and no children, just render placeholder
       if (!options || options.length === 0) {
-        return children;
+        return (
+          <>
+            {placeholder && (
+              <option value="" disabled>
+                {placeholder}
+              </option>
+            )}
+          </>
+        );
       }
 
       return (
@@ -134,6 +180,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             id={id}
             disabled={disabled}
+            value={internalValue}
+            onChange={handleChange}
             className={selectVariants({ variant: effectiveVariant, size, focusRing, className })}
             {...props}
           >
