@@ -42,7 +42,7 @@ export type { TooltipProps } from './components/Tooltip';
 
 export { PageHeader, PageHeaderTop, PageHeaderMiddle, PageHeaderTabs, PageHeaderBottom } from './components/PageHeader';
 export type { PageHeaderProps } from './components/PageHeader';
-export type { PageHeaderTopProps, BreadcrumbItem, SelectorItem, GreetingConfig } from './components/PageHeader/PageHeaderTop';
+export type { PageHeaderTopProps, SelectorItem, GreetingConfig } from './components/PageHeader/PageHeaderTop';
 export type { PageHeaderMiddleProps } from './components/PageHeader/PageHeaderMiddle';
 export type { PageHeaderTabsProps } from './components/PageHeader/PageHeaderTabs';
 export type { PageHeaderBottomProps } from './components/PageHeader/PageHeaderBottom';
@@ -94,3 +94,31 @@ export type { ThumbnailLightboxProps } from './components/ThumbnailLightbox';
 export { SlidePanel } from './components/SlidePanel';
 export type { SlidePanelProps } from './components/SlidePanel';
 
+// ─── NEW COMPONENTS (ORA-112) ──────────────────────────────────────────
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './components/Accordion';
+export type { AccordionProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from './components/Accordion';
+
+export { Alert } from './components/Alert';
+export type { AlertProps, AlertVariant } from './components/Alert';
+
+export { Breadcrumb } from './components/Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItem } from './components/Breadcrumb';
+
+export { Chip } from './components/Chip';
+export type { ChipProps, ChipVariant } from './components/Chip';
+
+export { Collapsible } from './components/Collapsible';
+export type { CollapsibleProps } from './components/Collapsible';
+
+export { IconButton } from './components/IconButton';
+export type { IconButtonProps } from './components/IconButton';
+
+export { Skeleton } from './components/Skeleton';
+export type { SkeletonProps } from './components/Skeleton';
+
+export { Spinner } from './components/Spinner';
+export type { SpinnerProps } from './components/Spinner';
+
+export { Stepper } from './components/Stepper';
+export type { StepperProps, Step } from './components/Stepper';
