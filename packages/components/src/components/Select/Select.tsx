@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Check } from 'lucide-react';
 
-const selectVariants = cva(
-  'w-full appearance-none transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+const selectTriggerVariants = cva(
+  'w-full flex items-center justify-between transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -17,9 +17,9 @@ const selectVariants = cva(
           'bg-white dark:bg-gray-800 border-2 border-green-500 dark:border-green-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-green-600',
       },
       size: {
-        sm: 'px-3 py-1.5 text-sm rounded-md pr-9',
-        md: 'px-3 py-2 text-base rounded-lg pr-10',
-        lg: 'px-4 py-3 text-lg rounded-xl pr-12',
+        sm: 'px-3 py-1.5 text-sm rounded-md',
+        md: 'px-3 py-2 text-base rounded-lg',
+        lg: 'px-4 py-3 text-lg rounded-xl',
       },
       focusRing: {
         default: 'focus:ring-2 focus:ring-orange-500 focus:ring-offset-1',
@@ -41,12 +41,6 @@ const optionFontSizeMap = {
   lg: 'text-lg',
 } as const;
 
-const optionFontSizeInlineMap = {
-  sm: 14,
-  md: 16,
-  lg: 18,
-} as const;
-
 const iconSizeMap = {
   sm: 16,
   md: 20,
@@ -64,9 +58,7 @@ export interface SelectOptionGroup {
   options: SelectOption[];
 }
 
-export interface SelectProps
-  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'value'>,
-    VariantProps<typeof selectVariants> {
+export interface SelectProps extends VariantProps<typeof selectTriggerVariants> {
   label?: string;
   error?: string;
   helpText?: string;
@@ -75,9 +67,24 @@ export interface SelectProps
   fullWidth?: boolean;
   /** Controlled value (single selection only) */
   value?: string;
+  defaultValue?: string;
+  /** Callback when selection changes */
+  onChange?: (value: string) => void;
+  /** Class name override for the trigger */
+  className?: string;
+  /** Disable the select */
+  disabled?: boolean;
+  /** Mark as required */
+  required?: boolean;
+  /** The id of the select */
+  id?: string;
+  /** Name attribute for form submission */
+  name?: string;
+  /** Children as options (alternative to options prop) */
+  children?: React.ReactNode;
 }
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       className,
@@ -88,127 +95,365 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       error,
       helpText,
       options = [],
-      placeholder,
+      placeholder = 'Select...',
       fullWidth = true,
-      disabled,
-      children,
+      disabled = false,
+      required = false,
       value,
+      defaultValue,
       onChange,
-      ...props
+      id,
+      name,
+      children,
     },
     ref
   ) => {
-    const id = props.id || `select-${Math.random().toString(36).substring(2, 9)}`;
+    const generatedId = useRef(`select-${Math.random().toString(36).substring(2, 9)}`).current;
+    const selectId = id || generatedId;
+    const listboxId = `${selectId}-listbox`;
     const effectiveVariant = error ? 'error' : variant;
 
-    /**
-     * Track uncontrolled state so the component behaves consistently
-     * regardless of whether options are flat or grouped.
-     */
-    const [internalValue, setInternalValue] = React.useState<string | undefined>(
-      value ?? undefined
-    );
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedLabel, setSelectedLabel] = useState<string>('');
+    const [focusedIndex, setFocusedIndex] = useState(-1);
+    const [selectedValue, setSelectedValue] = useState<string | undefined>(value ?? defaultValue);
+
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const listRef = useRef<HTMLUListElement>(null);
 
     // Sync controlled value
-    React.useEffect(() => {
+    useEffect(() => {
       if (value !== undefined) {
-        setInternalValue(value);
+        setSelectedValue(value);
       }
     }, [value]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const newValue = e.target.value;
-      setInternalValue(newValue);
-      onChange?.(e);
-    };
-
-    const renderOptions = () => {
-      const sizeFontClass = optionFontSizeMap[size || 'md'];
-    const optionFontSize = optionFontSizeInlineMap[size || 'md'];
-
-      // If children are provided, render them directly (with placeholder if given)
-      if (children) {
-        return (
-          <>
-            {placeholder && (
-              <option value="" disabled className={sizeFontClass} style={{ fontSize: optionFontSize }}>
-                {placeholder}
-              </option>
-            )}
-            {children}
-          </>
-        );
+    // Build flat list of options for keyboard navigation
+    const flatOptions = React.useMemo(() => {
+      if (children) return [];
+      const flat: { value: string; label: string; disabled?: boolean; groupLabel?: string }[] = [];
+      for (const item of options) {
+        if ('options' in item) {
+          for (const opt of item.options) {
+            flat.push({ ...opt, groupLabel: item.label });
+          }
+        } else {
+          flat.push(item);
+        }
       }
+      return flat;
+    }, [options, children]);
 
-      // If no options and no children, just render placeholder
+    // Find selected label
+    useEffect(() => {
+      if (children) return;
+      const selected = flatOptions.find((o) => o.value === selectedValue);
+      setSelectedLabel(selected?.label ?? '');
+    }, [selectedValue, flatOptions, children]);
+
+    // Resolve current value
+    const currentValue = value !== undefined ? value : selectedValue;
+
+    const handleTriggerKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (disabled) return;
+
+        switch (e.key) {
+          case 'Enter':
+          case ' ':
+            e.preventDefault();
+            setIsOpen((prev) => !prev);
+            if (!isOpen) {
+              const idx = flatOptions.findIndex((o) => o.value === currentValue);
+              setFocusedIndex(idx >= 0 ? idx : 0);
+            }
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            if (!isOpen) {
+              setIsOpen(true);
+              setFocusedIndex(0);
+            } else {
+              setFocusedIndex((prev) => {
+                const max = flatOptions.length - 1;
+                return prev < max ? prev + 1 : 0;
+              });
+            }
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            if (!isOpen) {
+              setIsOpen(true);
+              setFocusedIndex(flatOptions.length - 1);
+            } else {
+              setFocusedIndex((prev) => {
+                const max = flatOptions.length - 1;
+                return prev > 0 ? prev - 1 : max;
+              });
+            }
+            break;
+          case 'Escape':
+            e.preventDefault();
+            setIsOpen(false);
+            triggerRef.current?.focus();
+            break;
+          case 'Home':
+            e.preventDefault();
+            setFocusedIndex(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            setFocusedIndex(flatOptions.length - 1);
+            break;
+        }
+      },
+      [disabled, isOpen, flatOptions, currentValue]
+    );
+
+    const selectOption = useCallback(
+      (option: { value: string; label: string; disabled?: boolean }) => {
+        if (option.disabled) return;
+        const newValue = option.value;
+        setSelectedValue(newValue);
+        setSelectedLabel(option.label);
+        onChange?.(newValue);
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      },
+      [onChange]
+    );
+
+    const handleListKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (disabled) return;
+
+        switch (e.key) {
+          case 'Enter':
+          case ' ':
+            e.preventDefault();
+            if (focusedIndex >= 0 && focusedIndex < flatOptions.length) {
+              selectOption(flatOptions[focusedIndex]);
+            }
+            break;
+          case 'Escape':
+            e.preventDefault();
+            setIsOpen(false);
+            triggerRef.current?.focus();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            setFocusedIndex((prev) => {
+              const max = flatOptions.length - 1;
+              return prev < max ? prev + 1 : 0;
+            });
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            setFocusedIndex((prev) => {
+              const max = flatOptions.length - 1;
+              return prev > 0 ? prev - 1 : max;
+            });
+            break;
+          case 'Home':
+            e.preventDefault();
+            setFocusedIndex(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            setFocusedIndex(flatOptions.length - 1);
+            break;
+          case 'Tab':
+            setIsOpen(false);
+            break;
+        }
+      },
+      [disabled, flatOptions, focusedIndex, selectOption]
+    );
+
+    // Close on outside click
+    useEffect(() => {
+      if (!isOpen) return;
+      const handleClick = (e: MouseEvent) => {
+        if (
+          triggerRef.current &&
+          !triggerRef.current.contains(e.target as Node) &&
+          listRef.current &&
+          !listRef.current.contains(e.target as Node)
+        ) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClick);
+      return () => document.removeEventListener('mousedown', handleClick);
+    }, [isOpen]);
+
+    // Focus management on list open
+    useEffect(() => {
+      if (isOpen && listRef.current && focusedIndex >= 0) {
+        const items = listRef.current.querySelectorAll<HTMLLIElement>('[role="option"]');
+        items[focusedIndex]?.focus();
+      }
+    }, [isOpen, focusedIndex]);
+
+    const renderOptionList = () => {
+      if (children) return children;
+
       if (!options || options.length === 0) {
         return (
-          <>
-            {placeholder && (
-              <option value="" disabled className={sizeFontClass} style={{ fontSize: optionFontSize }}>
-                {placeholder}
-              </option>
-            )}
-          </>
+          <li className="px-3 py-2 text-sm text-gray-400 dark:text-gray-500 italic cursor-default" role="option" aria-disabled="true">
+            {placeholder || 'No options'}
+          </li>
         );
       }
 
-      return (
-        <>
-          {placeholder && (
-            <option value="" disabled className={sizeFontClass} style={{ fontSize: optionFontSize }}>
-              {placeholder}
-            </option>
-          )}
-          {options.map((item, index) => {
-            if ('options' in item) {
-              return (
-                <optgroup key={index} label={item.label} className={sizeFontClass}>
-                  {item.options.map((opt) => (
-                    <option key={opt.value} value={opt.value} disabled={opt.disabled} className={sizeFontClass} style={{ fontSize: optionFontSize }}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </optgroup>
-              );
-            }
-            return (
-              <option key={item.value} value={item.value} disabled={item.disabled} className={sizeFontClass} style={{ fontSize: optionFontSize }}>
+      let globalIndex = -1;
+
+      return options.map((item, groupIdx) => {
+        if ('options' in item) {
+          return (
+            <li key={`group-${groupIdx}`} role="presentation">
+              <div
+                className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-800/50"
+                role="presentation"
+              >
                 {item.label}
-              </option>
-            );
-          })}
-        </>
+              </div>
+              <ul role="presentation" className="list-none p-0 m-0">
+                {item.options.map((opt) => {
+                  globalIndex++;
+                  const idx = globalIndex;
+                  const isSelected = opt.value === currentValue;
+                  const isFocused = idx === focusedIndex;
+
+                  return renderOptionItem(opt, idx, isSelected, isFocused);
+                })}
+              </ul>
+            </li>
+          );
+        }
+
+        globalIndex++;
+        const idx = globalIndex;
+        const isSelected = item.value === currentValue;
+        const isFocused = idx === focusedIndex;
+
+        return renderOptionItem(item, idx, isSelected, isFocused);
+      });
+    };
+
+    const renderOptionItem = (
+      opt: SelectOption,
+      idx: number,
+      isSelected: boolean,
+      isFocused: boolean
+    ) => {
+      const sizeFontClass = optionFontSizeMap[size || 'md'];
+
+      return (
+        <li
+          key={opt.value}
+          id={`${listboxId}-option-${idx}`}
+          role="option"
+          aria-selected={isSelected}
+          aria-disabled={opt.disabled || undefined}
+          tabIndex={-1}
+          className={`${sizeFontClass} px-3 py-2 cursor-pointer flex items-center justify-between transition-colors ${
+            opt.disabled
+              ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+              : isSelected
+              ? 'bg-orange-50 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 font-medium'
+              : isFocused && !opt.disabled
+              ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+          }`}
+          onMouseEnter={() => !opt.disabled && setFocusedIndex(idx)}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            selectOption(opt);
+          }}
+        >
+          <span>{opt.label}</span>
+          {isSelected && !opt.disabled && (
+            <Check size={16} className="text-orange-500 flex-shrink-0 ml-2" />
+          )}
+        </li>
       );
     };
 
     return (
-      <div className={fullWidth ? 'w-full' : 'w-auto'}>
+      <div ref={ref} className={fullWidth ? 'w-full' : 'w-auto'}>
         {label && (
-          <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label htmlFor={selectId} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {label}
+            {required && <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>}
           </label>
         )}
 
         <div className="relative">
-          <select
-            ref={ref}
-            id={id}
+          <button
+            ref={triggerRef}
+            id={selectId}
+            type="button"
+            role="combobox"
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
+            aria-controls={listboxId}
+            aria-activedescendant={
+              focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined
+            }
+            aria-invalid={!!error || undefined}
+            aria-required={required || undefined}
+            aria-disabled={disabled || undefined}
+            aria-label={label || undefined}
             disabled={disabled}
-            value={internalValue}
-            onChange={handleChange}
-            className={selectVariants({ variant: effectiveVariant, size, focusRing, className })}
-            {...props}
+            name={name}
+            className={selectTriggerVariants({
+              variant: effectiveVariant,
+              size,
+              focusRing,
+              className,
+            })}
+            onClick={(e) => {
+              if (disabled) return;
+              e.preventDefault();
+              setIsOpen((prev) => !prev);
+              if (!isOpen) {
+                const idx = flatOptions.findIndex((o) => o.value === currentValue);
+                setFocusedIndex(idx >= 0 ? idx : 0);
+              }
+            }}
+            onKeyDown={handleTriggerKeyDown}
           >
-            {renderOptions()}
-          </select>
-
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <span className={selectedLabel ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'}>
+              {selectedLabel || placeholder}
+            </span>
             <ChevronDown
               size={iconSizeMap[size || 'md']}
-              className={`text-gray-400 ${disabled ? 'opacity-50' : ''}`}
+              className={`text-gray-400 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${disabled ? 'opacity-50' : ''}`}
             />
-          </div>
+          </button>
+
+          {isOpen && (
+            <ul
+              ref={listRef}
+              id={listboxId}
+              role="listbox"
+              aria-label={label || 'Select options'}
+              tabIndex={-1}
+              onKeyDown={handleListKeyDown}
+              onBlur={(e) => {
+                // Don't close if focus moves within the listbox
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setIsOpen(false);
+                }
+              }}
+              className={`absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-auto max-h-60 focus:outline-none ${
+                optionFontSizeMap[size || 'md']
+              }`}
+            >
+              {renderOptionList()}
+            </ul>
+          )}
         </div>
 
         {helpText && !error && (
@@ -216,7 +461,24 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         )}
 
         {error && (
-          <p className="mt-2 text-sm text-red-600">{error}</p>
+          <p className="mt-2 text-sm text-red-600" role="alert">{error}</p>
+        )}
+
+        {/* Hidden native select for form submission */}
+        {name && (
+          <select
+            name={name}
+            value={currentValue || ''}
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden="true"
+            readOnly
+            onChange={() => {}} // Prevent React warning
+          >
+            {flatOptions.map((opt) => (
+              <option key={opt.value} value={opt.value} />
+            ))}
+          </select>
         )}
       </div>
     );

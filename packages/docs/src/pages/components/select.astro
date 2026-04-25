@@ -42,8 +42,8 @@ const props = [
         <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
-        A styled native select component that supports single selection, grouped options,
-        validation states, and keyboard navigation.
+        A fully accessible custom dropdown component with ARIA support, keyboard navigation,
+        grouped options, and validation states.
       </p>
       <div class="flex items-center gap-4">
         <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
@@ -154,9 +154,10 @@ export function LanguageSelect() {
           <li><strong>No options</strong> — Renders with placeholder, visually indicates empty state.</li>
           <li><strong>Long option text</strong> — Text truncates with ellipsis; tooltip on full hover.</li>
           <li><strong>Grouped options</strong> — Uses native <code>&lt;optgroup&gt;</code> with bold labels.</li>
-          <li><strong>Keyboard navigation</strong> — Arrow keys navigate options, Enter selects, Escape closes.</li>
-          <li><strong>Screen reader support</strong> — Labels, values, and error states use aria attributes.</li>
-          <li><strong>Focus management</strong> — Focus ring uses orange-500 ring on focus visible.</li>
+          <li><strong>Keyboard navigation</strong> — Arrow keys navigate options, Enter/Space selects, Escape closes, Home/End jump to first/last.</li>
+          <li><strong>Screen reader support</strong> — Uses combobox pattern with aria-expanded, aria-activedescendant, and aria-selected.</li>
+          <li><strong>Focus management</strong> — Focus ring uses orange-500 ring on focus visible; focus returns to trigger after selection.</li>
+          <li><strong>Form support</strong> — Hidden native select preserved for form submissions when a name is provided.</li>
         </ul>
       </div>
     </section>
