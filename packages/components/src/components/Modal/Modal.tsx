@@ -169,7 +169,14 @@ export const Modal: React.FC<ModalProps> = ({
     );
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
-    firstElement?.focus();
+
+    // Focus the most appropriate element: prefer the last focusable (primary action)
+    // over the close button (which is typically first in DOM order).
+    if (focusableElements.length > 1 && firstElement?.getAttribute('aria-label') === 'Close modal') {
+      lastElement?.focus();
+    } else {
+      firstElement?.focus();
+    }
 
     const handleTab = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
