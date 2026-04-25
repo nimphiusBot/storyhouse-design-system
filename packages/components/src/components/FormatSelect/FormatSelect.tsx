@@ -46,10 +46,15 @@ export const FormatSelect: React.FC<FormatSelectProps> = ({
   disabled = false,
   className,
 }) => {
-  const selectedOption = options.find((opt) => opt.format === value);
+  // Guard: if value doesn't match any option, show placeholder to avoid blank trigger
+  const matchedValue = options.some((opt) => opt.format === value);
+  const safeValue = matchedValue ? value : '';
+  const selectedOption = matchedValue
+    ? options.find((opt) => opt.format === value)
+    : undefined;
 
   return (
-    <SelectPrimitive.Root value={value} onValueChange={onChange} disabled={disabled}>
+    <SelectPrimitive.Root value={safeValue} onValueChange={onChange} disabled={disabled}>
       <SelectPrimitive.Trigger
         className={cn(
           'w-full flex items-center justify-between gap-2',
