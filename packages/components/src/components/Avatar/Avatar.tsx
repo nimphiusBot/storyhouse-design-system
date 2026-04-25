@@ -56,6 +56,11 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ src, alt = '', name, className, size = 'md', variant = 'circle', fallback }, ref) => {
     const dim = sizeDimensions[size];
     const [imgError, setImgError] = React.useState(false);
+
+    // Reset imgError when src changes so a new image can be attempted
+    React.useEffect(() => {
+      setImgError(false);
+    }, [src]);
     const shapeStyles = variant === 'circle' ? 'rounded-full' : 'rounded-lg';
     const containerStyles = cn(
       'relative inline-flex items-center justify-center overflow-hidden',
