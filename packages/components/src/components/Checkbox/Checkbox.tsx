@@ -63,12 +63,20 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const checkboxId = id || `checkbox-${Math.random().toString(36).substring(2, 9)}`;
     const effectiveVariant = error ? 'error' : variant;
 
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    React.useImperativeHandle(ref, () => inputRef.current!);
+    const internalRef = React.useRef<HTMLInputElement>(null);
+    const mergedRef = (el: HTMLInputElement | null) => {
+      internalRef.current = el;
+      if (typeof ref === 'function') {
+        ref(el);
+      } else if (ref) {
+        ref.current = el;
+      }
+    };
 
     React.useEffect(() => {
-      if (inputRef.current) {
-        inputRef.current.indeterminate = indeterminate;
+      const el = internalRef.current;
+      if (el) {
+        el.indeterminate = indeterminate;
       }
     }, [indeterminate]);
 
@@ -100,7 +108,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       return (
         <div className="relative inline-flex">
           <input
-            ref={inputRef}
+            ref={mergedRef}
             type="checkbox"
             id={checkboxId}
             disabled={disabled}
@@ -132,7 +140,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       <div className="flex items-start gap-3">
         <div className="relative inline-flex pt-0.5">
           <input
-            ref={inputRef}
+            ref={mergedRef}
             type="checkbox"
             id={checkboxId}
             disabled={disabled}
