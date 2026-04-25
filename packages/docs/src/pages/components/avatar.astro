@@ -151,22 +151,19 @@ export function AvatarFallback() {
       requiring a <code>key</code> prop workaround.
     </p>
 
-    <CodeBlock title="avatar-retry.tsx" code={`import React from 'react';
+    <CodeBlock title="avatar-src-change.tsx" code={`import React, { useState } from 'react';
 import { Avatar } from '@storyhouse/components';
 
-export function AvatarWithRetry() {
-  const [retryKey, setRetryKey] = React.useState(0);
+export function AvatarSrcChange() {
+  const [src, setSrc] = useState(
+    'https://example.com/broken.jpg'
+  );
 
   return (
-    <div className="flex items-center gap-3">
-      <Avatar
-        key={retryKey}
-        src="https://example.com/photo.jpg"
-        name="Jane Doe"
-        alt="Jane Doe"
-      />
-      <button onClick={() => setRetryKey((k) => k + 1)}>
-        Retry Load
+    <div className="flex flex-col items-start gap-3">
+      <Avatar src={src} name="Jane Doe" alt="Jane Doe" />
+      <button onClick={() => setSrc('https://i.pravatar.cc/150?u=jane')}>
+        Load Valid Image
       </button>
     </div>
   );
