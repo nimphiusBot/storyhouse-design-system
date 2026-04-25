@@ -1,0 +1,1 @@
+import"./hoisted.fTNWgo_t.js";document.querySelectorAll(".copy-btn").forEach(t=>{t.addEventListener("click",async()=>{const e=t.getAttribute("data-code");if(e)try{await navigator.clipboard.writeText(e),t.textContent="Copied!",setTimeout(()=>{t.textContent="Copy"},2e3)}catch{t.textContent="Error",setTimeout(()=>{t.textContent="Copy"},2e3)}})});

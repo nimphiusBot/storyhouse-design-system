@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build workspace packages (tokens, utils, components)
-        run: npm run build
+      - name: Build library packages (tokens, utils, components)
+        run: npx turbo run build --filter=@storyhouse/tokens --filter=@storyhouse/utils --filter=@storyhouse/components
 
       - name: Build Docs (Astro)
         run: |
@@ -42,7 +42,21 @@ jobs:
       - name: Build Storybook
         run: |
           cd packages/storybook
-          npm run build-storybook
+          npm run build
+      - name: Verify component pages exist
+        run: |
+          echo "Pages built:"
+          ls packages/docs/dist/components/ | wc -l
+          echo "First 10:"
+          ls packages/docs/dist/components/ | head -10
+          echo "---"
+          if [ "$(ls packages/docs/dist/components/ | wc -l)" -lt 30 ]; then
+            echo "ERROR: Expected 30+ component pages, found fewer"
+            exit 1
+          fi
+          echo "Storybook files:"
+          ls packages/storybook/storybook-static/ | head -5
+          echo "Total files: $(find packages/storybook/storybook-static -type f | wc -l)"
 
       - name: Prepare GitHub Pages output
         run: |

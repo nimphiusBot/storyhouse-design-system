@@ -1,0 +1,506 @@
+<!DOCTYPE html><html lang="en" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><base href="/storyhouse-design-system/"><link rel="icon" type="image/svg+xml" href="/storyhouse-design-system/favicon.svg"><meta name="generator" content="Astro v4.16.19"><title>Input — Storyhouse Design System</title><meta name="description" content="Form input component with labels, validation states, icons, and full accessibility support."><script>
+      // Dark mode — apply immediately to prevent flash
+      (function() {
+        const stored = localStorage.getItem('storyhouse-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script><link rel="stylesheet" href="/storyhouse-design-system/_astro/changelog.8_3-PJy5.css">
+<link rel="stylesheet" href="/storyhouse-design-system/_astro/auto-refresh-indicator.Cd9qlCRy.css"><script type="module" src="/storyhouse-design-system/_astro/hoisted.D49FKi8l.js"></script></head> <body class="min-h-screen bg-white text-gray-900 transition-colors duration-200 dark:bg-gray-950 dark:text-gray-100"> <header class="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80"> <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"> <div class="flex h-16 items-center justify-between"> <div class="flex items-center gap-8"> <a href="/storyhouse-design-system/" class="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"> <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-sm font-bold text-white">S</span>
+Storyhouse
+</a> <nav class="hidden sm:flex sm:space-x-1"> <a href="/storyhouse-design-system/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+Home
+</a> <a href="/storyhouse-design-system/components" class="rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+Components
+</a> <a href="/storyhouse-design-system/guides" class="rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+Guides
+</a> <a href="/storyhouse-design-system/tokens" class="rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+Tokens
+</a> </nav> </div> <div class="flex items-center gap-2"> <!-- Search --> <button onclick="window.__openSearch && window.__openSearch()" class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-600 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-500 dark:hover:border-gray-600 dark:hover:text-gray-300" aria-label="Search documentation"> <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path> </svg> <span>Search</span> <kbd class="hidden rounded-md border border-gray-200 bg-white px-1.5 py-0.5 text-xs text-gray-400 md:inline-block dark:border-gray-600 dark:bg-gray-800">⌘K</kbd> </button> <a <a href="/storyhouse-design-system/storybook/" target="_blank" rel="noopener noreferrer" class="hidden rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 sm:inline-flex dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"> <svg class="mr-1.5 h-4 w-4" fill="currentColor" viewBox="0 0 24 24"> <path d="M16.71.243l-.12 2.711a.18.18 0 00.29.144l1.19-1.014.78.637c.12.1.296.064.376-.052l.18-2.733 1.284-.266L20.5 0H3.595l-.092 3.53h16.38l-.357 4.42H3.767l-.45 5.16h16.363l-.564 6.896-6.836 1.94-6.05-1.94-.388-4.346H3.212l.5 5.56 6.992 2.5 1.17.38 6.38-1.82.72-8.37h-14.7l.45-5.53h14.7l.57-6.883z"></path> </svg>
+Storybook
+</a> <button id="theme-toggle" class="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" aria-label="Toggle dark mode"> <svg class="h-5 w-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path> </svg> <svg class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path> </svg> </button> <a href="https://github.com/nimphiusBot/storyhouse-design-system" target="_blank" rel="noopener noreferrer" class="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" aria-label="GitHub repository"> <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path> </svg> </a> </div> </div> </div> </header> <main>  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"> <div class="flex gap-12 py-10"> <!-- Mobile sidebar toggle button --> <button id="sidebar-toggle" class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-orange-500 text-white shadow-lg transition-all hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 lg:hidden" aria-label="Toggle navigation"> <svg id="sidebar-icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path> </svg> <svg id="sidebar-icon-close" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> <!-- Overlay backdrop for mobile --> <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden bg-black/40 backdrop-blur-sm lg:hidden"></div> <!-- Sidebar --> <aside id="doc-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform border-r border-gray-200 bg-white p-6 shadow-xl transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:w-56 lg:translate-x-0 lg:border-r-0 lg:bg-transparent lg:p-0 lg:shadow-none dark:border-gray-800 dark:bg-gray-950 dark:lg:bg-transparent"> <div class="flex items-center justify-between lg:hidden"> <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Navigation</span> <button id="sidebar-close-btn" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800" aria-label="Close navigation"> <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <nav class="mt-4 space-y-8 lg:mt-0 lg:sticky lg:top-24"> <div> <h4 class="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Getting Started</h4> <ul class="space-y-0.5"> <li> <a href="/storyhouse-design-system/guides/getting-started" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Installation </a> </li><li> <a href="/storyhouse-design-system/guides/theming" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Theming Guide </a> </li><li> <a href="/storyhouse-design-system/guides/utilities" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Utilities </a> </li><li> <a href="/storyhouse-design-system/guides/contributing" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Contributing </a> </li><li> <a href="/storyhouse-design-system/guides/patterns" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Common Patterns </a> </li><li> <a href="/storyhouse-design-system/guides/migration" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Migration Guide </a> </li> </ul> </div><div> <h4 class="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Components</h4> <ul class="space-y-0.5"> <li> <a href="/storyhouse-design-system/components/button" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Button </a> </li><li> <a href="/storyhouse-design-system/components/card" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Card </a> </li><li> <a href="/storyhouse-design-system/components/input" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400"> Input </a> </li><li> <a href="/storyhouse-design-system/components/badge" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Badge </a> </li><li> <a href="/storyhouse-design-system/components/avatar" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Avatar </a> </li><li> <a href="/storyhouse-design-system/components/checkbox" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Checkbox </a> </li><li> <a href="/storyhouse-design-system/components/select" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Select </a> </li><li> <a href="/storyhouse-design-system/components/tabs" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Tabs </a> </li><li> <a href="/storyhouse-design-system/components/modal" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Modal </a> </li><li> <a href="/storyhouse-design-system/components/toast" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Toast </a> </li><li> <a href="/storyhouse-design-system/components/tooltip" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Tooltip </a> </li><li> <a href="/storyhouse-design-system/components/pagination" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Pagination </a> </li><li> <a href="/storyhouse-design-system/components/datatable" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Data Table </a> </li><li> <a href="/storyhouse-design-system/components/emptystate" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Empty State </a> </li><li> <a href="/storyhouse-design-system/components/file-upload" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> File Upload </a> </li><li> <a href="/storyhouse-design-system/components/error-boundary" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Error Boundary </a> </li> </ul> </div><div> <h4 class="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Design Tokens</h4> <ul class="space-y-0.5"> <li> <a href="/storyhouse-design-system/tokens/colors" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Colors </a> </li><li> <a href="/storyhouse-design-system/tokens/typography" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Typography </a> </li><li> <a href="/storyhouse-design-system/tokens/spacing" class="block rounded-lg px-3 py-1.5 text-sm font-medium transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"> Spacing &amp; Shadows </a> </li> </ul> </div> </nav> </aside> <!-- Content --> <article class="min-w-0 flex-1"> <div class="prose-storyhouse max-w-3xl"> <div class="flex items-center gap-3 !mt-0"> <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Input</h1> <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300"> Stable </span> </div> <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Form input component with labels, validation states, icons, and full accessibility support.</p>  <section> <h2 id="overview">Overview</h2> <p>
+The <code>Input</code> component provides a feature-rich form input with built-in label support, error states,
+      helper text, optional icon slots, and comprehensive ARIA attributes for accessibility.
+</p> </section> <section> <h2 id="live-demo">Live Demo</h2> <p>Try the Input component in action — including validation, icons, and sizes.</p> <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z20cXOq" prefix="r0" component-url="/storyhouse-design-system/_astro/LiveInputDemo.CHe9WZCP.js" component-export="default" renderer-url="/storyhouse-design-system/_astro/client.CnAnD4Bu.js" props="{}" ssr="" client="load" opts="{&quot;name&quot;:&quot;LiveInputDemo&quot;,&quot;value&quot;:true}" await-children=""><div class="space-y-6"><div><p class="mb-3 text-sm font-medium text-gray-500">Basic Input</p><div class="flex flex-col gap-1.5 w-fit"><label for="full-name" class="text-sm font-medium text-gray-700">Full Name</label><div class="relative"><input id="full-name" class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" placeholder="Enter your name"/></div></div></div><div><p class="mb-3 text-sm font-medium text-gray-500">With Icons</p><div class="flex flex-col gap-1.5 w-fit"><label for="search" class="text-sm font-medium text-gray-700">Search</label><div class="relative"><div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div><input id="search" class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" placeholder="Search..."/></div></div><div class="mt-3"><div class="flex flex-col gap-1.5 w-fit"><label for="password" class="text-sm font-medium text-gray-700">Password</label><div class="relative"><input id="password" class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" type="password" placeholder="Enter password"/><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"><svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></div></div></div></div></div><div><p class="mb-3 text-sm font-medium text-gray-500">Sizes</p><div class="flex flex-col gap-3"><div class="flex flex-col gap-1.5 w-fit"><div class="relative"><input class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-3 py-1.5 text-sm" aria-invalid="false" placeholder="Small"/></div></div><div class="flex flex-col gap-1.5 w-fit"><div class="relative"><input class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" placeholder="Medium"/></div></div><div class="flex flex-col gap-1.5 w-fit"><div class="relative"><input class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-6 py-3 text-lg" aria-invalid="false" placeholder="Large"/></div></div></div></div><div><p class="mb-3 text-sm font-medium text-gray-500">Validation</p><form><div class="flex flex-col gap-1.5 w-fit"><label for="email" class="text-sm font-medium text-gray-700">Email</label><div class="relative"><input id="email" class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" aria-describedby="email-helper" type="email" placeholder="you@example.com" value=""/></div><p id="email-helper" class="text-sm text-gray-500">We&#x27;ll never share your email.</p></div><div class="mt-3"><div class="flex flex-col gap-1.5 w-fit"><label for="disabled" class="text-sm font-medium text-gray-700">Disabled</label><div class="relative"><input id="disabled" class="w-full rounded-lg border bg-white text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 px-4 py-2 text-base" aria-invalid="false" disabled="" value="johndoe"/></div></div></div><button type="submit" class="mt-3 inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">Validate</button></form></div></div><!--astro:end--></astro-island> </div> </section> <section> <h2 id="basic">Basic Usage</h2> <p>A simple text input with a label and placeholder.</p> <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"> <div class="flex flex-col gap-1.5 w-fit"> <label for="input-basic-example" class="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label> <input id="input-basic-example" type="email" placeholder="you@example.com" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-400"> </div> </div> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-basic.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputBasic() {
+  return (
+    <Input
+      label=&#34;Email&#34;
+      type=&#34;email&#34;
+      placeholder=&#34;you@example.com&#34;
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputBasic() {
+  return (
+    &lt;Input
+      label=&quot;Email&quot;
+      type=&quot;email&quot;
+      placeholder=&quot;you@example.com&quot;
+    /&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="sizes">Sizes</h2> <p>Three sizes accommodate different layout densities.</p> <div class="my-6 flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"> <div class="flex flex-col gap-1.5 w-fit"> <label for="input-size-sm" class="text-sm font-medium text-gray-700 dark:text-gray-300">Small</label> <input id="input-size-sm" placeholder="Small" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"> </div> <div class="flex flex-col gap-1.5 w-fit"> <label for="input-size-md" class="text-sm font-medium text-gray-700 dark:text-gray-300">Medium</label> <input id="input-size-md" placeholder="Medium" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"> </div> <div class="flex flex-col gap-1.5 w-fit"> <label for="input-size-lg" class="text-sm font-medium text-gray-700 dark:text-gray-300">Large</label> <input id="input-size-lg" placeholder="Large" class="w-full rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"> </div> </div> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-sizes.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputSizes() {
+  return (
+    <div className=&#34;flex flex-col gap-4&#34;>
+      <Input size=&#34;sm&#34; placeholder=&#34;Small&#34; />
+      <Input size=&#34;md&#34; placeholder=&#34;Medium&#34; />
+      <Input size=&#34;lg&#34; placeholder=&#34;Large&#34; />
+    </div>
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputSizes() {
+  return (
+    &lt;div className=&quot;flex flex-col gap-4&quot;&gt;
+      &lt;Input size=&quot;sm&quot; placeholder=&quot;Small&quot; /&gt;
+      &lt;Input size=&quot;md&quot; placeholder=&quot;Medium&quot; /&gt;
+      &lt;Input size=&quot;lg&quot; placeholder=&quot;Large&quot; /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="states">States</h2> <h3>Error State</h3> <p>Use the <code>error</code> prop to show validation feedback. Error messages are announced by screen readers via <code>role="alert"</code>.</p> <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"> <div class="flex flex-col gap-1.5 w-fit"> <label for="input-error-example" class="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label> <input id="input-error-example" type="email" value="invalid" aria-invalid="true" class="w-full rounded-lg border border-red-300 bg-white px-4 py-2 text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-700 dark:bg-gray-900 dark:text-gray-100"> <p id="input-error-example-error" role="alert" class="text-sm text-red-600 dark:text-red-400">Please enter a valid email address.</p> </div> </div> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-error.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputError() {
+  return (
+    <Input
+      label=&#34;Email&#34;
+      type=&#34;email&#34;
+      value=&#34;invalid&#34;
+      error=&#34;Please enter a valid email address.&#34;
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputError() {
+  return (
+    &lt;Input
+      label=&quot;Email&quot;
+      type=&quot;email&quot;
+      value=&quot;invalid&quot;
+      error=&quot;Please enter a valid email address.&quot;
+    /&gt;
+  );
+}</code></pre> </div>  <h3>Helper Text</h3> <p>Use the <code>helperText</code> prop for contextual guidance below the input.</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-helper.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputHelper() {
+  return (
+    <Input
+      label=&#34;Password&#34;
+      type=&#34;password&#34;
+      helperText=&#34;Must be at least 8 characters.&#34;
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputHelper() {
+  return (
+    &lt;Input
+      label=&quot;Password&quot;
+      type=&quot;password&quot;
+      helperText=&quot;Must be at least 8 characters.&quot;
+    /&gt;
+  );
+}</code></pre> </div>  <h3>Disabled State</h3> <p>Disabled inputs show reduced opacity and prevent user interaction.</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-disabled.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputDisabled() {
+  return (
+    <Input
+      label=&#34;Username&#34;
+      value=&#34;johndoe&#34;
+      disabled
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputDisabled() {
+  return (
+    &lt;Input
+      label=&quot;Username&quot;
+      value=&quot;johndoe&quot;
+      disabled
+    /&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="full-width">Full Width</h2> <p>Set <code>fullWidth</code> to make the input span its container — essential for responsive forms and search bars.</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-fullwidth.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputFullWidth() {
+  return (
+    <div className=&#34;w-full&#34;>
+      <Input label=&#34;Search&#34; placeholder=&#34;Type to search...&#34; fullWidth />
+    </div>
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputFullWidth() {
+  return (
+    &lt;div className=&quot;w-full&quot;&gt;
+      &lt;Input label=&quot;Search&quot; placeholder=&quot;Type to search...&quot; fullWidth /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="icons">Icon Slots</h2> <p>Add icons inside the input using <code>leftIcon</code> and <code>rightIcon</code> props.</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-icons.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputIcons() {
+  return (
+    <div className=&#34;flex flex-col gap-4&#34;>
+      <Input
+        label=&#34;Search&#34;
+        placeholder=&#34;Type to search...&#34;
+        leftIcon={<SearchIcon />}
+      />
+      <Input
+        label=&#34;Password&#34;
+        type=&#34;password&#34;
+        rightIcon={<EyeIcon />}
+      />
+    </div>
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputIcons() {
+  return (
+    &lt;div className=&quot;flex flex-col gap-4&quot;&gt;
+      &lt;Input
+        label=&quot;Search&quot;
+        placeholder=&quot;Type to search...&quot;
+        leftIcon={&lt;SearchIcon /&gt;}
+      /&gt;
+      &lt;Input
+        label=&quot;Password&quot;
+        type=&quot;password&quot;
+        rightIcon={&lt;EyeIcon /&gt;}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="edge-cases">Edge Cases &amp; Error States</h2> <h3>Very Long Placeholder Text</h3> <p>
+Long placeholder text does not wrap — it overflows horizontally with a standard input. Keep
+      placeholders concise (under 40 characters). For longer contextual hints, use <code>helperText</code>.
+</p> <h3>Both Icons Simultaneously</h3> <p> <code>leftIcon</code> and <code>rightIcon</code> can be used together. The left icon gets <code>pl-10</code>
+padding, the right icon gets <code>pr-10</code> padding. Both use <code>pointer-events-none</code> so
+      clicks pass through to the input.
+</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-dual-icons.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputDualIcons() {
+  return (
+    <Input
+      label=&#34;Search&#34;
+      leftIcon={<SearchIcon />}
+      rightIcon={<ClearIcon />}
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputDualIcons() {
+  return (
+    &lt;Input
+      label=&quot;Search&quot;
+      leftIcon={&lt;SearchIcon /&gt;}
+      rightIcon={&lt;ClearIcon /&gt;}
+    /&gt;
+  );
+}</code></pre> </div>  <h3>Label Auto-ID Collisions</h3> <p>
+The label's auto-generated <code>id</code> is derived by lowercasing and hyphenating the label text.
+      If you have multiple inputs with the same label on one page (e.g., two form sections both labeled "Email"),
+      provide explicit <code>id</code> props to avoid ID collisions.
+</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-custom-id.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import { Input } from '@storyhouse/components';
+
+export function InputCustomId() {
+  return (
+    <>
+      <Input label=&#34;Email&#34; id=&#34;billing-email&#34; />
+      <Input label=&#34;Email&#34; id=&#34;shipping-email&#34; />
+    </>
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputCustomId() {
+  return (
+    &lt;&gt;
+      &lt;Input label=&quot;Email&quot; id=&quot;billing-email&quot; /&gt;
+      &lt;Input label=&quot;Email&quot; id=&quot;shipping-email&quot; /&gt;
+    &lt;/&gt;
+  );
+}</code></pre> </div>  <h3>Error/Helper Interaction</h3> <p>
+When both <code>error</code> and <code>helperText</code> are provided, only the error message is shown.
+      Helper text is hidden to avoid confusion. When the error is cleared (set to <code>undefined</code>),
+      the helper text reappears automatically.
+</p> <div class="group relative my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center gap-2 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <span class="flex h-3 w-3 rounded-full bg-red-400"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400"></span> <span class="flex h-3 w-3 rounded-full bg-green-400"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">input-error-cleared.tsx</span> </div> <button class="copy-btn absolute right-3 top-3 z-10 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-gray-500 opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:text-gray-700 group-hover:opacity-100 dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" data-code="import React from 'react';
+import { Input } from '@storyhouse/components';
+
+export function InputWithValidation() {
+  const [value, setValue] = React.useState('');
+  const error = value.length > 0 &#38;&#38; value.length < 3
+    ? 'Must be at least 3 characters.'
+    : undefined;
+
+  return (
+    <Input
+      label=&#34;Username&#34;
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      error={error}
+      helperText=&#34;Choose a unique username.&#34;
+    />
+  );
+}">
+Copy
+</button> <pre class="astro-code"><code class="language-tsx">import React from &#39;react&#39;;
+import { Input } from &#39;@storyhouse/components&#39;;
+
+export function InputWithValidation() {
+  const [value, setValue] = React.useState(&#39;&#39;);
+  const error = value.length &gt; 0 &amp;&amp; value.length &lt; 3
+    ? &#39;Must be at least 3 characters.&#39;
+    : undefined;
+
+  return (
+    &lt;Input
+      label=&quot;Username&quot;
+      value={value}
+      onChange={(e) =&gt; setValue(e.target.value)}
+      error={error}
+      helperText=&quot;Choose a unique username.&quot;
+    /&gt;
+  );
+}</code></pre> </div>  </section> <section> <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2> <h3>Form Design</h3> <ul> <li>Always provide a <code>label</code> — placeholder text is not a replacement for labels</li> <li>Use <code>type="email"</code>, <code>type="tel"</code>, <code>type="url"</code> for mobile-optimized keyboards</li> <li>Show validation errors on blur (when the user leaves the field), not while typing</li> <li>Use <code>helperText</code> for format hints, <code>error</code> for validation feedback</li> <li>Keep forms to a single column for better readability and mobile usability</li> </ul> <h3>Validation Timing</h3> <p>
+For the best UX, validate on blur (not on every keystroke). Show errors inline next to the
+      relevant field, not as a separate error summary. Clear the error when the user starts correcting
+      it — re-validate on the next blur or submit.
+</p> <h3>Search Inputs</h3> <p>
+When using Input as a search field:
+</p> <ul> <li>Use <code>leftIcon</code> with a search magnifying glass icon</li> <li>Set <code>type="search"</code> for proper semantics</li> <li>Consider <code>fullWidth</code> for expanded search bars</li> <li>Use <code>debounce</code> (300ms) on <code>onChange</code> for async search</li> </ul> <h3>Accessibility</h3> <ul> <li>Every input must have a label (visible or via <code>aria-label</code>)</li> <li>Error states set <code>aria-invalid="true"</code> on the input element</li> <li>Error and helper messages use <code>aria-describedby</code> linking</li> <li>Error messages use <code>role="alert"</code> for screen reader announcement</li> <li>Icon containers use <code>pointer-events-none</code> to prevent focus interference</li> </ul> </section> <section> <h2 id="implementation">Implementation Details</h2> <h3>Auto-ID Generation</h3> <p>
+The component generates an <code>id</code> from the label text by lowercasing and replacing
+      whitespace with hyphens. This auto-generated ID is used for <code>htmlFor</code> on the label
+      and for <code>aria-describedby</code> linking to error and helper text elements.
+</p> <h3>ARIA Binding</h3> <p>
+When <code>error</code> is provided, the input gets <code>aria-invalid="true"</code> and
+<code>aria-describedby</code> pointing to the error message element. When <code>helperText</code>
+is provided (without error), <code>aria-describedby</code> points to the helper element.
+      If both are provided, error takes priority in description linking.
+</p> <h3>Dark Mode</h3> <p>
+Input uses dark mode variants across border colors, background, text, and placeholder.
+      Focus ring colors also dark-adapt: <code>focus:border-blue-500</code> becomes
+<code>dark:focus:border-blue-400</code>. Error states use red-300/red-700 borders
+      and red-600/red-400 text for dark mode.
+</p> </section> <section> <h2 id="props">Props</h2> <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900"> <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800"> <thead> <tr> <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Prop</th> <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Type</th> <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Default</th> <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Description</th> </tr> </thead> <tbody class="divide-y divide-gray-100 dark:divide-gray-800"> <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">label</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">string</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Label text rendered above the input. Auto-generates an id.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">error</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">string</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Error message. Shows red border and alert text when set.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">helperText</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">string</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Helper text shown below the input (hidden when error is set).</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">size</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">&quot;sm&quot; | &quot;md&quot; | &quot;lg&quot;</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">&quot;md&quot;</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Input height and text size.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">fullWidth</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">boolean</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">false</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Spans 100% of parent width.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">leftIcon</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">React.ReactNode</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Icon rendered inside the input on the left side.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">rightIcon</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">React.ReactNode</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Icon rendered inside the input on the right side.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">id</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">string</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">-</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Custom id. Auto-generated from label if not provided.</td> </tr><tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300">disabled</code>  </td> <td class="whitespace-nowrap px-4 py-3"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">boolean</code> </td> <td class="whitespace-nowrap px-4 py-3 font-mono text-sm text-gray-600 dark:text-gray-400"> <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">false</code> </td> <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Disables input and reduces opacity.</td> </tr> </tbody> </table> </div> <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">All standard <code>&lt;input&gt;</code> attributes (type, placeholder, value, onChange, etc.) are also supported.</p> </section> <section> <h2 id="accessibility">Accessibility</h2> <ul> <li>Label is properly associated via <code>htmlFor</code> matching the input <code>id</code></li> <li>Error messages use <code>aria-describedby</code> linking and <code>role="alert"</code></li> <li><code>aria-invalid</code> is set automatically when the <code>error</code> prop is provided</li> <li>Helper text and error are properly differentiated via <code>aria-describedby</code></li> <li>Disabled state uses <code>cursor-not-allowed</code> and reduced opacity</li> <li>Icon containers use <code>pointer-events-none</code> to prevent input interference</li> </ul> </section> <section> <h2 id="storybook-preview">Interactive Preview</h2> <p>Explore all Input variants and props interactively in Storybook:</p> <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800"> <div class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-800 dark:bg-gray-900"> <div class="flex items-center gap-2"> <span class="flex h-3 w-3 rounded-full bg-red-400" aria-hidden="true"></span> <span class="flex h-3 w-3 rounded-full bg-yellow-400" aria-hidden="true"></span> <span class="flex h-3 w-3 rounded-full bg-green-400" aria-hidden="true"></span> <span class="ml-3 text-xs font-medium text-gray-500 dark:text-gray-400">Input — Storybook</span> </div> <a href="/storyhouse-design-system/storybook/?path=/story/components-input--default" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300">
+Open in Storybook →
+</a> </div> <iframe src="/storyhouse-design-system/storybook/iframe.html?id=components-input--default&#38;viewMode=story" title="Storybook preview: Input — Storybook" style="width:100%;height:500px;border:none" class="block bg-white dark:bg-gray-950" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe> </div> </section>  </div> </article> </div> </div>  </main> <!-- Search modal — powered by Fuse.js via inline script --><div id="search-overlay" class="fixed inset-0 z-[100] hidden"> <!-- Backdrop --> <div id="search-backdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div> <!-- Modal --> <div class="relative mx-auto mt-[15vh] max-w-lg px-4"> <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900"> <!-- Search input --> <div class="flex items-center border-b border-gray-200 px-4 dark:border-gray-700"> <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path> </svg> <input id="search-input" type="text" placeholder="Search documentation..." autocomplete="off" class="w-full border-0 bg-transparent px-3 py-4 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-0 dark:text-gray-100 dark:placeholder:text-gray-500"> <kbd class="hidden shrink-0 rounded-md border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-400 sm:inline-block dark:border-gray-700 dark:bg-gray-800">ESC</kbd> </div> <!-- Results --> <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2"> <div class="px-3 py-8 text-center text-sm text-gray-400">
+Type to search components, guides, tokens, and more…
+</div> </div> </div> </div> </div> <script>
+(function() {
+  const base = document.querySelector('base')?.getAttribute('href') || '/storyhouse-design-system/';
+
+  // ── Search index ──────────────────────────────────────────────────────────
+  const pages = [
+    { title: 'Home', description: 'Storyhouse Design System landing page', path: base, category: 'page' },
+    { title: 'Components', description: 'Browse all Storyhouse components', path: base + 'components', category: 'page' },
+    { title: 'Button', description: 'Versatile button component with 4 variants, 3 sizes, loading state, and full-width support', path: base + 'components/button', category: 'component' },
+    { title: 'Card', description: 'Flexible card container with 4 variants, composable sub-components', path: base + 'components/card', category: 'component' },
+    { title: 'Input', description: 'Form input with labels, validation, icons, 3 sizes, and accessibility', path: base + 'components/input', category: 'component' },
+    { title: 'Badge', description: 'Status indicators with 6 variants, dot indicator, and removable tags', path: base + 'components/badge', category: 'component' },
+    { title: 'Avatar', description: 'User avatar with image, initials fallback, 5 sizes, and deterministic colors', path: base + 'components/avatar', category: 'component' },
+    { title: 'Guides', description: 'Learn how to use the Storyhouse design system', path: base + 'guides', category: 'page' },
+    { title: 'Getting Started', description: 'Installation, basic usage, CSS tokens, Tailwind config, and project structure', path: base + 'guides/getting-started', category: 'guide' },
+    { title: 'Theming Guide', description: 'Customize the design system with CSS variable overrides, dark mode, and semantic tokens', path: base + 'guides/theming', category: 'guide' },
+    { title: 'Utilities', description: 'cn() class merge utility, TypeScript helpers, and Tailwind integration', path: base + 'guides/utilities', category: 'guide' },
+    { title: 'Contributing', description: 'Component structure, coding standards, Storybook stories, testing, and PR process', path: base + 'guides/contributing', category: 'guide' },
+    { title: 'Common Patterns', description: 'Reusable UI patterns for forms, navigation, data display, and responsive layouts using Storyhouse components', path: base + 'guides/patterns', category: 'guide' },
+    { title: 'Migration Guide', description: 'Upgrade between Storyhouse versions, breaking changes, deprecations, and upgrade checklist', path: base + 'guides/migration', category: 'guide' },
+    { title: 'Design Tokens', description: 'Browse colors, typography, spacing, and shadow tokens', path: base + 'tokens', category: 'page' },
+    { title: 'Color Tokens', description: 'Brand orange palette, neutral grays, semantic colors with CSS and JS usage', path: base + 'tokens/colors', category: 'token' },
+    { title: 'Typography Tokens', description: 'Font families, size scale, weight spectrum, line height, and letter spacing', path: base + 'tokens/typography', category: 'token' },
+    { title: 'Spacing & Shadow Tokens', description: 'Spacing scale, box shadows, border radius, and opacity tokens', path: base + 'tokens/spacing', category: 'token' },
+    { title: 'Changelog', description: 'Release history and updates for the Storyhouse Design System', path: base + 'changelog', category: 'page' },
+  ];
+
+  // ── Category config ───────────────────────────────────────────────────────
+  const categoryConfig = {
+    component: { label: 'Components', color: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300' },
+    guide:     { label: 'Guides', color: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' },
+    token:     { label: 'Tokens', color: 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300' },
+    page:      { label: 'Pages', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
+  };
+
+  // ── Fuzzy match logic (lightweight, no dependency) ────────────────────────
+  function score(query, text) {
+    if (!query || !text) return 0;
+    const q = query.toLowerCase();
+    const t = text.toLowerCase();
+    // Exact substring match scores highest
+    const idx = t.indexOf(q);
+    if (idx === 0) return 100 - (t.length - q.length); // starts with
+    if (idx > 0) return 80 - (t.length - q.length);     // contains
+    // Word-level prefix matching
+    const words = t.split(/[\s-]+/);
+    let score = 0;
+    for (const w of words) {
+      if (w.startsWith(q)) score += 60;
+    }
+    // Character-by-character fuzzy (abbreviated: "bt" → "Button")
+    let qi = 0;
+    for (const ch of t) {
+      if (ch === q[qi]) {
+        qi++;
+        if (qi === q.length) { score += 40; break; }
+      }
+    }
+    return score;
+  }
+
+  function search(query) {
+    if (!query || query.length < 1) return [];
+    const results = [];
+    for (const page of pages) {
+      const titleScore = score(query, page.title);
+      const descScore = score(query, page.description);
+      const total = Math.max(titleScore, descScore);
+      if (total > 0) {
+        results.push({ ...page, score: total });
+      }
+    }
+    return results.sort((a, b) => b.score - a.score).slice(0, 10);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  const overlay = document.getElementById('search-overlay');
+  const backdrop = document.getElementById('search-backdrop');
+
+  function renderResults(q) {
+    const hits = search(q);
+    const categoryOrder = ['component', 'guide', 'token', 'page'];
+    const grouped = {};
+    for (const h of hits) {
+      if (!grouped[h.category]) grouped[h.category] = [];
+      grouped[h.category].push(h);
+    }
+
+    if (hits.length === 0) {
+      results.innerHTML = '<div class="px-3 py-8 text-center text-sm text-gray-400">No results found for "' + q + '"</div>';
+      return;
+    }
+
+    let html = '';
+    for (const cat of categoryOrder) {
+      const items = grouped[cat];
+      if (!items || items.length === 0) continue;
+      const cfg = categoryConfig[cat] || { label: cat, color: 'bg-gray-100 text-gray-600' };
+      html += '<div class="mb-2">';
+      html += '<div class="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-500">' + cfg.label + '</div>';
+      for (const item of items) {
+        html += '<a href="' + item.path + '" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">';
+        html += '<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ' + cfg.color + '">' + cfg.label + '</span>';
+        html += '<span class="flex-1 text-gray-900 dark:text-white">' + item.title + '</span>';
+        html += '</a>';
+      }
+      html += '</div>';
+    }
+    results.innerHTML = html;
+  }
+
+  // ── Event listeners ──────────────────────────────────────────────────────
+  input.addEventListener('input', function() {
+    renderResults(this.value);
+  });
+
+  overlay.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      overlay.classList.add('hidden');
+      input.value = '';
+    }
+  });
+
+  backdrop.addEventListener('click', function() {
+    overlay.classList.add('hidden');
+    input.value = '';
+  });
+
+  // ── Open/close helpers ────────────────────────────────────────────────────
+  window.__openSearch = function() {
+    overlay.classList.remove('hidden');
+    setTimeout(function() { input.focus(); input.select(); }, 50);
+  };
+
+  window.__closeSearch = function() {
+    overlay.classList.add('hidden');
+    input.value = '';
+  };
+
+  // ── Keyboard shortcut ─────────────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      window.__openSearch();
+    }
+    if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+      overlay.classList.remove('hidden');
+      input.value = '';
+      window.__closeSearch();
+    }
+  });
+})();
+</script> <footer class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900"> <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8"> <div class="grid gap-8 md:grid-cols-3"> <div> <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Storyhouse Design System</h3> <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Built for scale, precision, and exceptional developer experience.</p> </div> <div> <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Quick Links</h3> <ul class="mt-2 space-y-1"> <li><a href="/storyhouse-design-system/components" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Components</a></li> <li><a href="/storyhouse-design-system/guides/getting-started" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Getting Started</a></li> <li><a href="/storyhouse-design-system/storybook/" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Storybook</a></li> <li><a href="/storyhouse-design-system/tokens" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Design Tokens</a></li> <li><a href="/storyhouse-design-system/changelog" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Changelog</a></li> </ul> </div> <div> <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Resources</h3> <ul class="mt-2 space-y-1"> <li><a href="https://github.com/nimphiusBot/storyhouse-design-system" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">GitHub</a></li> <li><a href="/storyhouse-design-system/guides/theming" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Theming Guide</a></li> </ul> </div> </div> <div class="mt-8 border-t border-gray-200 pt-8 dark:border-gray-800"> <p class="text-center text-sm text-gray-400 dark:text-gray-500">© 2024 Storyhouse Design System. Built with precision.</p> </div> </div> </footer>  </body> </html> <script>
+(function() {
+  const toggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('doc-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const iconOpen = document.getElementById('sidebar-icon-open');
+  const iconClose = document.getElementById('sidebar-icon-close');
+
+  function openSidebar() {
+    sidebar?.classList.remove('-translate-x-full');
+    overlay?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.add('-translate-x-full');
+    overlay?.classList.add('hidden');
+    document.body.style.overflow = '';
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+  }
+
+  toggle?.addEventListener('click', function() {
+    if (sidebar?.classList.contains('-translate-x-full')) {
+      openSidebar();
+    } else {
+      closeSidebar();
+    }
+  });
+  overlay?.addEventListener('click', closeSidebar);
+  closeBtn?.addEventListener('click', closeSidebar);
+
+  // Close on link click (mobile)
+  sidebar?.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      if (window.innerWidth < 1024) closeSidebar();
+    });
+  });
+})();
+</script>
