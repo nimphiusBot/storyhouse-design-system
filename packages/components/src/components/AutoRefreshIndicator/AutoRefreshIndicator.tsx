@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { RefreshCw, Wifi, WifiOff, AlertTriangle } from 'lucide-react';
@@ -54,6 +54,22 @@ function formatTimestamp(ts: number): string {
 }
 
 /**
+ * Format a relative time string (e.g., "5s ago", "2m ago").
+ */
+function formatRelativeTime(ts: number): string {
+  const diff = Date.now() - ts;
+  const seconds = Math.floor(diff / 1000);
+  if (seconds < 5) return 'just now';
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+/**
  * AutoRefreshIndicator
  *
  * A compact UI badge that shows the auto-refresh state of a dashboard or data view.
@@ -88,6 +104,30 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
   paused = false,
 }) => {
   if (!enabled && !lastPolledLabel) return null;
+
+  /**
+   * Tick every 5 seconds to keep relative-time labels and tooltips fresh.
+   * The interval is properly cleaned up on unmount to prevent memory leaks.
+   */
+  const [tick, setTick] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setTick((n) => n + 1);
+    }, 5000);
+
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, []);
+
+  // Compute dynamic relative-time label from timestamp (re-evaluated on each tick)
+  const dynamicTimeLabel = lastPolledAt ? formatRelativeTime(lastPolledAt) : undefined;
+  const effectiveTimeLabel = lastPolledLabel || dynamicTimeLabel;
 
   // Build tooltip
   const tooltipParts: string[] = [];
@@ -169,8 +209,8 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
       </span>
 
       {/* Last polled (always shown for refinement) */}
-      {lastPolledLabel && (
-        <span className="opacity-60 ml-0.5">· {lastPolledLabel}</span>
+      {effectiveTimeLabel && (
+        <span className="opacity-60 ml-0.5">· {effectiveTimeLabel}</span>
       )}
 
       {/* Data-just-refreshed indicator dot */}
