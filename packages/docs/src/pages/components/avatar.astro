@@ -145,10 +145,10 @@ export function AvatarFallback() {
     <p>
       When an image fails to load (broken URL, network error), the component falls back to showing
       initials (if <code>name</code> is provided) or the default user icon. The error state is tracked
-      via internal <code>imgError</code> state. Note that if the <code>src</code> prop changes after
-      an error, the <code>imgError</code> state is <strong>not</strong> automatically reset — the
-      component will continue showing the fallback. To retry the image, use a <code>key</code> prop
-      to force a remount.
+      via internal <code>imgError</code> state. If the <code>src</code> prop changes after an error,
+      the <code>imgError</code> state is automatically reset, allowing the new image to load. This
+      means dynamic avatar changes (e.g., browsing through a user gallery) work seamlessly without
+      requiring a <code>key</code> prop workaround.
     </p>
 
     <CodeBlock title="avatar-retry.tsx" code={`import React from 'react';
@@ -260,8 +260,9 @@ export function AvatarGroup() {
     </ol>
     <p>
       The <code>imgError</code> state is set to <code>true</code> by the <code>onError</code> handler
-      on the <code>&lt;img&gt;</code> element. This state persists until the component unmounts or
-      receives a new <code>key</code>.
+      on the <code>&lt;img&gt;</code> element. This state is automatically reset when the
+      <code>src</code> prop changes via a <code>useEffect</code> hook, allowing the component to
+      reattempt loading a new image URL.
     </p>
 
     <h3>Deterministic Name Color</h3>
