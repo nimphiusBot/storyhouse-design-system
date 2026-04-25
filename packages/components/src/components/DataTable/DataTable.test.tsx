@@ -180,16 +180,18 @@ describe('DataTable', () => {
     // The expanded row should be visible
     expect(screen.getByText('Expanded Alice')).toBeInTheDocument();
 
-    // The action column td should contain both checkbox and expand button
+    // The first two columns should contain checkbox and expand button separately
     const tds = container.querySelectorAll('tbody tr td');
-    // First cell should contain both a checkbox and a button
+    // First cell should contain a checkbox
     const firstCell = tds[0]!;
     expect(firstCell.querySelector('input[type="checkbox"]')).toBeInTheDocument();
-    expect(firstCell.querySelector('button')).toBeInTheDocument();
+    // Second cell should contain a button
+    const secondCell = tds[1]!;
+    expect(secondCell.querySelector('button')).toBeInTheDocument();
 
-    // The expanded row td should have colSpan = columns.length + 1
+    // The expanded row td should have colSpan = columns.length + 2
     const expandedTd = container.querySelector('tbody td[colspan]');
-    expect(expandedTd?.getAttribute('colspan')).toBe('3'); // 2 columns + 1 action
+    expect(expandedTd?.getAttribute('colspan')).toBe('4'); // 2 columns + 1 select + 1 expand
   });
 
   it('uses custom key extractor', () => {
