@@ -109,7 +109,7 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
    * Tick every 5 seconds to keep relative-time labels and tooltips fresh.
    * The interval is properly cleaned up on unmount to prevent memory leaks.
    */
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {

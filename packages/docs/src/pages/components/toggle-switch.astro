@@ -184,7 +184,7 @@ export function DisabledToggle() {
       <h3>Label Click Association</h3>
       <p>
         When a <code>label</code> is provided, the component generates a unique <code>id</code> for the
-        toggle button and renders a <code>&lt;label htmlFor={id}&gt;</code>. This means clicking the
+        toggle button and renders a <code>&lt;label htmlFor=&#123;id&#125;&gt;</code>. This means clicking the
         label triggers the toggle — the <code>onChange</code> callback receives the opposite of the
         current <code>checked</code> value.
       </p>
@@ -217,8 +217,8 @@ export function DisabledToggle() {
 
       <h3>onChange Handler Pattern</h3>
       <ul>
-        <li>Use <code>onChange={setEnabled}</code> with React <code>useState</code> — the callback receives the new value directly</li>
-        <li>For complex logic, wrap: <code>onChange={(v) => handleToggle(v)}</code></li>
+        <li>Use <code>onChange=&#123;setEnabled&#125;</code> with React <code>useState</code> — the callback receives the new value directly</li>
+        <li>For complex logic, wrap: <code>onChange=&#123;(v) => handleToggle(v)&#125;</code></li>
         <li>Never call <code>setState(!checked)</code> — the component computes the next value</li>
       </ul>
 

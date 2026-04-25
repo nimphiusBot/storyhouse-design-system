@@ -2,8 +2,6 @@ import React from 'react';
 
 export default function LiveFileUploadDemo(): React.ReactNode {
   const [isDragging, setIsDragging] = React.useState(false);
-  const [mimeRestricted, setMimeRestricted] = React.useState(false);
-
   return (
     <div className="space-y-6">
       <div>
