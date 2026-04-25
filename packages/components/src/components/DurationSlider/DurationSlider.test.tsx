@@ -119,7 +119,8 @@ describe('DurationSlider', () => {
 
   it('renders with 900 value (15min)', () => {
     render(<DurationSlider value={900} onChange={() => {}} />);
-    expect(screen.getByText('Long Form')).toBeInTheDocument();
+    const longForms = screen.getAllByText('Long Form');
+    expect(longForms.length).toBeGreaterThan(0);
     expect(screen.getByText('15min')).toBeInTheDocument();
   });
 

@@ -157,6 +157,10 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     if (!disabled) setIsDragging(true);
   };
 
+  const handleTouchStart = () => {
+    if (!disabled) setIsDragging(true);
+  };
+
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging || disabled || !trackRef.current) return;
 
@@ -172,7 +176,29 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     }
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+    if (!isDragging || disabled || !trackRef.current || !e.touches[0]) return;
+    // Prevent page scroll while dragging the slider
+    e.preventDefault();
+
+    const rect = trackRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    const moveX = touch.clientX - rect.left;
+    const movePercentage = (moveX / rect.width) * 100;
+
+    const nearestIndex = Math.round((movePercentage / 100) * (DURATION_OPTIONS.length - 1));
+    const clampedIndex = Math.max(0, Math.min(DURATION_OPTIONS.length - 1, nearestIndex));
+
+    if (DURATION_OPTIONS[clampedIndex]!.value !== value) {
+      onChange(DURATION_OPTIONS[clampedIndex]!.value);
+    }
+  };
+
   const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
   };
 
@@ -180,9 +206,13 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     if (!isDragging) return;
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDragging, value]);
 
@@ -269,6 +299,7 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
           <button
             type="button"
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
             onKeyDown={handleKeyDown}
             disabled={disabled}
             className={cn(
