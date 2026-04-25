@@ -215,7 +215,22 @@ export function useFocusTrap({
 
         if (!target) {
           const elements = getFocusableElements(currentContainer);
-          target = elements[0] ?? null;
+          // Walk backwards to skip elements with [data-dismiss] or aria-label="Close …"
+          // so we prefer the primary action (typically a confirm/save button) over a close button.
+          for (let i = elements.length - 1; i >= 0; i--) {
+            const el = elements[i]!;
+            const isDismiss =
+              el.hasAttribute('data-dismiss') ||
+              (el.getAttribute('aria-label') || '').toLowerCase().startsWith('close');
+            if (!isDismiss) {
+              target = el;
+              break;
+            }
+          }
+          // If every element is a dismiss control, fall back to the first one
+          if (!target) {
+            target = elements[0] ?? null;
+          }
         }
 
         if (target) {

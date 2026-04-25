@@ -161,41 +161,14 @@ export const Modal: React.FC<ModalProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [closeOnEscape, isOpen, onClose]);
 
-  // Focus trap — handles Tab cycling, focus redirection, mousedown trapping
+  // Focus trap — handles Tab cycling, focus redirection, mousedown trapping.
+  // autoFocus: true makes the trap auto-focus the last non-dismiss element
+  // (primary action in the footer), avoiding the close button.
   useFocusTrap({
     enabled: isOpen && shouldRender,
     containerRef: modalRef,
-    autoFocus: false,
+    autoFocus: true,
   });
-
-  // Initial focus: prefer the last focusable element that isn't the close button
-  // (typically the primary/confirm action in the footer)
-  useEffect(() => {
-    if (!isOpen || !shouldRender || !modalRef.current) return;
-
-    const modal = modalRef.current;
-    const focusableElements = modal.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-
-    if (focusableElements.length === 0) return;
-
-    // Walk backwards to find the last non-close-button element (primary action)
-    let initialFocus: HTMLElement | null = null;
-    for (let i = focusableElements.length - 1; i >= 0; i--) {
-      const el = focusableElements[i]!;
-      if (el.getAttribute('aria-label') !== 'Close modal') {
-        initialFocus = el;
-        break;
-      }
-    }
-
-    if (!initialFocus) {
-      initialFocus = focusableElements[0]!;
-    }
-
-    initialFocus.focus();
-  }, [isOpen, shouldRender]);
 
   if (!shouldRender) return null;
 
@@ -267,6 +240,7 @@ export const Modal: React.FC<ModalProps> = ({
                 onClick={onClose}
                 className="ml-4 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
                 aria-label="Close modal"
+                data-dismiss
               >
                 <X className="w-5 h-5" />
               </button>
