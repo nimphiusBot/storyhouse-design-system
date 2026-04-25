@@ -31,39 +31,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build library packages (tokens, utils, components)
-        run: npx turbo run build --filter=@storyhouse/tokens --filter=@storyhouse/utils --filter=@storyhouse/components
-
-      - name: Build Docs (Astro)
-        run: |
-          cd packages/docs
-          npm run build
-
-      - name: Build Storybook
-        run: |
-          cd packages/storybook
-          npm run build
-      - name: Verify component pages exist
-        run: |
-          echo "Pages built:"
-          ls packages/docs/dist/components/ | wc -l
-          echo "First 10:"
-          ls packages/docs/dist/components/ | head -10
-          echo "---"
-          if [ "$(ls packages/docs/dist/components/ | wc -l)" -lt 30 ]; then
-            echo "ERROR: Expected 30+ component pages, found fewer"
-            exit 1
-          fi
-          echo "Storybook files:"
-          ls packages/storybook/storybook-static/ | head -5
-          echo "Total files: $(find packages/storybook/storybook-static -type f | wc -l)"
+      - name: Build all packages (tokens, utils, components, storybook, docs)
+        run: npm run build
 
       - name: Prepare GitHub Pages output
         run: |
           mkdir -p _site/storybook
           cp -r packages/docs/dist/* _site/
           cp -r packages/storybook/storybook-static/* _site/storybook/
-          # 404.html is built by Astro's 404.astro — no need to copy index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

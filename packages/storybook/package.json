@@ -10,7 +10,7 @@
     "build-storybook": "storybook build",
     "clean": "rm -rf storybook-static",
     "lint": "eslint . --ext .ts,.tsx",
-    "build": "npx storybook build"
+    "build": "build-storybook"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^8.0.0",
