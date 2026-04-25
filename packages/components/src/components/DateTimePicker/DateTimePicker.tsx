@@ -189,7 +189,7 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
           <label
             className={cn(
               'block text-sm font-medium mb-1.5',
-              error ? 'text-red-700' : 'text-gray-700',
+              error ? 'text-red-700 dark:text-red-400' : 'text-gray-700 dark:text-gray-300',
               disabled && 'opacity-50',
             )}
           >
@@ -210,7 +210,7 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
               {mode === 'time' ? (
                 <Clock
                   className={cn(
-                    'text-gray-400',
+                    'text-gray-400 dark:text-gray-500',
                     size === 'sm' && 'h-3 w-3',
                     size === 'md' && 'h-4 w-4',
                     size === 'lg' && 'h-5 w-5',
@@ -219,7 +219,7 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
               ) : (
                 <Calendar
                   className={cn(
-                    'text-gray-400',
+                    'text-gray-400 dark:text-gray-500',
                     size === 'sm' && 'h-3 w-3',
                     size === 'md' && 'h-4 w-4',
                     size === 'lg' && 'h-5 w-5',
@@ -252,7 +252,7 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
               type="button"
               onClick={handleClear}
               className={cn(
-                'absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors',
+                'absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors',
                 size === 'sm' && 'right-2',
                 size === 'lg' && 'right-4',
               )}

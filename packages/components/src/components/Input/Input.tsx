@@ -44,13 +44,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     const inputBaseStyles = cn(
-      'w-full rounded-lg border bg-white text-gray-900 transition-colors',
-      'placeholder:text-gray-400',
+      'w-full rounded-lg border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors',
+      'placeholder:text-gray-400 dark:placeholder:text-gray-500',
       'focus:outline-none focus:ring-2 focus:ring-offset-0',
-      'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50',
+      'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50 dark:disabled:bg-gray-800/50',
       error
-        ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
-        : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20',
+        ? 'border-red-300 dark:border-red-600 focus:border-red-500 focus:ring-red-500/20'
+        : 'border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500/20',
       leftIcon && 'pl-10',
       rightIcon && 'pr-10',
       inputSizeStyles[size],
@@ -62,7 +62,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             {label}
           </label>

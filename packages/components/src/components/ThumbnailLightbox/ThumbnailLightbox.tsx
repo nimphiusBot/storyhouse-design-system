@@ -240,8 +240,8 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
         )}
 
         {/* Keyboard Hint */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-400 text-xs opacity-60">
-          Press <kbd className="px-1.5 py-0.5 bg-white/10 dark:bg-black/20 rounded text-white dark:text-gray-200">ESC</kbd> to close
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-400 dark:text-gray-500 text-xs opacity-60">
+          Press <kbd className="px-1.5 py-0.5 bg-white/10 dark:bg-white/20 rounded text-white dark:text-gray-200">ESC</kbd> to close
         </div>
       </div>
     </div>
