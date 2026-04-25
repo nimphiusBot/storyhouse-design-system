@@ -147,12 +147,13 @@ export function useFocusTrap({
       if (!relatedTarget) return;
 
       // Only redirect if focus moved to an element outside the container.
-      if (!container.contains(relatedTarget)) {
+      if (container && !container.contains(relatedTarget)) {
         const elements = getFocusableElements(container);
-        if (elements.length > 0) {
-          elements[0].focus();
+        const firstElement = elements[0];
+        if (firstElement) {
+          firstElement.focus();
         } else {
-          container.focus();
+          container?.focus();
         }
       }
 
