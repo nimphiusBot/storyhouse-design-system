@@ -12,7 +12,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
   position = 'top',
-  delay = 300,
+  delay = 200,
   className = '',
 }) => {
   const [isVisible, setIsVisible] = useState(false);

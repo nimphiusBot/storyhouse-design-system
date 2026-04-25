@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-25T04:58:05.864Z",
+  "entries": {
+    "memory:memory/2026-04-24.md:25:48": {
+      "key": "memory:memory/2026-04-24.md:25:48",
+      "path": "memory/2026-04-24.md",
+      "startLine": 25,
+      "endLine": 48,
+      "source": "memory",
+      "snippet": "**Commit:** `b41b27a` — pushed to main, CI/CD triggered. ## ORA-109: ToggleSwitch Docs Overhaul Investigated ORA-109 (ToggleSwitch: Missing disabled prop and onChange handler). **Finding:** The ToggleSwitch component already had `disabled` and `onChange` props defined in its TypeScript interface and implemented in the component. Tests (13/13) pass covering both props. **What was done:** - Rewrote the ToggleSwitch docs page to match the production docs pattern - Added `status=\"stable\"` to DocLayout - Added `label` and `ariaLabel` to PropsTable (were completely missing) - Added `disabled` and `onChange` as required props with clear descriptions - Added comprehensive usage examples: basic t",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.6319431817004516,
+      "maxScore": 0.6319431817004516,
+      "firstRecalledAt": "2026-04-25T04:58:05.864Z",
+      "lastRecalledAt": "2026-04-25T04:58:05.864Z",
+      "queryHashes": [
+        "452f2e400263"
+      ],
+      "recallDays": [
+        "2026-04-25"
+      ],
+      "conceptTags": [
+        "ci/cd",
+        "ora-109",
+        "13/13",
+        "commit",
+        "b41b27a",
+        "pushed",
+        "triggered",
+        "ora"
+      ]
+    },
+    "memory:memory/2026-04-24.md:1:32": {
+      "key": "memory:memory/2026-04-24.md:1:32",
+      "path": "memory/2026-04-24.md",
+      "startLine": 1,
+      "endLine": 32,
+      "source": "memory",
+      "snippet": "# 2026-04-24 ## Batch Port: 11 Components (ORA-58) Completed porting 11 priority components from storyhouse-main into the design system: **Components ported:** Checkbox, Select, Tabs, Modal, Toast, Tooltip, Pagination, DataTable, EmptyState, FileUpload, ErrorBoundary **Deliverables:** - 11 component .tsx files in `packages/components/src/components/{Name}/` - 11 component index.ts files (re-export pattern) - Updated `packages/components/src/index.ts` with all 11 exports + type exports - 11 Storybook stories in `packages/storybook/src/stories/` - 11 Live React demo islands in `packages/docs/src/components/react/` - 11 Astro documentation pages in `packages/docs/src/pages/components/` - Up",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.6315050799498636,
+      "maxScore": 0.6315050799498636,
+      "firstRecalledAt": "2026-04-25T04:58:05.864Z",
+      "lastRecalledAt": "2026-04-25T04:58:05.864Z",
+      "queryHashes": [
+        "452f2e400263"
+      ],
+      "recallDays": [
+        "2026-04-25"
+      ],
+      "conceptTags": [
+        "ora-58",
+        "storyhouse-main",
+        "index.ts",
+        "re-export",
+        "packages/components/src/index.ts",
+        "packages/storybook/src/stories",
+        "batch",
+        "components"
+      ]
+    }
+  }
+}

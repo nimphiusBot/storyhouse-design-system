@@ -208,6 +208,24 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, shouldRender, onClose, closeOnEscape]);
 
+  // Handle keydown for all keys - prevent space/enter from triggering outside elements
+  useEffect(() => {
+    if (!isOpen || !shouldRender) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent keyboard events from reaching elements behind the panel
+      if (e.key === ' ' || e.key === 'Enter') {
+        const target = e.target as HTMLElement | null;
+        if (target && !panelRef.current?.contains(target)) {
+          e.stopPropagation();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown, true);
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [isOpen, shouldRender]);
+
   // Prevent body scroll when panel is open
   useEffect(() => {
     if (!preventBodyScroll) return;
