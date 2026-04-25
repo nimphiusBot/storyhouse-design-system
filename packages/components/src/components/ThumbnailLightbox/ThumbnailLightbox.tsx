@@ -101,18 +101,20 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(imageUrl);
+      const response = await fetch(imageUrl, { mode: 'cors' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `thumbnail-${orientation}.jpg`;
+      link.download = `thumbnail-${orientation}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(downloadUrl);
     } catch (error) {
-      console.error('Failed to download thumbnail:', error);
+      console.warn('Direct download failed (likely CORS), opening image in new tab:', error);
+      window.open(imageUrl, '_blank');
     }
   };
 
