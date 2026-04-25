@@ -174,7 +174,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
     const accessibleLabel = customLabel || `Progress`;
 
     // Compute aria-labelledby: prefer explicit labelledBy, else link to visible label when shown
-    const ariaLabelledby = labelledBy ?? (showLabel ? labelId : undefined);
+    const ariaLabelledby = labelledBy ?? (showLabel || customLabel ? labelId : undefined);
 
     // ARIA value text for screen readers
     const ariaValueText = valueText ??
@@ -201,7 +201,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
 
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
-        {showLabel && labelPosition === 'top' && (
+        {(showLabel || customLabel) && labelPosition === 'top' && (
           <div id={labelId} className="mb-1">{renderLabelChildren()}</div>
         )}
 
@@ -229,7 +229,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
           />
         </div>
 
-        {showLabel && labelPosition === 'bottom' && (
+        {(showLabel || customLabel) && labelPosition === 'bottom' && (
           <div id={labelId} className="mt-1">{renderLabelChildren()}</div>
         )}
       </div>

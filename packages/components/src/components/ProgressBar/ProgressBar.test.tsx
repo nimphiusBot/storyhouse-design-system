@@ -25,10 +25,15 @@ describe('ProgressBar', () => {
       expect(bar).toHaveAttribute('aria-valuemax', '5');
     });
 
-    it('sets aria-label from the label prop', () => {
+    it('links visible label via aria-labelledby when label prop is provided', () => {
       render(<ProgressBar value={75} label="Upload progress" />);
       const bar = screen.getByRole('progressbar');
-      expect(bar).toHaveAttribute('aria-label', 'Upload progress');
+      const labelId = bar.getAttribute('aria-labelledby');
+      expect(labelId).toBeTruthy();
+      const labelEl = document.getElementById(labelId!);
+      expect(labelEl).toBeInTheDocument();
+      expect(labelEl).toHaveTextContent('Upload progress');
+      expect(screen.getByText('Upload progress')).toBeInTheDocument();
     });
 
     it('sets a default accessible label when no custom label is provided', () => {
@@ -67,8 +72,14 @@ describe('ProgressBar', () => {
       expect(labelEl).toHaveTextContent('Progress');
     });
 
-    it('does not set aria-label when aria-labelledby is present', () => {
+    it('does not set aria-label when aria-labelledby is present (from showLabel)', () => {
       render(<ProgressBar value={65} showLabel />);
+      const bar = screen.getByRole('progressbar');
+      expect(bar).not.toHaveAttribute('aria-label');
+    });
+
+    it('does not set aria-label when aria-labelledby is present (from label)', () => {
+      render(<ProgressBar value={75} label="Upload progress" />);
       const bar = screen.getByRole('progressbar');
       expect(bar).not.toHaveAttribute('aria-label');
     });
