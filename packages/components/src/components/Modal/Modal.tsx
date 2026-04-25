@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { createPortal } from 'react-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -160,8 +161,18 @@ export const Modal: React.FC<ModalProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [closeOnEscape, isOpen, onClose]);
 
+  // Focus trap — handles Tab cycling, focus redirection, mousedown trapping
+  useFocusTrap({
+    enabled: isOpen && shouldRender,
+    containerRef: modalRef,
+    autoFocus: false,
+  });
+
+  // Initial focus: prefer the last focusable element that isn't the close button
+  // (typically the primary/confirm action in the footer)
   useEffect(() => {
-    if (!isOpen || !modalRef.current) return;
+    if (!isOpen || !shouldRender || !modalRef.current) return;
+
     const modal = modalRef.current;
     const focusableElements = modal.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -169,12 +180,8 @@ export const Modal: React.FC<ModalProps> = ({
 
     if (focusableElements.length === 0) return;
 
-    // Find the first focusable element that is NOT the close button.
-    // The close button lives in the modal header (typically first in DOM)
-    // and should not receive initial focus. The primary action (e.g.
-    // "Confirm") is usually the last focusable in footer.
-    let initialFocus: HTMLElement | null = null;
     // Walk backwards to find the last non-close-button element (primary action)
+    let initialFocus: HTMLElement | null = null;
     for (let i = focusableElements.length - 1; i >= 0; i--) {
       const el = focusableElements[i]!;
       if (el.getAttribute('aria-label') !== 'Close modal') {
@@ -183,37 +190,11 @@ export const Modal: React.FC<ModalProps> = ({
       }
     }
 
-    // If all elements were close buttons (unlikely), fall back to first
-    const fallback = focusableElements[0] ?? null;
     if (!initialFocus) {
-      initialFocus = fallback;
+      initialFocus = focusableElements[0]!;
     }
 
-    if (initialFocus) {
-      initialFocus.focus();
-    } else {
-      return;
-    }
-
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    const handleTab = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-    modal.addEventListener('keydown', handleTab as unknown as EventListener);
-    return () => modal.removeEventListener('keydown', handleTab as unknown as EventListener);
+    initialFocus.focus();
   }, [isOpen, shouldRender]);
 
   if (!shouldRender) return null;
