@@ -89,7 +89,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     return (
       <div
         ref={ref}
-        className={cn(containerStyles, 'bg-gray-200 text-gray-500', className)}
+        className={cn(containerStyles, 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400', className)}
         style={{ width: dim.size, height: dim.size }}
         role="img"
         aria-label={alt || 'User avatar'}

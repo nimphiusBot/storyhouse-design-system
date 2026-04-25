@@ -13,10 +13,10 @@ const checkboxVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-gray-300 bg-white text-orange-600 hover:border-orange-500 focus:ring-orange-500',
-        primary: 'border-orange-500 bg-white text-orange-600 hover:border-orange-600 focus:ring-orange-500',
-        success: 'border-green-500 bg-white text-green-600 hover:border-green-600 focus:ring-green-500',
-        error: 'border-red-500 bg-white text-red-600 hover:border-red-600 focus:ring-red-500',
+        default: 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-orange-600 hover:border-orange-500 focus:ring-orange-500',
+        primary: 'border-orange-500 bg-white dark:bg-gray-700 text-orange-600 hover:border-orange-600 focus:ring-orange-500',
+        success: 'border-green-500 bg-white dark:bg-gray-700 text-green-600 hover:border-green-600 focus:ring-green-500',
+        error: 'border-red-500 bg-white dark:bg-gray-700 text-red-600 hover:border-red-600 focus:ring-red-500',
       },
       size: {
         sm: 'h-4 w-4',
@@ -163,7 +163,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             htmlFor={checkboxId}
             className={cn(
               'text-sm font-medium cursor-pointer select-none',
-              error ? 'text-red-700' : 'text-gray-700',
+              error ? 'text-red-700 dark:text-red-400' : 'text-gray-700 dark:text-gray-300',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
@@ -173,7 +173,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           {description && (
             <p className={cn(
               'text-sm mt-0.5',
-              error ? 'text-red-600' : 'text-gray-500',
+              error ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400',
               disabled && 'opacity-50'
             )}>
               {description}
@@ -211,12 +211,12 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   return (
     <div className={cn('space-y-2', className)}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
         </label>
       )}
       {description && (
-        <p className="text-sm text-gray-500">{description}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
       )}
       <div className={cn(
         'gap-4',

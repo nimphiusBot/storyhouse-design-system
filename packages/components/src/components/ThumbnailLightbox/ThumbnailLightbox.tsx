@@ -206,7 +206,7 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
         {/* Footer with Metadata */}
         {metadata && (
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-            <div className="flex items-center justify-center gap-6 text-white text-sm">
+            <div className="flex items-center justify-center gap-6 text-white dark:text-gray-200 text-sm">
               {metadata.generatedAt && (
                 <div className="flex items-center gap-2">
                   <span className="text-gray-400">Generated:</span>
@@ -241,7 +241,7 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
 
         {/* Keyboard Hint */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-400 text-xs opacity-60">
-          Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">ESC</kbd> to close
+          Press <kbd className="px-1.5 py-0.5 bg-white/10 dark:bg-black/20 rounded text-white dark:text-gray-200">ESC</kbd> to close
         </div>
       </div>
     </div>

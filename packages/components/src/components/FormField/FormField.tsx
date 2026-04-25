@@ -50,8 +50,8 @@ const labelVariants = cva('font-medium select-none', {
       horizontal: 'min-w-[120px] pt-2',
     },
     error: {
-      true: 'text-red-700',
-      false: 'text-gray-700',
+      true: 'text-red-700 dark:text-red-400',
+      false: 'text-gray-700 dark:text-gray-300',
     },
     disabled: {
       true: 'opacity-50 cursor-not-allowed',
@@ -134,7 +134,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
               </span>
             )}
             {showOptionalText && (
-              <span className="text-gray-500 ml-1 font-normal text-sm">(optional)</span>
+              <span className="text-gray-500 dark:text-gray-400 ml-1 font-normal text-sm">(optional)</span>
             )}
           </label>
         )}
@@ -152,7 +152,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
                 size === 'sm' && 'text-xs',
                 size === 'md' && 'text-sm',
                 size === 'lg' && 'text-sm',
-                disabled ? 'text-gray-400' : 'text-gray-500',
+                disabled ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400',
               )}
             >
               {helpText}
@@ -163,7 +163,7 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
           {error && (
             <p
               className={cn(
-                'mt-1.5 text-red-600',
+                'mt-1.5 text-red-600 dark:text-red-400',
                 size === 'sm' && 'text-xs',
                 size === 'md' && 'text-sm',
                 size === 'lg' && 'text-sm',
@@ -205,14 +205,14 @@ export const FormGroup: React.FC<FormGroupProps> = ({
   ...props
 }) => {
   return (
-    <div className={cn('space-y-4', divider && 'pb-6 border-b border-gray-200', className)} {...props}>
+    <div className={cn('space-y-4', divider && 'pb-6 border-b border-gray-200 dark:border-gray-700', className)} {...props}>
       {(title || description) && (
         <div className="mb-4">
           {title && (
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">{title}</h3>
           )}
           {description && (
-            <p className="text-sm text-gray-600">{description}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
           )}
         </div>
       )}

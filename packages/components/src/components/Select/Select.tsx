@@ -8,13 +8,13 @@ const selectVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-orange-500 hover:border-gray-400',
+          'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-orange-500 hover:border-gray-400 dark:hover:border-gray-500',
         filled:
-          'bg-gray-100 border border-transparent text-gray-900 placeholder:text-gray-500 focus:bg-white focus:border-orange-500 hover:bg-gray-200',
+          'bg-gray-100 dark:bg-gray-700 border border-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 hover:bg-gray-200 dark:hover:bg-gray-600',
         error:
-          'bg-white border-2 border-red-500 text-gray-900 placeholder:text-gray-400 focus:border-red-600',
+          'bg-white dark:bg-gray-800 border-2 border-red-500 dark:border-red-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-red-600',
         success:
-          'bg-white border-2 border-green-500 text-gray-900 placeholder:text-gray-400 focus:border-green-600',
+          'bg-white dark:bg-gray-800 border-2 border-green-500 dark:border-green-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-green-600',
       },
       size: {
         sm: 'px-3 py-1.5 text-sm rounded-md pr-9',
@@ -122,7 +122,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className={fullWidth ? 'w-full' : 'w-auto'}>
         {label && (
-          <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {label}
           </label>
         )}
@@ -147,7 +147,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         </div>
 
         {helpText && !error && (
-          <p className="mt-2 text-sm text-gray-500">{helpText}</p>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{helpText}</p>
         )}
 
         {error && (

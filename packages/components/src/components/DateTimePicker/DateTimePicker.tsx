@@ -270,7 +270,7 @@ export const DateTimePicker = React.forwardRef<HTMLInputElement, DateTimePickerP
         </div>
 
         {helpText && !error && (
-          <p className={cn('mt-1.5 text-sm text-gray-500', disabled && 'opacity-50')}>
+          <p className={cn('mt-1.5 text-sm text-gray-500 dark:text-gray-400', disabled && 'opacity-50')}>
             {helpText}
           </p>
         )}

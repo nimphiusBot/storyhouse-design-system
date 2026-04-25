@@ -80,7 +80,7 @@ export const SocialIcon: React.FC<SocialIconProps> = ({
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
         aria-label={ariaLabel}
-        className={cn('inline-flex items-center justify-center hover:opacity-80 transition-opacity', className)}
+        className={cn('inline-flex items-center justify-center hover:opacity-80 dark:hover:opacity-60 transition-opacity', className)}
       >
         {iconElement}
       </a>

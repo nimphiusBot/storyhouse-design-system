@@ -14,10 +14,10 @@ export interface CardProps {
 }
 
 const variantStyles = {
-  default: 'bg-white shadow-sm border border-gray-200',
-  elevated: 'bg-white shadow-md border border-gray-100',
-  bordered: 'bg-white border-2 border-gray-200',
-  flat: 'bg-gray-50',
+  default: 'bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700',
+  elevated: 'bg-white dark:bg-gray-800 shadow-md border border-gray-100 dark:border-gray-700',
+  bordered: 'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700',
+  flat: 'bg-gray-50 dark:bg-gray-800/50',
 };
 
 const paddingStyles = {
@@ -73,7 +73,7 @@ export interface CardTitleProps {
 export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ children, className, as: Tag = 'h3' }, ref) => {
     return (
-      <Tag ref={ref} className={cn('text-lg font-semibold text-gray-900', className)}>
+      <Tag ref={ref} className={cn('text-lg font-semibold text-gray-900 dark:text-gray-100', className)}>
         {children}
       </Tag>
     );
@@ -90,7 +90,7 @@ export interface CardContentProps {
 export const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ children, className }, ref) => {
     return (
-      <div ref={ref} className={cn('text-gray-700', className)}>
+      <div ref={ref} className={cn('text-gray-700 dark:text-gray-300', className)}>
         {children}
       </div>
     );
@@ -109,7 +109,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
     return (
       <div
         ref={ref}
-        className={cn('mt-4 flex items-center gap-2 border-t border-gray-100 pt-4', className)}
+        className={cn('mt-4 flex items-center gap-2 border-t border-gray-100 dark:border-gray-700 pt-4', className)}
       >
         {children}
       </div>
