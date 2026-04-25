@@ -199,6 +199,17 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
       );
     };
 
+    // Inline label value text (shown inside or alongside the bar)
+    const renderInlineLabel = () => (
+      <span className="text-xs font-medium text-white drop-shadow-sm">
+        {customLabel || (indeterminate
+          ? 'Loading...'
+          : showValues
+            ? `${formatValue(clampedValue)} / ${formatValue(max)}`
+            : `${percentage.toFixed(0)}%`)}
+      </span>
+    );
+
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {(showLabel || customLabel) && labelPosition === 'top' && (
@@ -216,7 +227,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
           aria-describedby={describedBy}
           aria-valuetext={ariaValueText}
           aria-busy={indeterminate ? true : undefined}
-          className={progressBarVariants({ size, variant })}
+          className={cn(progressBarVariants({ size, variant }), 'relative')}
         >
           <div
             aria-hidden="true"
@@ -227,6 +238,11 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
             )}
             style={indeterminate ? undefined : { width: `${percentage}%` }}
           />
+          {(showLabel || customLabel) && labelPosition === 'inline' && (
+            <div id={labelId} className="absolute inset-0 flex items-center justify-center">
+              {renderInlineLabel()}
+            </div>
+          )}
         </div>
 
         {(showLabel || customLabel) && labelPosition === 'bottom' && (
