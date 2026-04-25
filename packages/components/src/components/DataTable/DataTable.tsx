@@ -135,11 +135,16 @@ export function DataTable<T>({
       newDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     }
     // else: clicking a new column preserves the previous direction
-    if (!isSortControlled) {
+
+    if (isSortControlled) {
+      // Controlled mode: parent manages sort state — only fire callback
+      onSort?.(key, newDirection);
+    } else {
+      // Uncontrolled mode: manage internally and do NOT fire onSort
+      // to avoid conflicting control patterns
       setInternalSortKey(key);
       setInternalSortDirection(newDirection);
     }
-    onSort?.(key, newDirection);
   };
 
   const handleSelectAll = () => {
