@@ -17,6 +17,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const tooltipIdRef = useRef(`tooltip-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`);
+  const childRef = useRef<HTMLDivElement>(null);
 
   const showTooltip = () => {
     timeoutRef.current = setTimeout(() => {
@@ -73,9 +75,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
       onFocus={showTooltip}
       onBlur={hideTooltip}
     >
-      {children}
+      <div ref={childRef} aria-describedby={isVisible ? tooltipIdRef.current : undefined}>
+        {children}
+      </div>
       {isVisible && (
-        <div className={getTooltipClasses()} role="tooltip">
+        <div id={tooltipIdRef.current} className={getTooltipClasses()} role="tooltip">
           {content}
           <div className={getArrowClasses()} />
         </div>
