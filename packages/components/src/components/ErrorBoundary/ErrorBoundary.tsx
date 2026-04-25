@@ -1,9 +1,12 @@
 import React, { Component, type ReactNode } from 'react';
 
-interface ErrorBoundaryProps {
+export interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
+  /** Callback invoked after the user triggers a retry (reset). Useful for
+   *  re-initializing application state before children re-render. */
+  onReset?: () => void;
 }
 
 interface ErrorBoundaryState {
@@ -66,7 +69,9 @@ export class ErrorBoundary extends Component<
 
   handleReset = (): void => {
     if (this._isMounted) {
-      this.setState({ hasError: false, error: null });
+      this.setState({ hasError: false, error: null }, () => {
+        this.props.onReset?.();
+      });
     }
   };
 

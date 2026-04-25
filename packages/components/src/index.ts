@@ -60,6 +60,7 @@ export { FileUpload } from './components/FileUpload';
 export type { FileUploadProps } from './components/FileUpload';
 
 export { ErrorBoundary } from './components/ErrorBoundary';
+export type { ErrorBoundaryProps } from './components/ErrorBoundary';
 
 export { ProgressBar, progressBarVariants, progressFillVariants } from './components/ProgressBar';
 export type { ProgressBarProps } from './components/ProgressBar';
