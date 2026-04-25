@@ -1,0 +1,271 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/alert`;
+---
+
+<DocLayout
+  title="Alert"
+  status="stable"
+  description="Contextual notification banners for important messages. Supports info, success, warning, error, and tip variants with optional dismissibility."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Alert</code> component communicates important messages to users. It comes in five semantic
+      variants — <strong>info</strong>, <strong>success</strong>, <strong>warning</strong>,
+      <strong>error</strong>, and <strong>tip</strong> — each with a distinct icon, color scheme,
+      and tone. Alerts can be dismissible and accept custom icons or no icon at all.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>
+      Choose the variant that matches the severity and tone of your message.
+    </p>
+
+    <div class="my-6 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">i</span>
+        <div>
+          <p class="font-medium text-blue-900 dark:text-blue-100">Info</p>
+          <p class="text-sm text-blue-700 dark:text-blue-300">This is an informational message.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-600 text-xs font-bold text-white">✓</span>
+        <div>
+          <p class="font-medium text-green-900 dark:text-green-100">Success</p>
+          <p class="text-sm text-green-700 dark:text-green-300">Operation completed successfully.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-yellow-600 text-xs font-bold text-white">!</span>
+        <div>
+          <p class="font-medium text-yellow-900 dark:text-yellow-100">Warning</p>
+          <p class="text-sm text-yellow-700 dark:text-yellow-300">Please review your changes before proceeding.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">✕</span>
+        <div>
+          <p class="font-medium text-red-900 dark:text-red-100">Error</p>
+          <p class="text-sm text-red-700 dark:text-red-300">Something went wrong. Please try again.</p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 p-4 dark:border-purple-800 dark:bg-purple-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-purple-600 text-xs font-bold text-white">✦</span>
+        <div>
+          <p class="font-medium text-purple-900 dark:text-purple-100">Tip</p>
+          <p class="text-sm text-purple-700 dark:text-purple-300">You can use keyboard shortcuts to navigate faster.</p>
+        </div>
+      </div>
+    </div>
+
+    <CodeBlock title="alert-variants.tsx" code={`import { Alert } from '@storyhouse/components';
+
+export function AlertVariants() {
+  return (
+    <div className="space-y-4">
+      <Alert variant="info" title="Info">This is an informational message.</Alert>
+      <Alert variant="success" title="Success">Saved successfully!</Alert>
+      <Alert variant="warning" title="Warning">Please review your changes.</Alert>
+      <Alert variant="error" title="Error">Something went wrong.</Alert>
+      <Alert variant="tip" title="Tip">Use keyboard shortcuts to go faster.</Alert>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="dismissible">Dismissible Alert</h2>
+    <p>
+      Set <code>dismissible</code> to allow users to close an alert manually. The <code>onDismiss</code>
+      callback fires when the close button is clicked, enabling you to track dismissals or preserve state.
+    </p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 pr-10 relative dark:border-blue-800 dark:bg-blue-950">
+        <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">i</span>
+        <div>
+          <p class="font-medium text-blue-900 dark:text-blue-100">Dismissible</p>
+          <p class="text-sm text-blue-700 dark:text-blue-300">Click the X to dismiss this alert.</p>
+        </div>
+        <button class="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded text-blue-500 hover:bg-blue-200 dark:hover:bg-blue-800">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <CodeBlock title="alert-dismissible.tsx" code={`import { Alert } from '@storyhouse/components';
+
+export function DismissibleAlert() {
+  return (
+    <Alert
+      variant="info"
+      title="Dismissible Alert"
+      dismissible
+      onDismiss={() => console.log('Alert dismissed')}
+    >
+      Click the X to close this alert.
+    </Alert>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="custom-icon">Custom Icon</h2>
+    <p>
+      Override the default variant icon by passing <code>icon</code>. Set <code>icon={null}</code>
+      to hide the icon entirely for a minimal appearance.
+    </p>
+
+    <CodeBlock title="alert-custom-icon.tsx" code={`import { Alert } from '@storyhouse/components';
+
+export function CustomIconAlert() {
+  return (
+    <>
+      <Alert variant="success" title="Custom Icon" icon={<CustomIcon />}>
+        This alert uses a custom icon.
+      </Alert>
+
+      <Alert variant="info" title="No Icon" icon={null}>
+        This alert has no icon.
+      </Alert>
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'variant', type: '"info" | "success" | "warning" | "error" | "tip"', default: '"info"', description: 'Semantic variant determining color scheme and default icon.' },
+        { name: 'title', type: 'string', default: '-', description: 'Bold title displayed above the message content.' },
+        { name: 'children', type: 'React.ReactNode', default: '-', description: 'Body content of the alert.' },
+        { name: 'icon', type: 'ReactNode | null', default: '(variant-dependent)', description: 'Custom icon element. Set to null to remove the icon.' },
+        { name: 'dismissible', type: 'boolean', default: 'false', description: 'Shows a close button allowing users to dismiss the alert.' },
+        { name: 'onDismiss', type: '() => void', default: '-', description: 'Callback fired when the dismiss button is clicked.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+    <h3>Empty or Missing Title</h3>
+    <p>
+      When <code>title</code> is omitted, the alert renders without a bold heading. This is useful
+      for simple inline notifications where a title would be overkill. The variant icon still appears.
+    </p>
+
+    <CodeBlock title="alert-no-title.tsx" code={`import { Alert } from '@storyhouse/components';
+
+export function AlertNoTitle() {
+  return (
+    <Alert variant="info">
+      Simple inline message without a title heading.
+    </Alert>
+  );
+}`} />
+
+    <h3>Long Content</h3>
+    <p>
+      Alerts grow vertically to accommodate long content. Text wraps naturally. For very long content,
+      consider limiting the alert width with a container or extracting content into a separate section.
+    </p>
+
+    <h3>Multiple Alerts</h3>
+    <p>
+      When showing multiple alerts at once, stack them vertically with <code>space-y-3</code>.
+      Avoid stacking more than 3–4 alerts — consider using a toast or notification system instead.
+    </p>
+
+    <h3>Dismissible Callback</h3>
+    <p>
+      The <code>onDismiss</code> callback does not automatically remove the alert from the DOM.
+      You must manage the visibility state yourself (e.g., by conditionally rendering the Alert).
+    </p>
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+    <h3>Variant Selection</h3>
+    <ul>
+      <li><strong>Info</strong> — General information, tips, or context that doesn't require action</li>
+      <li><strong>Success</strong> — Confirmation of a completed action (saved, submitted, updated)</li>
+      <li><strong>Warning</strong> — Non-critical issues that need attention (unsaved changes, expiring data)</li>
+      <li><strong>Error</strong> — Critical failures requiring user action (validation errors, network failures)</li>
+      <li><strong>Tip</strong> — Helpful suggestions, shortcuts, or productivity hints</li>
+    </ul>
+
+    <h3>Placement</h3>
+    <ul>
+      <li>Place alerts near the top of the relevant content area</li>
+      <li>Use inline alerts for form validation, full-width alerts for page-level messages</li>
+      <li>Avoid placing alerts in the middle of user workflows</li>
+    </ul>
+
+    <h3>Content Guidelines</h3>
+    <ul>
+      <li>Write clear, actionable messages — tell users what happened and what to do</li>
+      <li>Keep titles short (1–4 words), body text concise (1–3 sentences)</li>
+      <li>Avoid technical jargon in user-facing alerts</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+
+    <h3>Variant Mapping</h3>
+    <p>
+      Each variant maps to a predefined combination of background, border, text, and icon colors.
+      These are defined as Tailwind class tuples in the component source, consumed via <code>cn()</code>.
+      The default icon is a semantic SVG (info circle, checkmark, exclamation, X, lightbulb).
+    </p>
+
+    <h3>Dismissible Architecture</h3>
+    <p>
+      When <code>dismissible</code> is true, a close button is rendered as an absolute-positioned
+      <code>&lt;button&gt;</code> element. The button has <code>aria-label="Dismiss"</code>
+      for screen reader support.
+    </p>
+
+    <h3>Dark Mode</h3>
+    <p>
+      All variant color schemes include dark mode Tailwind variants. The background, border, and text
+      colors adapt automatically when the <code>dark</code> class is present on <code>&lt;html&gt;</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Uses <code>role="alert"</code> for screen reader announcement</li>
+      <li>All variant colors meet WCAG AA contrast ratios (4.5:1 for text, 3:1 for non-text)</li>
+      <li>Dismiss button has <code>aria-label="Dismiss"</code></li>
+      <li>Dismiss button is keyboard accessible (native button element)</li>
+      <li>Custom icons should have <code>aria-hidden="true"</code> unless they convey meaning</li>
+      <li>Focus-visible ring on dismiss button for keyboard users</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Alert variants interactively in Storybook:</p>
+    <StorybookPreview id="components-alert--info" title="Alert — Storybook" height="500" />
+  </section>
+</DocLayout>

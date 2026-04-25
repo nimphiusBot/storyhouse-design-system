@@ -31,11 +31,32 @@ const colorMaps = {
 
 const miniCards = [
   {
+    href: `${base}components/accordion`,
+    icon: 'M19 9l-7 7-7-7',
+    color: 'slate',
+    title: 'Accordion',
+    description: '3 variants, single/multiple',
+  },
+  {
+    href: `${base}components/alert`,
+    icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
+    color: 'red',
+    title: 'Alert',
+    description: '5 variants, dismissible',
+  },
+  {
+    href: `${base}components/breadcrumb`,
+    icon: 'M9 5l7 7-7 7',
+    color: 'gray',
+    title: 'Breadcrumb',
+    description: '3 variants, collapsible',
+  },
+  {
     href: `${base}components/button`,
     icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
     color: 'blue',
     title: 'Button',
-    description: '4 variants, 3 sizes, loading state',
+    description: '4 variants, 3 sizes, loading',
   },
   {
     href: `${base}components/card`,
@@ -45,11 +66,53 @@ const miniCards = [
     description: '4 variants, 4 sub-components',
   },
   {
+    href: `${base}components/chip`,
+    icon: 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z',
+    color: 'teal',
+    title: 'Chip',
+    description: '6 variants, removable',
+  },
+  {
+    href: `${base}components/collapsible`,
+    icon: 'M5 15l7-7 7 7',
+    color: 'purple',
+    title: 'Collapsible',
+    description: '3 variants, animated',
+  },
+  {
+    href: `${base}components/icon-button`,
+    icon: 'M10 20l4-16',
+    color: 'cyan',
+    title: 'Icon Button',
+    description: '3 variants, loading state',
+  },
+  {
     href: `${base}components/input`,
     icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z',
     color: 'purple',
     title: 'Input',
     description: 'Labels, errors, icons, 3 sizes',
+  },
+  {
+    href: `${base}components/skeleton`,
+    icon: 'M4 4h5v5H4V4zm0 11h5v5H4v-5zm11-11h5v5h-5V4zm0 11h5v5h-5v-5z',
+    color: 'gray',
+    title: 'Skeleton',
+    description: '5 radii, count mode',
+  },
+  {
+    href: `${base}components/spinner`,
+    icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+    color: 'indigo',
+    title: 'Spinner',
+    description: '4 sizes, label support',
+  },
+  {
+    href: `${base}components/stepper`,
+    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+    color: 'emerald',
+    title: 'Stepper',
+    description: '3 variants, vertical layout',
   },
   {
     href: `${base}components/badge`,
@@ -65,6 +128,20 @@ const miniCards = [
     title: 'Avatar',
     description: '5 sizes, 2 shapes, initials',
   },
+  {
+    href: `${base}components/tabs`,
+    icon: 'M4 6h16M4 10h16M4 14h16M4 18h16',
+    color: 'rose',
+    title: 'Tabs',
+    description: '2 variants, icons + badges',
+  },
+  {
+    href: `${base}components/modal`,
+    icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+    color: 'yellow',
+    title: 'Modal',
+    description: '5 variants, 6 sizes',
+  },
 ];
 
 const miniColorMaps = {
@@ -73,6 +150,15 @@ const miniColorMaps = {
   purple: { bg: 'bg-purple-100 dark:bg-purple-950', text: 'text-purple-600 dark:text-purple-400' },
   orange: { bg: 'bg-orange-100 dark:bg-orange-950', text: 'text-orange-600 dark:text-orange-400' },
   pink: { bg: 'bg-pink-100 dark:bg-pink-950', text: 'text-pink-600 dark:text-pink-400' },
+  red: { bg: 'bg-red-100 dark:bg-red-950', text: 'text-red-600 dark:text-red-400' },
+  gray: { bg: 'bg-gray-100 dark:bg-gray-950', text: 'text-gray-600 dark:text-gray-400' },
+  teal: { bg: 'bg-teal-100 dark:bg-teal-950', text: 'text-teal-600 dark:text-teal-400' },
+  cyan: { bg: 'bg-cyan-100 dark:bg-cyan-950', text: 'text-cyan-600 dark:text-cyan-400' },
+  indigo: { bg: 'bg-indigo-100 dark:bg-indigo-950', text: 'text-indigo-600 dark:text-indigo-400' },
+  emerald: { bg: 'bg-emerald-100 dark:bg-emerald-950', text: 'text-emerald-600 dark:text-emerald-400' },
+  rose: { bg: 'bg-rose-100 dark:bg-rose-950', text: 'text-rose-600 dark:text-rose-400' },
+  yellow: { bg: 'bg-yellow-100 dark:bg-yellow-950', text: 'text-yellow-600 dark:text-yellow-400' },
+  slate: { bg: 'bg-slate-100 dark:bg-slate-950', text: 'text-slate-600 dark:text-slate-400' },
 };
 ---
 
@@ -117,7 +203,7 @@ const miniColorMaps = {
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div class="text-center">
-          <p class="text-4xl font-bold text-gray-900 dark:text-white">16</p>
+          <p class="text-4xl font-bold text-gray-900 dark:text-white">39</p>
           <p class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-400">Production Components</p>
         </div>
         <div class="text-center">
@@ -175,7 +261,7 @@ const miniColorMaps = {
           Components at a glance
         </h2>
         <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Five production-ready components, each with full documentation and interactive examples.
+          Sixteen production-ready components, each with full documentation and interactive examples.
         </p>
       </div>
 

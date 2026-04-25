@@ -1,0 +1,157 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/collapsible`;
+---
+
+<DocLayout
+  title="Collapsible"
+  status="stable"
+  description="Toggleable content panel with animated expand/collapse. Supports controlled and uncontrolled modes with multiple visual variants."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Collapsible</code> component lets users show and hide content with a smooth animation.
+      It supports both controlled (<code>open</code> + <code>onOpenChange</code>) and uncontrolled
+      (<code>defaultOpen</code>) usage, with a customizable trigger and three visual variants.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>Three visual variants to match different layout contexts.</p>
+
+    <div class="my-6 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="rounded-lg border border-gray-200 dark:border-gray-700">
+        <button class="flex w-full items-center justify-between px-4 py-3 text-left font-medium text-gray-900 dark:text-white">
+          <span>Default Collapsible</span>
+          <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="border-t border-gray-200 px-4 py-3 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">Content area with default styling.</div>
+      </div>
+
+      <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+        <button class="flex w-full items-center justify-between text-left font-medium text-gray-900 dark:text-white">
+          <span>Ghost Collapsible</span>
+          <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <CodeBlock title="collapsible-variants.tsx" code={`import { Collapsible } from '@storyhouse/components';
+
+export function CollapsibleVariants() {
+  return (
+    <div className="space-y-4">
+      <Collapsible variant="default" trigger={<span>Show Details</span>}>
+        Default styled collapsible section.
+      </Collapsible>
+      <Collapsible variant="card" trigger={<span>Card Style</span>}>
+        Card-like appearance with background and shadow.
+      </Collapsible>
+      <Collapsible variant="ghost" trigger={<span>Ghost Style</span>}>
+        Minimal styling, no borders.
+      </Collapsible>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="controlled">Controlled vs Uncontrolled</h2>
+
+    <h3>Uncontrolled</h3>
+    <p>Use <code>defaultOpen</code> to set initial state. The component manages its own open/close state internally.</p>
+
+    <CodeBlock title="collapsible-uncontrolled.tsx" code={`import { Collapsible } from '@storyhouse/components';
+
+export function UncontrolledCollapsible() {
+  return (
+    <Collapsible defaultOpen trigger={<span>Details</span>}>
+      This content is visible by default but can be collapsed.
+    </Collapsible>
+  );
+}`} />
+
+    <h3>Controlled</h3>
+    <p>Use <code>open</code> and <code>onOpenChange</code> to control the state externally.</p>
+
+    <CodeBlock title="collapsible-controlled.tsx" code={`import { Collapsible } from '@storyhouse/components';
+
+export function ControlledCollapsible() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      trigger={<span>Controlled Panel</span>}
+    >
+      External state controls this panel's visibility.
+    </Collapsible>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'open', type: 'boolean', default: '-', description: 'Controlled open state. Use with onOpenChange.' },
+        { name: 'defaultOpen', type: 'boolean', default: 'false', description: 'Default open state for uncontrolled usage.' },
+        { name: 'onOpenChange', type: '(open: boolean) => void', default: '-', description: 'Callback when open state changes.' },
+        { name: 'trigger', type: 'ReactNode', default: '(required)', description: 'Element that toggles the collapsible on click.' },
+        { name: 'children', type: 'ReactNode', default: '-', description: 'Content revealed when the collapsible is open.' },
+        { name: 'variant', type: '"default" | "card" | "ghost"', default: '"default"', description: 'Visual variant for the collapsible.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Best Practices</h2>
+
+    <h3>Empty Content</h3>
+    <p>When children are empty or null, the collapsible still renders the trigger. The content area is empty when open.</p>
+
+    <h3>Nested Collapsibles</h3>
+    <p>Collapsibles can be nested inside each other. Each manages its own open state independently.</p>
+
+    <h3>Long Content</h3>
+    <p>Content area grows with its children. There is no maximum height limit. For very long content, consider adding a container with <code>max-h</code> and overflow.</p>
+
+    <h3>Animation</h3>
+    <p>Collapse/expand uses CSS transition on <code>max-height</code> and opacity. The animation is smooth but not interruptible mid-transition.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      Collapsible uses <code>max-h-0</code> and opacity transitions for animation — it doesn't mount/unmount
+      the content, avoiding layout shift. The trigger is a <code>button</code> with
+      <code>aria-expanded</code> reflecting the current state. Dark mode is handled via Tailwind
+      <code>dark:</code> variants on all variant styles.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Trigger uses <code>aria-expanded</code> to communicate open state</li>
+      <li>Content uses <code>role="region"</code> with an <code>aria-labelledby</code> pointing to the trigger</li>
+      <li>Toggle is keyboard accessible (native <code>button</code> element)</li>
+      <li>Focus remains on trigger after toggle</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <StorybookPreview id="components-collapsible--default" title="Collapsible — Storybook" height="500" />
+  </section>
+</DocLayout>

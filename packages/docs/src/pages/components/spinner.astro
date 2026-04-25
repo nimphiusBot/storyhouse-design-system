@@ -1,0 +1,163 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/spinner`;
+---
+
+<DocLayout
+  title="Spinner"
+  status="stable"
+  description="Animated SVG loading spinner with rotating icon. Four sizes, three color variants, and optional label support."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Spinner</code> component provides a visual loading indicator using an animated SVG
+      from <code>lucide-react</code>'s <code>Loader2</code> icon. It supports four sizes, three
+      color variants, and an optional descriptive label placed below or beside the spinner.
+      Uses <code>role="status"</code> for screen reader support.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+
+    <div class="my-6 flex flex-wrap items-center gap-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <svg class="h-4 w-4 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="text-sm text-gray-500">sm</span>
+      <svg class="h-5 w-5 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="text-sm text-gray-500">md</span>
+      <svg class="h-8 w-8 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="text-sm text-gray-500">lg</span>
+      <svg class="h-10 w-10 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg><span class="text-sm text-gray-500">xl</span>
+    </div>
+
+    <CodeBlock title="spinner-sizes.tsx" code={`import { Spinner } from '@storyhouse/components';
+
+export function SpinnerSizes() {
+  return (
+    <div className="flex items-center gap-6">
+      <Spinner size="sm" />
+      <Spinner size="md" />
+      <Spinner size="lg" />
+      <Spinner size="xl" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="variants">Color Variants</h2>
+
+    <div class="my-6 flex flex-wrap items-center gap-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col items-center gap-2">
+        <svg class="h-6 w-6 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <span class="text-xs text-gray-500">Default</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <svg class="h-6 w-6 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <span class="text-xs text-blue-600">Primary</span>
+      </div>
+      <div class="flex flex-col items-center gap-2 rounded-lg bg-gray-900 p-4">
+        <svg class="h-6 w-6 animate-spin text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <span class="text-xs text-gray-300">White</span>
+      </div>
+    </div>
+
+    <CodeBlock title="spinner-variants.tsx" code={`import { Spinner } from '@storyhouse/components';
+
+export function SpinnerVariants() {
+  return (
+    <div className="flex items-center gap-6">
+      <Spinner variant="default" />
+      <Spinner variant="primary" />
+      <Spinner variant="white" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="label">Label Support</h2>
+    <p>Add a text label below or beside the spinner using the <code>label</code> and <code>labelPosition</code> props.</p>
+
+    <div class="my-6 flex flex-wrap items-center gap-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex flex-col items-center gap-2">
+        <svg class="h-6 w-6 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <span class="text-sm text-gray-500">Loading...</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <svg class="h-5 w-5 animate-spin text-gray-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <span class="text-sm text-gray-500">Saving...</span>
+      </div>
+    </div>
+
+    <CodeBlock title="spinner-label.tsx" code={`import { Spinner } from '@storyhouse/components';
+
+export function SpinnerWithLabel() {
+  return (
+    <div className="flex items-center gap-6">
+      <Spinner label="Loading..." labelPosition="bottom" />
+      <Spinner label="Saving..." labelPosition="right" size="sm" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'size', type: '"sm" | "md" | "lg" | "xl"', default: '"md"', description: 'Controls the spinner dimensions.' },
+        { name: 'variant', type: '"default" | "primary" | "white"', default: '"default"', description: 'Color variant. White is for dark backgrounds.' },
+        { name: 'label', type: 'string', default: '-', description: 'Optional text label describing the loading state.' },
+        { name: 'labelPosition', type: '"bottom" | "right"', default: '"bottom"', description: 'Position of the label relative to the spinner icon.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Best Practices</h2>
+
+    <h3>Long Labels</h3>
+    <p>When <code>labelPosition="bottom"</code>, long labels wrap to the next line. Keep labels under 40 characters for best results.</p>
+
+    <h3>Multiple Spinners</h3>
+    <p>Avoid rendering multiple spinners on the same page simultaneously. Use one main spinner or a skeleton for the broader content area.</p>
+
+    <h3>Button Loading</h3>
+    <p>For loading states within buttons, use the Button's built-in <code>isLoading</code> prop instead of manually adding a Spinner.</p>
+
+    <h3>Overlay Loading</h3>
+    <p>For full-page loading, center a large Spinner (<code>size="xl"</code>) with a label. Consider adding a semi-transparent overlay.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      Spinner uses the <code>Loader2</code> icon from <code>lucide-react</code> with the
+      <code>animate-spin</code> Tailwind class. The icon is wrapped in a <code>div</code>
+      with <code>role="status"</code> for screen reader support. The label uses
+      <code>sr-only</code> when no visible label is provided, while the visible label
+      renders as a <code>span</code> positioned via flex.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Container uses <code>role="status"</code> for live region announcements</li>
+      <li>When no visible label is provided, a <code>sr-only</code> "Loading..." text is included</li>
+      <li>Spinner icon has <code>aria-hidden="true"</code></li>
+      <li>Color variants maintain sufficient contrast</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <StorybookPreview id="components-spinner--small" title="Spinner — Storybook" height="500" />
+  </section>
+</DocLayout>

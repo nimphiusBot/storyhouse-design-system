@@ -1,0 +1,296 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/accordion`;
+---
+
+<DocLayout
+  title="Accordion"
+  status="stable"
+  description="Collapsible content panels for displaying sections of related content. Supports single and multiple expansion modes with multiple visual variants."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Accordion</code> component lets users toggle between showing and hiding related content sections.
+      It supports single or multiple simultaneous expansion, three visual variants, and three sizes.
+      Built on <code>@radix-ui/react-accordion</code> for full accessibility compliance.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>
+      Three visual variants are available to match your layout needs.
+    </p>
+
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+
+      <div class="space-y-2">
+        <div class="rounded-lg border border-gray-200 dark:border-gray-700">
+          <button class="flex w-full items-center justify-between p-4 text-left font-medium">
+            <span>Default Accordion Item</span>
+            <svg class="h-5 w-5 text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="border-t border-gray-200 p-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+            This is the default accordion variant with simple borders.
+          </div>
+        </div>
+      </div>
+
+      <h4 class="mt-6 mb-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">Bordered</h4>
+      <div class="rounded-lg border-2 border-blue-200 dark:border-blue-800">
+        <button class="flex w-full items-center justify-between p-4 text-left font-medium">
+          <span>Bordered Accordion Item</span>
+          <svg class="h-5 w-5 text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="border-t border-blue-200 p-4 text-sm text-gray-600 dark:border-blue-800 dark:text-gray-400">
+          The bordered variant has thicker, colored borders.
+        </div>
+      </div>
+
+      <h4 class="mt-6 mb-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">Ghost</h4>
+      <div class="rounded-lg">
+        <button class="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+          <span>Ghost Accordion Item</span>
+          <svg class="h-5 w-5 text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-4 text-sm text-gray-600 dark:text-gray-400">
+          The ghost variant removes borders entirely for a clean, minimal look.
+        </div>
+      </div>
+    </div>
+
+    <CodeBlock title="accordion-variants.tsx" code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@storyhouse/components';
+
+export function AccordionVariants() {
+  return (
+    <div className="space-y-8">
+      <Accordion type="single" variant="default" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>What is Storyhouse?</AccordionTrigger>
+          <AccordionContent>Storyhouse is our design system.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Accordion type="single" variant="bordered" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Bordered style</AccordionTrigger>
+          <AccordionContent>Thick, colored borders.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <Accordion type="single" variant="ghost" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Ghost style</AccordionTrigger>
+          <AccordionContent>No borders, clean look.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="type">Type: Single vs Multiple</h2>
+    <p>
+      Set <code>type="single"</code> to allow only one panel open at a time, or <code>type="multiple"</code>
+      to let users open several panels simultaneously. When using <code>single</code>, add
+      <code>collapsible</code> to allow closing the open panel.
+    </p>
+
+    <CodeBlock title="accordion-type.tsx" code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@storyhouse/components';
+
+// Single — only one panel open at a time
+export function SingleAccordion() {
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>First Item</AccordionTrigger>
+        <AccordionContent>Content for item 1.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Second Item</AccordionTrigger>
+        <AccordionContent>Content for item 2.</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
+// Multiple — several panels can be open
+export function MultipleAccordion() {
+  return (
+    <Accordion type="multiple">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>First Item</AccordionTrigger>
+        <AccordionContent>Content for item 1.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Second Item</AccordionTrigger>
+        <AccordionContent>Content for item 2.</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="sizes">Sizes</h2>
+    <p>Three sizes control the padding and font size of accordion trigger and content.</p>
+
+    <CodeBlock title="accordion-sizes.tsx" code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@storyhouse/components';
+
+export function AccordionSizes() {
+  return (
+    <Accordion type="single" size="sm" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Small</AccordionTrigger>
+        <AccordionContent>Compact padding and smaller text.</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'type', type: '"single" | "multiple"', default: '"single"', description: 'Determines whether one or multiple items can be open simultaneously.' },
+        { name: 'variant', type: '"default" | "bordered" | "ghost"', default: '"default"', description: 'Visual variant for the accordion container and items.' },
+        { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Controls padding and font size of trigger and content.' },
+        { name: 'value', type: 'string[]', default: '-', description: 'Controlled open values. Use with onValueChange.' },
+        { name: 'defaultValue', type: 'string[]', default: '-', description: 'Default open items for uncontrolled usage.' },
+        { name: 'onValueChange', type: '(value: string[]) => void', default: '-', description: 'Callback fired when open items change.' },
+        { name: 'collapsible', type: 'boolean', default: 'false', description: 'When type="single", allows closing the open item (setting value to empty).' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+        { name: 'AccordionItem.value', type: 'string', default: '(required)', description: 'A unique identifier for the accordion item. Required on every AccordionItem.' },
+        { name: 'AccordionTrigger.icon', type: 'ReactNode', default: '-', description: 'Custom icon replacing the default chevron.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+    <h3>Empty Accordion</h3>
+    <p>
+      An <code>Accordion</code> with no children renders an empty container. While not a useful state,
+      it should not break layout. Ensure you always provide at least one <code>AccordionItem</code>.
+    </p>
+
+    <h3>Duplicate Values</h3>
+    <p>
+      If multiple <code>AccordionItem</code> children share the same <code>value</code>, the behavior
+      is undefined. Always use unique values for each item.
+    </p>
+
+    <h3>Nested Accordions</h3>
+    <p>
+      Accordion items can contain nested accordions. However, deep nesting (&gt;2 levels)
+      can reduce usability on small screens. Consider using a dialog or separate page
+      for deeply nested content.
+    </p>
+
+    <CodeBlock title="accordion-nested.tsx" code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@storyhouse/components';
+
+export function NestedAccordion() {
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="parent">
+        <AccordionTrigger>Parent Item</AccordionTrigger>
+        <AccordionContent>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="child-1">
+              <AccordionTrigger>Nested Item</AccordionTrigger>
+              <AccordionContent>Deep content.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}`} />
+
+    <h3>Long Trigger Text</h3>
+    <p>
+      Long trigger text wraps naturally. The chevron icon stays aligned to the right.
+      Use <code>whitespace-nowrap</code> via <code>className</code> on <code>AccordionTrigger</code>
+      if you need single-line truncation.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+    <h3>When to Use Accordion</h3>
+    <ul>
+      <li>Group related content into sections that users can expand progressively</li>
+      <li>FAQ pages and help documentation</li>
+      <li>Settings panels where categories are clearly distinct</li>
+    </ul>
+
+    <h3>When to Avoid</h3>
+    <ul>
+      <li>Content that users need to see simultaneously — use tabs or a grid instead</li>
+      <li>Critical information that should always be visible</li>
+      <li>More than 8–10 items at once; consider search or filtering</li>
+    </ul>
+
+    <h3>Content Guidelines</h3>
+    <ul>
+      <li>Keep trigger labels short and descriptive — they act as headings</li>
+      <li>Write unique labels — users scanning with a keyboard need distinct values</li>
+      <li>Use <code>type="single"</code> for focused reading experiences</li>
+      <li>Use <code>type="multiple"</code> for comparison scenarios or long reference content</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+
+    <h3>Radix UI Integration</h3>
+    <p>
+      Accordion is built on <code>@radix-ui/react-accordion</code> which provides WAI-ARIA compliant
+      expand/collapse semantics. The Radix primitives handle keyboard navigation (Up/Down arrows,
+      Home/End, Enter/Space), focus management, and ARIA attributes.
+    </p>
+
+    <h3>Animation</h3>
+    <p>
+      Content panels use CSS transitions for smooth expand/collapse. Animations respect
+      <code>prefers-reduced-motion</code> via the globals.css override, falling back to
+      instant toggling for accessibility.
+    </p>
+
+    <h3>ClassName Merging</h3>
+    <p>
+      The component uses <code>cn()</code> (tailwind-merge + clsx from <code>@storyhouse/utils</code>)
+      to merge consumer classNames with internal styles.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Built on <code>@radix-ui/react-accordion</code> with full WAI-ARIA accordion pattern</li>
+      <li>Keyboard navigation: Arrow Up/Down to move between triggers, Home/End for first/last</li>
+      <li>Enter or Space toggles the focused trigger</li>
+      <li>Triggers are rendered as <code>&lt;button&gt;</code> elements with <code>aria-expanded</code></li>
+      <li>Content panels use <code>aria-labelledby</code> referencing the trigger</li>
+      <li>Focus-visible ring only shows for keyboard users</li>
+      <li>Animations respect <code>prefers-reduced-motion</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <p>Explore all Accordion variants and props interactively in Storybook:</p>
+    <StorybookPreview id="components-accordion--single" title="Accordion — Storybook" height="500" />
+  </section>
+</DocLayout>

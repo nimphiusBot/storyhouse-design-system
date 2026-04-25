@@ -1,0 +1,250 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/stepper`;
+---
+
+<DocLayout
+  title="Stepper"
+  status="stable"
+  description="Step progress indicator for multi-step workflows. Three variants, three sizes, horizontal and vertical layouts."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Stepper</code> component visualizes progress through a multi-step process. It supports
+      three visual variants (<code>default</code>, <code>numbers</code>, <code>dots</code>), three sizes,
+      and both horizontal and vertical orientations. Clickable step navigation is available with
+      <code>allowStepClick</code> and <code>onStepClick</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+
+    <div class="my-6 space-y-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div>
+        <p class="mb-3 text-sm font-semibold text-gray-500 uppercase">Default</p>
+        <div class="flex items-start gap-0">
+          <div class="flex flex-col items-center flex-1">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-50 text-xs font-bold text-orange-600 dark:bg-orange-950 dark:text-orange-400">1</div>
+            <span class="mt-1.5 text-xs font-medium text-orange-600 dark:text-orange-400">Cart</span>
+          </div>
+          <div class="flex-1 flex items-center pt-3.5">
+            <div class="h-px flex-1 bg-orange-300"></div>
+          </div>
+          <div class="flex flex-col items-center flex-1">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-50 text-xs font-bold text-orange-600 dark:bg-orange-950 dark:text-orange-400">2</div>
+            <span class="mt-1.5 text-xs font-medium text-orange-600 dark:text-orange-400">Shipping</span>
+          </div>
+          <div class="flex-1 flex items-center pt-3.5">
+            <div class="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>
+          </div>
+          <div class="flex flex-col items-center flex-1">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-xs font-bold text-gray-400 dark:border-gray-600 dark:bg-transparent dark:text-gray-500">3</div>
+            <span class="mt-1.5 text-xs font-medium text-gray-400 dark:text-gray-500">Payment</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="mb-3 text-sm font-semibold text-gray-500 uppercase">Numbers</p>
+        <div class="flex items-center gap-0">
+          <div class="flex items-center justify-center rounded-full bg-orange-500 px-3 py-1 text-xs font-bold text-white">1</div>
+          <div class="h-px flex-1 bg-orange-300 mx-2"></div>
+          <div class="flex items-center justify-center rounded-full bg-orange-500 px-3 py-1 text-xs font-bold text-white">2</div>
+          <div class="h-px flex-1 bg-gray-200 dark:bg-gray-700 mx-2"></div>
+          <div class="flex items-center justify-center rounded-full border border-gray-300 bg-white px-3 py-1 text-xs font-bold text-gray-400 dark:border-gray-600 dark:bg-transparent dark:text-gray-500">3</div>
+        </div>
+      </div>
+
+      <div>
+        <p class="mb-3 text-sm font-semibold text-gray-500 uppercase">Dots</p>
+        <div class="flex items-center gap-3">
+          <div class="h-3 w-3 rounded-full bg-orange-500"></div>
+          <div class="h-px flex-1 bg-orange-300"></div>
+          <div class="h-3 w-3 rounded-full bg-orange-500"></div>
+          <div class="h-px flex-1 bg-gray-200 dark:bg-gray-700"></div>
+          <div class="h-3 w-3 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+      </div>
+    </div>
+
+    <CodeBlock title="stepper-variants.tsx" code={`import { Stepper } from '@storyhouse/components';
+
+export function StepperVariants() {
+  const steps = [
+    { id: '1', label: 'Cart' },
+    { id: '2', label: 'Shipping' },
+    { id: '3', label: 'Payment' },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <Stepper steps={steps} activeStep={1} />
+      <Stepper steps={steps} activeStep={1} variant="numbers" />
+      <Stepper steps={steps} activeStep={1} variant="dots" />
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="orientation">Orientation</h2>
+    <p>Stepper supports both horizontal and vertical layouts.</p>
+
+    <div class="my-6 flex flex-wrap gap-12 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-start gap-0 w-64">
+        <div class="flex flex-col items-center flex-1">
+          <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-50 text-xs font-bold text-orange-600">1</div>
+          <span class="mt-1 text-[10px] font-medium text-orange-600">Cart</span>
+        </div>
+        <div class="flex-1 flex items-center pt-3">
+          <div class="h-px flex-1 bg-orange-300"></div>
+        </div>
+        <div class="flex flex-col items-center flex-1">
+          <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-xs font-bold text-gray-400">2</div>
+          <span class="mt-1 text-[10px] font-medium text-gray-400">Payment</span>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <div class="flex flex-col items-center">
+            <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-orange-500 bg-orange-50 text-xs font-bold text-orange-600">1</div>
+            <div class="w-px flex-1 bg-orange-300 my-1"></div>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-orange-600">Cart</p>
+            <p class="text-xs text-gray-500">Review your items</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="flex flex-col items-center">
+            <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-xs font-bold text-gray-400">2</div>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-400">Payment</p>
+            <p class="text-xs text-gray-400">Enter payment details</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <CodeBlock title="stepper-orientation.tsx" code={`import { Stepper } from '@storyhouse/components';
+
+export function StepperOrientation() {
+  const steps = [
+    { id: '1', label: 'Cart', description: 'Review your items' },
+    { id: '2', label: 'Payment', description: 'Enter payment details' },
+    { id: '3', label: 'Confirm', description: 'Review and submit' },
+  ];
+
+  return (
+    <>
+      <Stepper steps={steps} activeStep={1} orientation="horizontal" />
+      <Stepper steps={steps} activeStep={1} orientation="vertical" />
+    </>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="clickable">Clickable Navigation</h2>
+    <p>Enable <code>allowStepClick</code> to let users navigate to completed steps. Use <code>onStepClick</code> to handle navigation.</p>
+
+    <CodeBlock title="stepper-clickable.tsx" code={`import { Stepper } from '@storyhouse/components';
+
+export function ClickableStepper() {
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const steps = [
+    { id: '1', label: 'Cart' },
+    { id: '2', label: 'Shipping' },
+    { id: '3', label: 'Payment' },
+    { id: '4', label: 'Confirm' },
+  ];
+
+  return (
+    <Stepper
+      steps={steps}
+      activeStep={activeStep}
+      allowStepClick
+      onStepClick={(step) => setActiveStep(steps.indexOf(step))}
+    />
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'steps', type: 'Step[]', default: '(required)', description: 'Array of step objects with id, label, description?, icon?, disabled?.' },
+        { name: 'activeStep', type: 'number', default: '0', description: 'Index of the currently active step.' },
+        { name: 'variant', type: '"default" | "numbers" | "dots"', default: '"default"', description: 'Visual variant.' },
+        { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Controls step indicator size and text size.' },
+        { name: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'Layout direction.' },
+        { name: 'onStepClick', type: '(step: Step, index: number) => void', default: '-', description: 'Callback when a step is clicked (requires allowStepClick).' },
+        { name: 'allowStepClick', type: 'boolean', default: 'false', description: 'Enables clicking on steps to navigate.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+    <h3>Step Object</h3>
+    <PropsTable
+      rows={[
+        { name: 'id', type: 'string', default: '(required)', description: 'Unique identifier for the step.' },
+        { name: 'label', type: 'string', default: '(required)', description: 'Display label.' },
+        { name: 'description', type: 'string', default: '-', description: 'Optional description shown in vertical layout.' },
+        { name: 'icon', type: 'ReactNode', default: '-', description: 'Optional custom icon replacing the number.' },
+        { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables clicking on this step.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Best Practices</h2>
+
+    <h3>Single Step</h3>
+    <p>A stepper with one step renders a single indicator. Consider using a progress bar instead if there's only one step.</p>
+
+    <h3>Many Steps</h3>
+    <p>For 7+ steps, horizontal layout may overflow. Use <code>orientation="vertical"</code> or a compact variant like <code>dots</code>.</p>
+
+    <h3>Disabled Steps</h3>
+    <p>Set <code>disabled: true</code> on Step objects to prevent clicking them even when <code>allowStepClick</code> is enabled.</p>
+
+    <h3>Descriptions in Horizontal</h3>
+    <p>Descriptions are only shown in vertical orientation. In horizontal mode, only the label is visible below the step indicator.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      Stepper renders each step as a styled indicator connected by lines. The active and completed
+      steps use orange coloring while future steps are gray. The component uses flex layout for
+      horizontal mode and flex-col for vertical mode. Clickable steps are <code>button</code>
+      elements with <code>onClick</code> handlers.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Stepper container uses <code>role="navigation"</code> with <code>aria-label="Progress"</code></li>
+      <li>Each step has <code>aria-current="step"</code> on the active step</li>
+      <li>Clickable steps are keyboard accessible (native buttons)</li>
+      <li>Current step includes an <code>sr-only</code> "Current step" prefix</li>
+      <li>Completed steps include an <code>sr-only</code> "Completed" prefix</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <StorybookPreview id="components-stepper--default" title="Stepper — Storyboard" height="600" />
+  </section>
+</DocLayout>

@@ -1,0 +1,167 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/skeleton`;
+---
+
+<DocLayout
+  title="Skeleton"
+  status="stable"
+  description="Loading placeholder components for content in transition. Supports custom dimensions, count mode, and multiple border radius options."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Skeleton</code> component provides placeholder loading states that indicate content
+      is loading. It supports custom dimensions via <code>width</code> and <code>height</code>,
+      a <code>count</code> mode for rendering multiple lines (like text blocks), and five
+      border radius options from <code>none</code> to <code>full</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="usage">Usage</h2>
+
+    <h3>Basic Skeleton</h3>
+    <p>Set custom dimensions to match the shape of your loading content.</p>
+
+    <div class="my-6 space-y-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-center gap-4">
+        <div class="h-12 w-12 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        <div class="flex-1 space-y-2">
+          <div class="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+          <div class="h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+        </div>
+      </div>
+    </div>
+
+    <CodeBlock title="skeleton-avatar-card.tsx" code={`import { Skeleton } from '@storyhouse/components';
+
+export function AvatarSkeleton() {
+  return (
+    <div className="flex items-center gap-4">
+      <Skeleton width={48} height={48} rounded="full" />
+      <div className="flex-1 space-y-2">
+        <Skeleton width="75%" height={16} rounded="sm" />
+        <Skeleton width="50%" height={12} rounded="sm" />
+      </div>
+    </div>
+  );
+}`} />
+
+    <h3>Count Mode</h3>
+    <p>Use <code>count</code> to render multiple skeleton lines with progressively decreasing widths for a natural text block appearance.</p>
+
+    <div class="my-6 space-y-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 100%"></div>
+      <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 92%"></div>
+      <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 85%"></div>
+      <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 78%"></div>
+      <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 60%"></div>
+    </div>
+
+    <CodeBlock title="skeleton-text-block.tsx" code={`import { Skeleton } from '@storyhouse/components';
+
+export function TextSkeleton() {
+  return (
+    <div className="space-y-3">
+      <Skeleton count={5} height={16} rounded="sm" />
+    </div>
+  );
+}`} />
+
+    <h3>Card Skeleton</h3>
+    <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="mb-4 flex items-center gap-4">
+        <div class="h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+        <div class="flex-1">
+          <div class="mb-2 h-5 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+          <div class="h-3 w-1/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+        <div class="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" style="width: 85%"></div>
+      </div>
+    </div>
+
+    <CodeBlock title="skeleton-card.tsx" code={`import { Skeleton } from '@storyhouse/components';
+
+export function CardSkeleton() {
+  return (
+    <div className="rounded-xl border p-6">
+      <div className="mb-4 flex items-center gap-4">
+        <Skeleton width={40} height={40} rounded="md" />
+        <div className="flex-1">
+          <Skeleton width="50%" height={20} rounded="sm" />
+          <Skeleton width="33%" height={12} rounded="sm" className="mt-2" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Skeleton height={16} rounded="sm" />
+        <Skeleton width="85%" height={16} rounded="sm" />
+      </div>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'width', type: 'string | number', default: '"100%"', description: 'Width of the skeleton. Numbers are treated as pixels. Strings support CSS units.' },
+        { name: 'height', type: 'string | number', default: '20', description: 'Height of the skeleton. Numbers are treated as pixels. Strings support CSS units.' },
+        { name: 'rounded', type: '"none" | "sm" | "md" | "lg" | "full"', default: '"md"', description: 'Border radius variant for the skeleton shape.' },
+        { name: 'count', type: 'number', default: '1', description: 'Number of skeleton items to render. Progressively reduces width for text blocks.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Best Practices</h2>
+
+    <h3>Minimal Size</h3>
+    <p>Very small skeletons (e.g., <code>width={4}</code>) may be hard to see. Minimum recommended size is 8px × 8px.</p>
+
+    <h3>Count with Custom Width</h3>
+    <p>When <code>count</code> is used alongside <code>width</code>, each skeleton uses that width directly instead of the progressive narrowing pattern.</p>
+
+    <h3>Image Placeholders</h3>
+    <p>For image placeholders, use <code>rounded="md"</code> or <code>rounded="lg"</code> and match the aspect ratio with <code>width</code> and <code>height</code>.</p>
+
+    <h3>Loading Performance</h3>
+    <p>Skeleton uses <code>animate-pulse</code> CSS animation which is GPU-accelerated. Avoid rendering more than 50 skeleton items at once to prevent layout thrashing.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      Skeleton renders a <code>div</code> with <code>animate-pulse</code> for the pulsing animation.
+      When <code>count &gt; 1</code>, items are wrapped in a flex column container with gaps.
+      Each progressive item reduces width by 7-8% for a natural text appearance.
+      Numeric values for <code>width</code>/<code>height</code> are converted to <code>px</code>.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Use <code>aria-busy="true"</code> on the parent container when loading</li>
+      <li>Skeleton elements have <code>aria-hidden="true"</code> to avoid announcement</li>
+      <li>For screen reader users, provide a <code>sr-only</code> "Loading..." text nearby</li>
+      <li>Remove skeleton and render real content once loaded</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <StorybookPreview id="components-skeleton--default" title="Skeleton — Storybook" height="500" />
+  </section>
+</DocLayout>

@@ -1,0 +1,164 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import PropsTable from '../../components/PropsTable.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import StorybookPreview from '../../components/StorybookPreview.astro';
+
+const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
+const currentPath = `${base}components/chip`;
+---
+
+<DocLayout
+  title="Chip"
+  status="stable"
+  description="Compact label components for tags, statuses, filters, and categories. Supports variants, icons, dots, and removable chips."
+  currentPath={currentPath}
+>
+  <section>
+    <h2 id="overview">Overview</h2>
+    <p>
+      The <code>Chip</code> component displays compact pieces of information such as tags, status indicators,
+      or filter values. It comes in six visual variants, two sizes, and supports optional icons, dot indicators,
+      removal buttons, and interactive (clickable) behavior.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="variants">Variants</h2>
+    <p>Chip supports six visual variants for different contexts.</p>
+
+    <div class="my-6 flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">Default</span>
+      <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">Primary</span>
+      <span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900 dark:text-green-300">Success</span>
+      <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">Warning</span>
+      <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700 dark:bg-red-900 dark:text-red-300">Danger</span>
+      <span class="inline-flex items-center rounded-full border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 dark:border-gray-600 dark:bg-transparent dark:text-gray-300">Outline</span>
+    </div>
+
+    <CodeBlock title="chip-variants.tsx" code={`import { Chip } from '@storyhouse/components';
+
+export function ChipVariants() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Chip variant="default">Default</Chip>
+      <Chip variant="primary">Primary</Chip>
+      <Chip variant="success">Success</Chip>
+      <Chip variant="warning">Warning</Chip>
+      <Chip variant="danger">Danger</Chip>
+      <Chip variant="outline">Outline</Chip>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="features">Features</h2>
+
+    <h3>Dot Indicator</h3>
+    <p>Add a colored dot before the label using the <code>dot</code> prop, useful for status indicators.</p>
+
+    <div class="my-4 flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
+        <span class="h-2 w-2 rounded-full bg-green-500"></span>Online
+      </span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
+        <span class="h-2 w-2 rounded-full bg-yellow-500"></span>Away
+      </span>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700 dark:bg-red-900 dark:text-red-300">
+        <span class="h-2 w-2 rounded-full bg-red-500"></span>Offline
+      </span>
+    </div>
+
+    <h3>Removable</h3>
+    <p>Set <code>removable</code> to show an X button that fires <code>onRemove</code> when clicked.</p>
+
+    <div class="my-4 flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <span class="inline-flex items-center gap-1 rounded-full bg-blue-100 pl-3 pr-1 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+        Removable
+        <button class="ml-1 flex h-4 w-4 items-center justify-center rounded-full hover:bg-blue-200 dark:hover:bg-blue-700">
+          <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </span>
+    </div>
+
+    <h3>Interactive</h3>
+    <p>Set <code>interactive</code> to make the chip clickable, useful for filter chips that toggle on/off.</p>
+
+    <CodeBlock title="chip-features.tsx" code={`import { Chip } from '@storyhouse/components';
+
+export function ChipFeatures() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Chip variant="success" dot>Online</Chip>
+      <Chip variant="primary" dot>Away</Chip>
+      <Chip variant="danger" dot>Offline</Chip>
+      <Chip variant="primary" removable>Tag One</Chip>
+      <Chip variant="primary" removable>Tag Two</Chip>
+      <Chip variant="default" interactive onClick={() => alert('Clicked!')}>
+        Click me
+      </Chip>
+    </div>
+  );
+}`} />
+  </section>
+
+  <section>
+    <h2 id="props">Props</h2>
+    <PropsTable
+      rows={[
+        { name: 'variant', type: '"default" | "primary" | "success" | "warning" | "danger" | "outline"', default: '"default"', description: 'Visual variant for the chip.' },
+        { name: 'size', type: '"sm" | "md"', default: '"md"', description: 'Controls padding and font size.' },
+        { name: 'icon', type: 'ReactNode', default: '-', description: 'Icon displayed before the label.' },
+        { name: 'dot', type: 'boolean', default: 'false', description: 'Shows a colored dot before the label.' },
+        { name: 'removable', type: 'boolean', default: 'false', description: 'Shows a remove (X) button.' },
+        { name: 'onRemove', type: '(e: React.MouseEvent) => void', default: '-', description: 'Callback fired when the remove button is clicked.' },
+        { name: 'interactive', type: 'boolean', default: 'false', description: 'Makes the chip clickable with hover styles.' },
+        { name: 'onClick', type: '(e: React.MouseEvent) => void', default: '-', description: 'Callback fired when the chip is clicked (interactive only).' },
+        { name: 'children', type: 'ReactNode', default: '-', description: 'Content of the chip.' },
+        { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged via tailwind-merge.' },
+      ]}
+    />
+  </section>
+
+  <section>
+    <h2 id="edge-cases">Edge Cases &amp; Best Practices</h2>
+
+    <h3>Long Labels</h3>
+    <p>Chip does not truncate labels by default. For long text, the chip expands horizontally. Keep labels under 20 characters for best results.</p>
+
+    <h3>Remove + Interactive</h3>
+    <p>When both <code>removable</code> and <code>interactive</code> are set, the remove button click stops propagation so it doesn't trigger the parent <code>onClick</code>.</p>
+
+    <h3>Stacking Chips</h3>
+    <p>When displaying many chips, wrap them in a <code>flex flex-wrap gap-2</code> container. Chips naturally wrap to the next line.</p>
+
+    <h3>Icon + Dot</h3>
+    <p>Both <code>icon</code> and <code>dot</code> can be used together. The dot renders before the icon, and the icon renders before the label.</p>
+  </section>
+
+  <section>
+    <h2 id="implementation">Implementation Details</h2>
+    <p>
+      Chips use <code>class-variance-authority</code> (CVA) for variant and size management.
+      The remove button uses <code>e.stopPropagation()</code> to prevent triggering the parent
+      <code>onClick</code>. All colors include <code>dark:</code> variants for automatic dark mode.
+    </p>
+  </section>
+
+  <section>
+    <h2 id="accessibility">Accessibility</h2>
+    <ul>
+      <li>Remove button has <code>aria-label="Remove"</code></li>
+      <li>Interactive chips render as <code>button</code> elements with proper keyboard support</li>
+      <li>Dot indicator includes <code>aria-hidden="true"</code></li>
+      <li>Icon elements use <code>aria-hidden="true"</code></li>
+      <li>Focus-visible ring on interactive and removable chips</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 id="storybook-preview">Interactive Preview</h2>
+    <StorybookPreview id="components-chip--default" title="Chip — Storybook" height="500" />
+  </section>
+</DocLayout>
