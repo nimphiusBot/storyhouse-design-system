@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Search, X, Filter as FilterIcon, SlidersHorizontal } from 'lucide-react';
+import { Search, X, Filter as FilterIcon, SlidersHorizontal, Check, ChevronDown } from 'lucide-react';
 import { Input } from '../Input/Input';
 import { Select } from '../Select/Select';
 import { Button } from '../Button/Button';
@@ -16,13 +16,13 @@ export interface FilterConfig {
   key: string;
   /** Display label */
   label: string;
-  /** Filter type */
+  /** Filter type: 'select' (single), 'multi-select' (checkboxes), or 'boolean' (toggle) */
   type: 'select' | 'multi-select' | 'boolean';
-  /** Select options */
+  /** Select/multi-select options */
   options?: Array<{ value: string; label: string }>;
-  /** Current filter value */
+  /** Current filter value: string for 'select', boolean for 'boolean', string[] for 'multi-select' */
   value: unknown;
-  /** Change handler */
+  /** Change handler: receives string for 'select', boolean for 'boolean', string[] for 'multi-select' */
   onChange: (value: unknown) => void;
 }
 
@@ -70,15 +70,116 @@ export interface FilterBarProps {
 }
 
 /**
+ * Internal multi-select dropdown component for FilterBar.
+ * Renders a dropdown with checkboxes for selecting multiple options.
+ */
+const MultiSelectFilter: React.FC<{
+  label: string;
+  options: Array<{ value: string; label: string }>;
+  value: string[];
+  onChange: (value: string[]) => void;
+}> = ({ label, options, value, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleOption = (optionValue: string) => {
+    if (value.includes(optionValue)) {
+      onChange(value.filter((v) => v !== optionValue));
+    } else {
+      onChange([...value, optionValue]);
+    }
+  };
+
+  const displayText = value.length === 0
+    ? label
+    : value.length === 1
+      ? options.find((o) => o.value === value[0])?.label || label
+      : `${label} (${value.length})`;
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className={cn(
+          'w-full flex items-center justify-between gap-2',
+          'px-3 py-2 rounded-lg text-sm',
+          'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600',
+          'hover:bg-gray-50 dark:hover:bg-gray-700',
+          'focus:outline-none focus:ring-2 focus:ring-orange-500',
+          'text-gray-900 dark:text-gray-100',
+          value.length > 0 && 'border-orange-500 bg-orange-50 dark:bg-orange-950/30',
+        )}
+      >
+        <span className="truncate">{displayText}</span>
+        <ChevronDown className={cn('w-4 h-4 text-gray-400 transition-transform', open && 'rotate-180')} />
+      </button>
+
+      {open && (
+        <div className={cn(
+          'absolute z-50 mt-1 w-full min-w-[200px]',
+          'bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg',
+          'p-1 max-h-[240px] overflow-y-auto',
+        )}>
+          {options.length === 0 && (
+            <div className="px-3 py-2 text-sm text-gray-400">No options</div>
+          )}
+          {options.map((option) => {
+            const selected = value.includes(option.value);
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => toggleOption(option.value)}
+                className={cn(
+                  'w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-left',
+                  'hover:bg-gray-100 dark:hover:bg-gray-700',
+                  selected && 'bg-orange-50 dark:bg-orange-950/50',
+                )}
+              >
+                <div className={cn(
+                  'w-4 h-4 rounded border flex items-center justify-center flex-shrink-0',
+                  selected
+                    ? 'bg-orange-600 border-orange-600 text-white'
+                    : 'border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700',
+                )}>
+                  {selected && <Check className="w-3 h-3" />}
+                </div>
+                <span className={cn(
+                  'flex-1',
+                  selected ? 'font-medium text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300',
+                )}>
+                  {option.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
  * FilterBar - Advanced filtering and search component
  *
  * A comprehensive filter bar with search, dropdown filters, boolean toggles,
- * quick presets, and active filter badges. Responsive on mobile with collapsible
- * filter panel.
+ * multi-select dropdowns, quick presets, and active filter badges. Responsive
+ * on mobile with collapsible filter panel.
  *
  * Features:
  * - Search input with clear button
- * - Select and boolean filter types
+ * - Select, boolean, and multi-select filter types
  * - Mobile-responsive collapse/expand
  * - Active filter badges with removal
  * - Quick filter presets
@@ -193,6 +294,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     {filter.label}
                   </Button>
                 )}
+                {filter.type === 'multi-select' && (
+                  <MultiSelectFilter
+                    label={filter.label}
+                    options={filter.options || []}
+                    value={Array.isArray(filter.value) ? filter.value as string[] : []}
+                    onChange={(value) => filter.onChange(value)}
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -263,6 +372,34 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 >
                   {filter.value ? 'Enabled' : 'Disabled'}
                 </Button>
+              )}
+              {filter.type === 'multi-select' && (
+                <div className="space-y-1">
+                  {(filter.options || []).map((option) => {
+                    const selected = Array.isArray(filter.value) && (filter.value as string[]).includes(option.value);
+                    return (
+                      <label
+                        key={option.value}
+                        className="flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={() => {
+                            const current = Array.isArray(filter.value) ? [...(filter.value as string[])] : [];
+                            if (selected) {
+                              filter.onChange(current.filter((v: string) => v !== option.value));
+                            } else {
+                              filter.onChange([...current, option.value]);
+                            }
+                          }}
+                          className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               )}
             </div>
           ))}
