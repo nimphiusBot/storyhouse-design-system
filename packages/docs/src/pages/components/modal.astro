@@ -99,7 +99,6 @@ export function ExampleModal() {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="Modal Title"
-  currentPath={currentPath}
         description="Description of this dialog."
         footer={
           <>
@@ -128,7 +127,6 @@ export function DeleteConfirm() {
         onClose={() => setIsOpen(false)}
         onConfirm={() => { /* delete logic */ }}
         title="Delete Account"
-  currentPath={currentPath}
         message="This action cannot be undone."
         confirmLabel="Delete"
         variant="danger"
@@ -156,7 +154,6 @@ export function DeleteConfirm() {
     <StorybookPreview
       url={storybookUrl}
       title="Modal Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>
