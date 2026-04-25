@@ -11,7 +11,7 @@ export interface ToggleSwitchProps {
   checked: boolean;
   /** Callback fired when the toggle state changes */
   onChange: (checked: boolean) => void;
-  /** Unique id for the toggle element */
+  /** Unique id for the toggle element. Auto-generated if not provided when a `label` is used. */
   id?: string;
   /** Whether the toggle is disabled */
   disabled?: boolean;
@@ -19,8 +19,10 @@ export interface ToggleSwitchProps {
   size?: 'sm' | 'md' | 'lg';
   /** Optional class name override */
   className?: string;
-  /** Accessible label for the toggle (required for screen readers when no visible label) */
-  'aria-label'?: string;
+  /** Visible label rendered next to the toggle switch. Associates via `htmlFor`/`id`. */
+  label?: string;
+  /** Accessible label for screen readers (used when no `label` prop is provided). */
+  ariaLabel?: string;
 }
 
 const sizeClasses = {
@@ -41,6 +43,12 @@ const translateClasses = {
   lg: 'translate-x-6',
 } as const;
 
+let toggleIdCounter = 0;
+function generateToggleId(): string {
+  toggleIdCounter += 1;
+  return `toggle-switch-${toggleIdCounter}-${Date.now().toString(36)}`;
+}
+
 /**
  * ToggleSwitch
  *
@@ -48,12 +56,24 @@ const translateClasses = {
  * disabled state, keyboard navigation (Enter/Space), and full accessibility via
  * role="switch" and aria-checked.
  *
+ * When a `label` is provided, it renders as a visible `<label>` element associated with
+ * the toggle via `htmlFor` for improved accessibility. Without a label, use `ariaLabel`
+ * for screen-reader-only labeling.
+ *
  * @example
  * ```tsx
+ * // With visible label
  * <ToggleSwitch
  *   checked={isEnabled}
  *   onChange={setIsEnabled}
- *   size="md"
+ *   label="Enable notifications"
+ * />
+ *
+ * // Screen-reader only label
+ * <ToggleSwitch
+ *   checked={isEnabled}
+ *   onChange={setIsEnabled}
+ *   ariaLabel="Notifications toggle"
  * />
  * ```
  */
@@ -62,44 +82,65 @@ export const ToggleSwitch = React.forwardRef<HTMLButtonElement, ToggleSwitchProp
     {
       checked,
       onChange,
-      id,
+      id: externalId,
       disabled = false,
       size = 'md',
       className,
-      'aria-label': ariaLabel,
+      label,
+      ariaLabel,
     },
     ref
   ) => {
-    return (
-      <button
-        ref={ref}
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        disabled={disabled}
-        id={id}
-        aria-label={ariaLabel}
-        onClick={() => !disabled && onChange(!checked)}
+    const [generatedId] = React.useState(generateToggleId);
+    const id = externalId || (label ? generatedId : undefined);
+
+    const labelElement = label ? (
+      <label
+        htmlFor={id}
         className={cn(
-          sizeClasses[size],
-          checked ? 'bg-orange-600 dark:bg-orange-500' : 'bg-gray-300 dark:bg-gray-600',
-          disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-          'relative inline-flex flex-shrink-0 border-2 border-transparent rounded-full',
-          'transition-colors ease-in-out duration-200',
-          'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900',
-          className
+          'text-sm font-medium cursor-pointer select-none text-gray-700 dark:text-gray-300',
+          disabled && 'opacity-50 cursor-not-allowed'
         )}
       >
-        <span className="sr-only">{ariaLabel || 'Toggle'}</span>
-        <span
+        {label}
+      </label>
+    ) : null;
+
+    const srLabel = ariaLabel || label || 'Toggle';
+
+    return (
+      <div className={cn('inline-flex items-center gap-3', className)}>
+        {labelElement}
+        <button
+          ref={ref}
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          disabled={disabled}
+          id={id}
+          aria-label={!label ? ariaLabel : undefined}
+          onClick={() => !disabled && onChange(!checked)}
           className={cn(
-            thumbSizeClasses[size],
-            checked ? translateClasses[size] : 'translate-x-0',
-            'pointer-events-none inline-block rounded-full bg-white shadow transform ring-0',
-            'transition ease-in-out duration-200'
+            sizeClasses[size],
+            checked ? 'bg-orange-600 dark:bg-orange-500' : 'bg-gray-300 dark:bg-gray-600',
+            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+            'relative inline-flex flex-shrink-0 border-2 border-transparent rounded-full',
+            'transition-colors ease-in-out duration-200',
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900',
+            label ? '' : className
           )}
-        />
-      </button>
+        >
+          <span className="sr-only">{srLabel}</span>
+          <span
+            className={cn(
+              thumbSizeClasses[size],
+              checked ? translateClasses[size] : 'translate-x-0',
+              'pointer-events-none inline-block rounded-full bg-white shadow transform ring-0',
+              'transition ease-in-out duration-200'
+            )}
+          />
+        </button>
+      </div>
     );
   }
 );
