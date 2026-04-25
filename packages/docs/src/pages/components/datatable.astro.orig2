@@ -159,28 +159,7 @@ const columnProps = [
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
       
       <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic</h3>
-      <CodeBlock lang="tsx" code={`import { DataTable } from '@storyhouse/components';
-import type { Column } from '@storyhouse/components';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-}
-
-const columns: Column<User>[] = [
-  { key: 'name', label: 'Name', sortable: true },
-  { key: 'email', label: 'Email', sortable: true },
-  { key: 'role', label: 'Role' },
-  { key: 'status', label: 'Status', align: 'center' },
-];
-
-export function UsersTable({ data }: { data: User[] }) {
-  return (
-    <DataTable data={data} columns={columns} striped />
-  );
-}`} />
+      <CodeBlock lang="tsx" code={`// code sample — see Storybook for full examples`} />
       
       <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-2">Advanced</h3>
       <CodeBlock lang="tsx" code={`import { DataTable } from '@storyhouse/components';
@@ -232,7 +211,7 @@ export function UsersTable({ data }: { data: User[] }) {
       stickyHeader
     />
   );
-}`} />
+}` />
     </section>
 
     <section>

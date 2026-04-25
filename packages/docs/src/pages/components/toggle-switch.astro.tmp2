@@ -14,7 +14,7 @@ const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components
 <DocLayout
   title="ToggleSwitch"
   status="stable"
-  description="Toggle switch component for binary on/off states. Supports multiple sizes, disabled state, labels, and full keyboard accessibility with switch role."
+  description="Toggle switch component for binary on/off states. Supports multiple sizes, disabled state, labels, and full keyboard accessibility with role=\"switch\"."
   currentPath={currentPath}
 >
   <div class="space-y-12">
@@ -23,7 +23,7 @@ const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components
       <p>
         The <code>ToggleSwitch</code> component renders a switch control for binary on/off states.
         It supports three sizes, disabled state, visible and screen-reader labels, and full keyboard
-        accessibility via <code>role='switch'</code> and <code>aria-checked</code>.
+        accessibility via <code>role="switch"</code> and <code>aria-checked</code>.
       </p>
     </section>
 
@@ -236,7 +236,7 @@ export function DisabledToggle() {
       <h3>Component Architecture</h3>
       <p>
         ToggleSwitch uses <code>React.forwardRef</code> to forward refs to the underlying native
-        <code>&lt;button&gt;</code> element. It uses <code>role='switch'</code> with
+        <code>&lt;button&gt;</code> element. It uses <code>role="switch"</code> with
         <code>aria-checked</code> for correct accessibility semantics.
       </p>
 
@@ -277,7 +277,7 @@ export function DisabledToggle() {
     <section>
       <h2 id="accessibility">Accessibility</h2>
       <ul>
-        <li>Uses <code>role='switch'</code> and <code>aria-checked</code> for correct ARIA semantics</li>
+        <li>Uses <code>role="switch"</code> and <code>aria-checked</code> for correct ARIA semantics</li>
         <li>Focusable via Tab; activates on Enter/Space</li>
         <li>Focus-visible ring (orange) only shows for keyboard users</li>
         <li>Visible label associates via <code>htmlFor</code>/<code>id</code> for click-to-toggle</li>

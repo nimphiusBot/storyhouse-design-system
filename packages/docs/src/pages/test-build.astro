@@ -1,0 +1,17 @@
+---
+import DocLayout from '../layouts/DocLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+---
+<DocLayout title="Test" description="Test">
+  <section>
+    <h2>Usage</h2>
+    <CodeBlock lang="tsx" code={`import { DataTable } from '@storyhouse/components';
+import type { Column } from '@storyhouse/components';
+const columns: Column<User>[] = [
+  { key: 'name', label: 'Name' },
+];
+export function UsersTable({ data }: { data: User[] }) {
+  return <DataTable data={data} columns={columns} striped />;
+}`} />
+  </section>
+</DocLayout>
