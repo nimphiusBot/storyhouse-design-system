@@ -35,6 +35,12 @@ const selectVariants = cva(
   }
 );
 
+const optionFontSizeMap = {
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+} as const;
+
 const iconSizeMap = {
   sm: 16,
   md: 20,
@@ -111,12 +117,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     };
 
     const renderOptions = () => {
+      const sizeFontClass = optionFontSizeMap[size || 'md'];
+
       // If children are provided, render them directly (with placeholder if given)
       if (children) {
         return (
           <>
             {placeholder && (
-              <option value="" disabled>
+              <option value="" disabled className={sizeFontClass}>
                 {placeholder}
               </option>
             )}
@@ -130,7 +138,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         return (
           <>
             {placeholder && (
-              <option value="" disabled>
+              <option value="" disabled className={sizeFontClass}>
                 {placeholder}
               </option>
             )}
@@ -141,16 +149,16 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       return (
         <>
           {placeholder && (
-            <option value="" disabled>
+            <option value="" disabled className={sizeFontClass}>
               {placeholder}
             </option>
           )}
           {options.map((item, index) => {
             if ('options' in item) {
               return (
-                <optgroup key={index} label={item.label}>
+                <optgroup key={index} label={item.label} className={sizeFontClass}>
                   {item.options.map((opt) => (
-                    <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                    <option key={opt.value} value={opt.value} disabled={opt.disabled} className={sizeFontClass}>
                       {opt.label}
                     </option>
                   ))}
@@ -158,7 +166,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               );
             }
             return (
-              <option key={item.value} value={item.value} disabled={item.disabled}>
+              <option key={item.value} value={item.value} disabled={item.disabled} className={sizeFontClass}>
                 {item.label}
               </option>
             );
