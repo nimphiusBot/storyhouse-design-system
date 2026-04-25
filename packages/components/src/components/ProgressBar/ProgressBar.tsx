@@ -54,8 +54,8 @@ const progressFillVariants = cva(
 export interface ProgressBarProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     VariantProps<typeof progressBarVariants> {
-  /** Current numeric value */
-  value: number;
+  /** Current numeric value (ignored when indeterminate) */
+  value?: number;
   /** Maximum value (default: 100) */
   max?: number;
   /** Show percentage label */
@@ -64,6 +64,10 @@ export interface ProgressBarProps
   labelPosition?: 'top' | 'bottom' | 'inline';
   /** Custom label text (overrides the default percentage) */
   label?: string;
+  /** When true, renders an indeterminate progress bar (spinner-like animation) */
+  indeterminate?: boolean;
+  /** Accessible value text for screen readers (overrides default percentage/value readout) */
+  valueText?: string;
   /** Auto-calculate variant based on percentage thresholds */
   thresholds?: {
     /** Below this value is success (default: 50) */
@@ -83,7 +87,16 @@ export interface ProgressBarProps
  * Displays the progress of a task or operation as a horizontal bar.
  * Supports multiple sizes (sm, md, lg), color variants (default, success,
  * warning, error, info, primary), automatic threshold-based variant selection,
- * percentage/value labels, and full accessibility via ARIA progressbar role.
+ * percentage/value labels, indeterminate mode, and full accessibility via
+ * WAI-ARIA progressbar role attributes.
+ *
+ * Accessibility:
+ * - The outer track container carries `role="progressbar"` along with
+ *   `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`.
+ * - When `indeterminate={true}`, the component sets `aria-busy="true"` and
+ *   omits `aria-valuenow` per the ARIA spec.
+ * - Use `label` or `valueText` to provide a clear accessible name and value
+ *   readout for screen readers.
  *
  * @example
  * ```tsx
@@ -93,19 +106,22 @@ export interface ProgressBarProps
  *   thresholds={{ success: 50, warning: 80 }}
  *   showLabel
  * />
+ * <ProgressBar indeterminate size="md" label="Loading..." />
  * ```
  */
 const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
   (
     {
       className,
-      value,
+      value = 0,
       max = 100,
       size,
       variant: variantProp,
       showLabel = false,
       labelPosition = 'top',
       label: customLabel,
+      indeterminate = false,
+      valueText,
       thresholds,
       showValues = false,
       formatValue = (val) => val.toLocaleString(),
@@ -113,12 +129,13 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
     },
     ref
   ) => {
-    // Calculate percentage
-    const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
+    // Calculate percentage (0 when indeterminate)
+    const clampedValue = Math.min(Math.max(value, 0), max);
+    const percentage = indeterminate ? 0 : Math.min(Math.max((clampedValue / max) * 100, 0), 100);
 
     // Auto-calculate variant based on thresholds
     let variant = variantProp;
-    if (thresholds && !variantProp) {
+    if (!indeterminate && thresholds && !variantProp) {
       const successThreshold = thresholds.success ?? 50;
       const warningThreshold = thresholds.warning ?? 80;
 
@@ -131,17 +148,28 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
       }
     }
 
-    // Determine label text
-    const labelText = customLabel ||
-      (showValues ? `${formatValue(value)} / ${formatValue(max)}` : `${percentage.toFixed(0)}%`);
+    // Accessible label text
+    const accessibleLabel = customLabel || `Progress`;
 
-    const renderLabel = () => {
+    // ARIA value text for screen readers
+    const ariaValueText = valueText ??
+      (showValues
+        ? `${formatValue(clampedValue)} of ${formatValue(max)}`
+        : undefined);
+
+    const renderLabelChildren = () => {
       if (!showLabel && !customLabel) return null;
 
       return (
         <div className="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400">
           <span>{customLabel || 'Progress'}</span>
-          <span className="font-medium">{showValues ? `${formatValue(value)} / ${formatValue(max)}` : `${percentage.toFixed(0)}%`}</span>
+          <span className="font-medium">
+            {indeterminate
+              ? 'Loading...'
+              : showValues
+                ? `${formatValue(clampedValue)} / ${formatValue(max)}`
+                : `${percentage.toFixed(0)}%`}
+          </span>
         </div>
       );
     };
@@ -149,23 +177,32 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {showLabel && labelPosition === 'top' && (
-          <div className="mb-1">{renderLabel()}</div>
+          <div className="mb-1">{renderLabelChildren()}</div>
         )}
 
-        <div className={progressBarVariants({ size, variant })}>
+        {/* The outer track container carries the progressbar role per WAI-ARIA spec */}
+        <div
+          role="progressbar"
+          aria-valuenow={indeterminate ? undefined : clampedValue}
+          aria-valuemin={0}
+          aria-valuemax={max}
+          aria-label={accessibleLabel}
+          aria-valuetext={ariaValueText}
+          aria-busy={indeterminate ? true : undefined}
+          className={progressBarVariants({ size, variant })}
+        >
           <div
-            className={progressFillVariants({ variant })}
-            style={{ width: `${percentage}%` }}
-            role="progressbar"
-            aria-valuenow={value}
-            aria-valuemin={0}
-            aria-valuemax={max}
-            aria-label={labelText}
+            className={cn(
+              progressFillVariants({ variant }),
+              indeterminate && 'animate-pulse',
+              indeterminate && 'w-1/2'
+            )}
+            style={indeterminate ? undefined : { width: `${percentage}%` }}
           />
         </div>
 
         {showLabel && labelPosition === 'bottom' && (
-          <div className="mt-1">{renderLabel()}</div>
+          <div className="mt-1">{renderLabelChildren()}</div>
         )}
       </div>
     );
