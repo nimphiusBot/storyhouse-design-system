@@ -39,14 +39,12 @@ const columnProps = [
 
 <DocLayout
   title="DataTable"
-  currentPath={currentPath}
   description="A data table component for displaying structured data with sorting, selection, expandable rows, and custom cell rendering."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">DataTable</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A feature-rich data table component with sorting, row selection, expandable rows,
@@ -153,10 +151,8 @@ export function UsersTable({ data }: { data: User[] }) {
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-datatable--docs"
       title="DataTable Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

@@ -30,15 +30,13 @@ const props = [
 
 <DocLayout
   title="Select"
-  currentPath={currentPath}
   description="A styled select dropdown component with support for option groups, validation states, and keyboard navigation."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Select</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A styled native select component that supports single selection, grouped options,
@@ -160,10 +158,8 @@ export function LanguageSelect() {
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-select--docs"
       title="Select Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

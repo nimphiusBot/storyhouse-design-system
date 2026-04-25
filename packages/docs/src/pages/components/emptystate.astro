@@ -26,14 +26,12 @@ const props = [
 
 <DocLayout
   title="EmptyState"
-  currentPath={currentPath}
   description="A flexible empty state component for displaying no data, no results, errors, permission denials, and loading states with optional actions."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">EmptyState</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         An empty state component for handling edge cases: no data, no search results, errors,
@@ -95,7 +93,6 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
 // No data
 <EmptyState
   title="No projects yet"
-  currentPath={currentPath}
   description="Create your first project to get started."
   primaryAction={{ label: 'Create Project', onClick: handleCreate }}
 />
@@ -104,7 +101,6 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
 <EmptyState
   variant="no-results"
   title="No results found"
-  currentPath={currentPath}
   description="Try adjusting your search query."
   icon={<Search className="w-6 h-6" />}
 />
@@ -113,7 +109,6 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
 <EmptyState
   variant="error"
   title="Failed to load"
-  currentPath={currentPath}
   description="An error occurred. Please try again."
   primaryAction={{ label: 'Retry', onClick: handleRetry }}
 />`} />
@@ -130,10 +125,8 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
       </ul>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-emptystate--docs"
       title="EmptyState Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

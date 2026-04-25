@@ -23,14 +23,12 @@ const props = [
 
 <DocLayout
   title="Tooltip"
-  currentPath={currentPath}
   description="A lightweight tooltip component that displays contextual information on hover, with support for four positions and configurable delay."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tooltip</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A lightweight tooltip component that provides contextual information on hover.
@@ -108,10 +106,8 @@ export function IconWithTooltip() {
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-tooltip--docs"
       title="Tooltip Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

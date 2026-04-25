@@ -23,15 +23,13 @@ const props = [
 
 <DocLayout
   title="ToggleSwitch"
-  currentPath={currentPath}
   description="A toggle switch component for binary on/off states with support for multiple sizes, disabled state, and keyboard accessibility."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ToggleSwitch</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A toggle switch component for binary on/off states. Supports three sizes (sm, md, lg),
@@ -136,10 +134,8 @@ export function SettingsToggle() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-toggle-switch--docs"
       title="ToggleSwitch Component"
-      currentPath={currentPath}
     />
   </div>
 </DocLayout>

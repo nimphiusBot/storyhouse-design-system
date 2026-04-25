@@ -29,14 +29,12 @@ const hookRet = [
 
 <DocLayout
   title="Toast"
-  currentPath={currentPath}
   description="A notification component for displaying non-intrusive feedback messages, with support for success, error, warning, and info types."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Toast</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         Lightweight notification messages that display temporarily and auto-dismiss.
@@ -125,10 +123,8 @@ export function SaveButton() {
       </ul>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-toast--docs"
       title="Toast Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

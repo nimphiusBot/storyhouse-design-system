@@ -33,14 +33,12 @@ const props = [
 
 <DocLayout
   title="FileUpload"
-  currentPath={currentPath}
   description="A drag-and-drop file upload component with validation, preview thumbnails, and multi-file support."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">FileUpload</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A drag-and-drop file upload component with file validation, preview thumbnails,
@@ -134,10 +132,8 @@ const props = [
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-file-upload--docs"
       title="FileUpload Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>
