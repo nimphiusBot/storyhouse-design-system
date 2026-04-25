@@ -228,7 +228,13 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
   }, [isOpen, shouldRender]);
 
   // Stack-aware body scroll lock — coordinates with Modal, ThumbnailLightbox, etc.
-  useBodyScrollLock(preventBodyScroll && isOpen && shouldRender);
+  // Uses isOpen || shouldRender so the lock is held during the full lifecycle:
+  // - Initial render before shouldRender catches up (isOpen=true, shouldRender=false)
+  // - Panel is visible (isOpen=true, shouldRender=true)
+  // - Close animation (isOpen=false, shouldRender=true)
+  // The useBodyScrollLock hook already implements global ref-counting, so multiple
+  // overlays stack correctly — closing one never re-enables scroll behind others.
+  useBodyScrollLock(preventBodyScroll && (isOpen || shouldRender));
 
   const handleOverlayClick = useCallback(() => {
     if (closeOnOverlayClick) {

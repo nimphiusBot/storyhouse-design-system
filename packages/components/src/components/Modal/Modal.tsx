@@ -135,7 +135,9 @@ export const Modal: React.FC<ModalProps> = ({
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
   // Stack-aware body scroll lock — coordinates with SlidePanel, ThumbnailLightbox, etc.
-  useBodyScrollLock(isOpen);
+  // Uses isOpen || shouldRender so the lock is held through the full lifecycle:
+  // initial render before shouldRender catches up, panel visible, and close animation.
+  useBodyScrollLock(isOpen || shouldRender);
 
   useEffect(() => {
     if (isOpen) {
