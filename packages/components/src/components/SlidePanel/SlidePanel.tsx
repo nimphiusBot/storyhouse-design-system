@@ -226,22 +226,30 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown, true);
   }, [isOpen, shouldRender]);
 
-  // Prevent body scroll when panel is open
+  // Prevent body scroll when panel is open — save and restore original overflow value
+  const originalOverflowRef = useRef<string>('');
+  const originalPaddingRightRef = useRef<string>('');
+
   useEffect(() => {
     if (!preventBodyScroll) return;
 
     if (isOpen && shouldRender) {
+      // Save original values before overwriting
+      originalOverflowRef.current = document.body.style.overflow;
+      originalPaddingRightRef.current = document.body.style.paddingRight;
+
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
+      // Restore original values instead of clearing unconditionally
+      document.body.style.overflow = originalOverflowRef.current;
+      document.body.style.paddingRight = originalPaddingRightRef.current;
     }
 
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
+      document.body.style.overflow = originalOverflowRef.current;
+      document.body.style.paddingRight = originalPaddingRightRef.current;
     };
   }, [isOpen, shouldRender, preventBodyScroll]);
 
