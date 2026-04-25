@@ -205,7 +205,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           </form>
         )}
 
-        <div className={paginationVariants({ variant })}>
+        <nav className={paginationVariants({ variant })} aria-label="Pagination">
           {showFirstLast && !isCompact && (
             <PageButton
               variant="outline"
@@ -291,7 +291,7 @@ export const Pagination: React.FC<PaginationProps> = ({
               <ChevronsRight className="h-4 w-4" />
             </PageButton>
           )}
-        </div>
+        </nav>
       </div>
     </div>
   );
