@@ -116,6 +116,19 @@ interface ToastContext {
   ToastContainer: React.FC<{ position?: ToastPosition }>;
 }
 
+/**
+ * Monotonically incrementing counter for unique toast IDs.
+ * Ensures every toast gets a unique identifier even when multiple
+ * toasts are triggered within the same millisecond — preventing
+ * duplicate toasts from being de-duplicated by React keys.
+ */
+let toastIdCounter = 0;
+
+function generateToastId(): string {
+  toastIdCounter += 1;
+  return `${Date.now()}-${toastIdCounter}`;
+}
+
 export const useToast = (): ToastContext => {
   const [toasts, setToasts] = React.useState<
     Array<{
@@ -128,7 +141,7 @@ export const useToast = (): ToastContext => {
 
   const showToast = React.useCallback(
     (message: string, type: Required<ToastProps>['type'] = 'success', duration: number = 3000) => {
-      const id = Date.now().toString();
+      const id = generateToastId();
       setToasts((prev) => [...prev, { id, message, type, duration }]);
     },
     []
