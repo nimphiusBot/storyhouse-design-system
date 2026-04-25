@@ -10,3 +10,4 @@ dist/
 .DS_Store
 packages/docs/.astro/
 storybook-static/
+_site/
