@@ -328,6 +328,7 @@ export const RadioCard = React.forwardRef<HTMLInputElement, RadioCardProps>(
   (
     {
       className,
+      size: _size, // discarded — RadioProps has 'size' which conflicts with native input
       title,
       description,
       icon,
