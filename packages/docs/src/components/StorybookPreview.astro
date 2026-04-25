@@ -13,7 +13,8 @@ const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 
 // Build the iframe URL to point at the specific story
 // Storybook uses kebab-case: "Components/Button" → "components-button"
-const storybookIframeUrl = `${base}storybook/iframe.html?id=${id}&viewMode=story`;
+// Storybook v8 static builds serve previews through the manager UI via path parameter, not iframe.html
+const storybookIframeUrl = `${base}storybook/?path=/story/${id}&viewMode=story`;
 // Build the "Open in Storybook" link to the canvas view (no sidebar chrome)
 const storybookSplashUrl = `${base}storybook/?path=/story/${id}`;
 ---
