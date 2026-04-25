@@ -1,149 +1,298 @@
 ---
 import DocLayout from '../../layouts/DocLayout.astro';
-import StatusBadge from '../../components/StatusBadge.astro';
 import PropsTable from '../../components/PropsTable.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import StorybookPreview from '../../components/StorybookPreview.astro';
 import LiveToggleSwitchDemo from '../../components/react/LiveToggleSwitchDemo';
 
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
-const currentPath = base + 'components/toggle-switch';
+const currentPath = `${base}components/toggle-switch`;
 const githubUrl = 'https://github.com/nimphiusBot/storyhouse-design-system/tree/main/packages/components/src/components/ToggleSwitch';
 const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs-components-toggle-switch--docs';
-
-const props = [
-  { name: 'checked', type: 'boolean', default: '-', description: 'Whether the toggle is checked/on' },
-  { name: 'onChange', type: '(checked: boolean) => void', default: '-', description: 'Callback fired when the toggle state changes' },
-  { name: 'id', type: 'string', default: '-', description: 'Unique id for the toggle element' },
-  { name: 'disabled', type: 'boolean', default: 'false', description: 'Whether the toggle is disabled' },
-  { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the toggle' },
-  { name: 'className', type: 'string', default: '-', description: 'Optional class name override' },
-];
 ---
 
 <DocLayout
   title="ToggleSwitch"
+  status="stable"
+  description="Toggle switch component for binary on/off states. Supports multiple sizes, disabled state, labels, and full keyboard accessibility with role=\"switch\"."
   currentPath={currentPath}
-  description="A toggle switch component for binary on/off states with support for multiple sizes, disabled state, and keyboard accessibility."
 >
   <div class="space-y-12">
-    <!-- Header -->
-    <div class="space-y-4">
-      <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ToggleSwitch</h1>
-        <StatusBadge status="stable" />
-      </div>
-      <p class="text-lg text-gray-600 dark:text-gray-400">
-        A toggle switch component for binary on/off states. Supports three sizes (sm, md, lg),
-        disabled state, keyboard navigation (Enter/Space), and full accessibility via
-        role="switch" and aria-checked.
-      </p>
-      <div class="flex items-center gap-4">
-        <a href={githubUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
-          View Source →
-        </a>
-        <a href={storybookUrl} class="text-sm text-orange-600 hover:text-orange-700 dark:text-orange-400">
-          View Storybook →
-        </a>
-      </div>
-    </div>
-
-    <!-- Live Demo -->
     <section>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Live Demo</h2>
-      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+      <h2 id="overview">Overview</h2>
+      <p>
+        The <code>ToggleSwitch</code> component renders a switch control for binary on/off states.
+        It supports three sizes, disabled state, visible and screen-reader labels, and full keyboard
+        accessibility via <code>role="switch"</code> and <code>aria-checked</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2 id="live-demo">Live Demo</h2>
+      <p>Click the toggles below to see the component in action with on, off, and disabled states.</p>
+      <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <LiveToggleSwitchDemo client:load />
       </div>
     </section>
 
-    <!-- Sizes -->
     <section>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Sizes</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-          <p class="font-medium text-gray-900 dark:text-white mb-2">Small (sm)</p>
-          <p class="text-sm text-gray-500">Compact size for dense layouts. 32x16px.</p>
-        </div>
-        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-          <p class="font-medium text-gray-900 dark:text-white mb-2">Medium (md)</p>
-          <p class="text-sm text-gray-500">Default size for standard forms. 40x20px.</p>
-        </div>
-        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-          <p class="font-medium text-gray-900 dark:text-white mb-2">Large (lg)</p>
-          <p class="text-sm text-gray-500">Prominent size for settings panels. 48x24px.</p>
+      <h2 id="sizes">Sizes</h2>
+      <p>Three sizes cover compact, standard, and prominent use cases. Each size scales the toggle track, thumb, and label consistently.</p>
+
+      <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex flex-col gap-6">
+          <div class="flex items-center gap-4">
+            <span class="w-16 text-sm font-medium text-gray-500">sm</span>
+            <div class="relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-orange-600 transition-colors duration-200">
+              <span class="inline-block h-3 w-3 translate-x-4 transform rounded-full bg-white shadow ring-0 transition duration-200"></span>
+            </div>
+            <span class="text-sm text-gray-500">32 &times; 16px — compact layouts</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="w-16 text-sm font-medium text-gray-500">md</span>
+            <div class="relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-orange-600 transition-colors duration-200">
+              <span class="inline-block h-4 w-4 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200"></span>
+            </div>
+            <span class="text-sm text-gray-500">40 &times; 20px — default</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="w-16 text-sm font-medium text-gray-500">lg</span>
+            <div class="relative inline-flex h-6 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-orange-600 transition-colors duration-200">
+              <span class="inline-block h-5 w-5 translate-x-6 transform rounded-full bg-white shadow ring-0 transition duration-200"></span>
+            </div>
+            <span class="text-sm text-gray-500">48 &times; 24px — prominent settings</span>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Props Table -->
-    <section>
-      <h2 id="props" class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Props</h2>
-      <PropsTable rows={props} />
-    </section>
+      <CodeBlock title="toggle-sizes.tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
 
-    <!-- Usage Examples -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
-
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Basic Toggle</h3>
-      <CodeBlock lang="tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
-
-export function DarkModeToggle() {
-  const [enabled, setEnabled] = useState(false);
-  
+export function ToggleSizes() {
   return (
-    <ToggleSwitch
-      checked={enabled}
-      onChange={setEnabled}
-      size="md"
-    />
-  );
-}`} />
-
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">With Label</h3>
-      <CodeBlock lang="tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
-
-export function SettingsToggle() {
-  const [notifications, setNotifications] = useState(true);
-  
-  return (
-    <div className="flex items-center gap-3">
-      <ToggleSwitch
-        checked={notifications}
-        onChange={setNotifications}
-        id="notifications"
-      />
-      <label htmlFor="notifications" className="text-sm font-medium">
-        Enable Notifications
-      </label>
+    <div className="flex items-center gap-4">
+      <ToggleSwitch checked size="sm" ariaLabel="Small" />
+      <ToggleSwitch checked size="md" ariaLabel="Medium" />
+      <ToggleSwitch checked size="lg" ariaLabel="Large" />
     </div>
   );
 }`} />
     </section>
 
-    <!-- Edge Cases & Accessibility -->
+    <!-- Props Table -->
     <section>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Edge Cases & Accessibility</h2>
-      <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
-        <ul class="space-y-3">
-          <li><strong>Keyboard navigation</strong> — Toggle is focusable via Tab and activates on Enter/Space.</li>
-          <li><strong>Screen readers</strong> — Uses role="switch" and aria-checked for accessibility.</li>
-          <li><strong>Disabled state</strong> — Reduces opacity and prevents interaction.</li>
-          <li><strong>Smooth animation</strong> — Thumb slides with a 200ms ease-in-out transition.</li>
-          <li><strong>Focus ring</strong> — Orange focus ring with offset for keyboard users.</li>
-        </ul>
-      </div>
+      <h2 id="props">Props</h2>
+      <PropsTable
+        rows={[
+          { name: 'checked', type: 'boolean', default: '-', required: true, description: 'Whether the toggle is checked/on.' },
+          { name: 'onChange', type: '(checked: boolean) => void', default: '-', required: true, description: 'Callback fired when the toggle state changes. Receives the new checked value.' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Whether the toggle is disabled. Reduces opacity and prevents interaction.' },
+          { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Controls the toggle dimensions. sm=32x16px, md=40x20px, lg=48x24px.' },
+          { name: 'id', type: 'string', default: '-', description: 'Custom id for the toggle element. Auto-generated when a label is provided without one.' },
+          { name: 'label', type: 'string', default: '-', description: 'Visible label text rendered next to the toggle. Associates via htmlFor/id for click-to-toggle behavior.' },
+          { name: 'ariaLabel', type: 'string', default: '-', description: 'Screen-reader-only label used when no visible label is provided.' },
+          { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes merged with internal styles via tailwind-merge.' },
+        ]}
+      />
     </section>
 
-    <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
-      title="ToggleSwitch Component"
-      currentPath={currentPath}
+    <section>
+      <h2 id="usage">Usage Examples</h2>
+
+      <h3>Basic Toggle</h3>
+      <p>The simplest usage — a toggle with no visible label, relying on <code>ariaLabel</code> for accessibility.</p>
+
+      <CodeBlock title="toggle-basic.tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
+import { useState } from 'react';
+
+export function DarkModeToggle() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <ToggleSwitch
+      checked={enabled}
+      onChange={setEnabled}
+      ariaLabel="Toggle dark mode"
     />
+  );
+}`} />
+
+      <h3>With Visible Label</h3>
+      <p>Providing a <code>label</code> renders it next to the toggle. Clicking the label toggles the switch.</p>
+
+      <CodeBlock title="toggle-with-label.tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
+import { useState } from 'react';
+
+export function NotificationsToggle() {
+  const [enabled, setEnabled] = useState(true);
+
+  return (
+    <ToggleSwitch
+      checked={enabled}
+      onChange={setEnabled}
+      label="Enable notifications"
+    />
+  );
+}`} />
+
+      <h3>Disabled State</h3>
+      <p>Use <code>disabled</code> to prevent interaction. The toggle reduces opacity and the cursor changes to not-allowed.</p>
+
+      <CodeBlock title="toggle-disabled.tsx" code={`import { ToggleSwitch } from '@storyhouse/components';
+
+export function DisabledToggle() {
+  return (
+    <div className="flex flex-col gap-3">
+      <ToggleSwitch
+        checked={false}
+        disabled
+        label="Feature not available"
+      />
+      <ToggleSwitch
+        checked={true}
+        disabled
+        label="Always enabled (locked)"
+      />
+    </div>
+  );
+}`} />
+    </section>
+
+    <section>
+      <h2 id="edge-cases">Edge Cases &amp; Error States</h2>
+
+      <h3>Controlled Component (onChange Required)</h3>
+      <p>
+        ToggleSwitch is a fully controlled component. The parent must manage the <code>checked</code>
+        state and update it in response to <code>onChange</code>. Without <code>onChange</code>,
+        clicking the toggle does nothing — the component does not manage its own state internally.
+      </p>
+
+      <h3>No Label and No ariaLabel</h3>
+      <p>
+        If neither <code>label</code> nor <code>ariaLabel</code> is provided, the toggle uses a fallback
+        sr-only text of "Toggle". Always provide a meaningful <code>label</code> or <code>ariaLabel</code>
+        for screen reader users.
+      </p>
+
+      <h3>Disabled Click Prevention</h3>
+      <p>
+        When <code>disabled</code> is <code>true</code>, the toggle's <code>onClick</code> handler
+        returns early without calling <code>onChange</code>. The native <code>disabled</code> attribute
+        also prevents focus and keyboard interaction.
+      </p>
+
+      <h3>Label Click Association</h3>
+      <p>
+        When a <code>label</code> is provided, the component generates a unique <code>id</code> for the
+        toggle button and renders a <code>&lt;label htmlFor={id}&gt;</code>. This means clicking the
+        label triggers the toggle — the <code>onChange</code> callback receives the opposite of the
+        current <code>checked</code> value.
+      </p>
+
+      <h3>Custom ID Conflict</h3>
+      <p>
+        If you provide a custom <code>id</code>, ensure it's unique on the page. The component uses
+        your ID as-is and expects the consuming code to manage uniqueness.
+      </p>
+    </section>
+
+    <section>
+      <h2 id="best-practices">Best Practices &amp; Usage Guidelines</h2>
+
+      <h3>When to Use a ToggleSwitch</h3>
+      <ul>
+        <li>Immediate-action settings that take effect without a submit button</li>
+        <li>Binary on/off, enable/disable, show/hide states</li>
+        <li>Settings pages, preference panels, feature flags</li>
+        <li>Form elements where a checkbox feels too small or subtle</li>
+      </ul>
+
+      <h3>When Not to Use a ToggleSwitch</h3>
+      <ul>
+        <li>Actions that require confirmation before taking effect (use a modal dialog)</li>
+        <li>Multi-select options (use checkboxes or a multi-select component)</li>
+        <li>States with more than two values (use a select or radio group)</li>
+        <li>Form submissions where the toggle is one of many fields (use a checkbox)</li>
+      </ul>
+
+      <h3>onChange Handler Pattern</h3>
+      <ul>
+        <li>Use <code>onChange={setEnabled}</code> with React <code>useState</code> — the callback receives the new value directly</li>
+        <li>For complex logic, wrap: <code>onChange={(v) => handleToggle(v)}</code></li>
+        <li>Never call <code>setState(!checked)</code> — the component computes the next value</li>
+      </ul>
+
+      <h3>Labeling</h3>
+      <ul>
+        <li>Always provide a <code>label</code> or <code>ariaLabel</code></li>
+        <li>Labels should describe the setting: "Enable dark mode" not "Dark mode"</li>
+        <li>Use concise labels (2-5 words) that fit inline next to the toggle</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="implementation">Implementation Details</h2>
+
+      <h3>Component Architecture</h3>
+      <p>
+        ToggleSwitch uses <code>React.forwardRef</code> to forward refs to the underlying native
+        <code>&lt;button&gt;</code> element. It uses <code>role="switch"</code> with
+        <code>aria-checked</code> for correct accessibility semantics.
+      </p>
+
+      <h3>Controlled State Model</h3>
+      <p>
+        The component is fully controlled — <code>checked</code> determines the visual state and
+        <code>onChange</code> is the sole mechanism for parent notification. This ensures
+        predictable behavior in forms and complex state management.
+      </p>
+
+      <h3>Thumb Animation</h3>
+      <p>
+        The toggle thumb animates using CSS <code>transform: translateX()</code> with a 200ms
+        ease-in-out transition. Using transform instead of <code>left</code> or <code>margin</code>
+        ensures GPU-accelerated animations that don't trigger layout recalculations.
+      </p>
+
+      <h3>Disabled State</h3>
+      <p>
+        When disabled, the button receives the native <code>disabled</code> attribute. Opacity
+        reduces to 50%, cursor changes to <code>not-allowed</code>, and onClick returns early
+        without calling <code>onChange</code>.
+      </p>
+
+      <h3>Class Merging</h3>
+      <p>
+        Uses the <code>cn()</code> utility (<code>tailwind-merge</code> + <code>clsx</code>) to
+        merge consumer className with internal classes. This resolves Tailwind conflicts correctly.
+      </p>
+
+      <h3>Dark Mode</h3>
+      <p>
+        Uses Tailwind dark mode variants for background (on: orange-500, off: gray-600), label text,
+        and focus ring offset. Each variant automatically adapts without prop changes.
+      </p>
+    </section>
+
+    <section>
+      <h2 id="accessibility">Accessibility</h2>
+      <ul>
+        <li>Uses <code>role="switch"</code> and <code>aria-checked</code> for correct ARIA semantics</li>
+        <li>Focusable via Tab; activates on Enter/Space</li>
+        <li>Focus-visible ring (orange) only shows for keyboard users</li>
+        <li>Visible label associates via <code>htmlFor</code>/<code>id</code> for click-to-toggle</li>
+        <li>sr-only fallback text when no label/ariaLabel provided</li>
+        <li>Disabled state uses native <code>disabled</code> attribute</li>
+        <li>Animations respect <code>prefers-reduced-motion</code></li>
+        <li>All color variants maintain WCAG AA contrast ratios</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="storybook-preview">Interactive Preview</h2>
+      <p>Explore all ToggleSwitch variants and states interactively in Storybook:</p>
+      <StorybookPreview id="components-toggle-switch--interactive" title="ToggleSwitch — Storybook" height="400" />
+    </section>
   </div>
 </DocLayout>
 
-<script>
-
-</script>
