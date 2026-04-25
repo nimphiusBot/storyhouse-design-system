@@ -87,7 +87,26 @@ describe('DataTable', () => {
     expect(onSelectionChange).toHaveBeenCalled();
   });
 
-  it('handles sort', () => {
+  it('handles sort in controlled mode', () => {
+    const onSort = vi.fn();
+    const { rerender } = render(
+      <DataTable
+        data={data}
+        columns={columns}
+        sortable={true}
+        sortKey="name"
+        sortDirection="asc"
+        onSort={onSort}
+      />
+    );
+    // Click a different sortable header
+    const nameHeader = screen.getByText('Name');
+    fireEvent.click(nameHeader);
+    // In controlled mode, clicking the same column toggles direction
+    expect(onSort).toHaveBeenCalledWith('name', 'desc');
+  });
+
+  it('does not call onSort in uncontrolled mode', () => {
     const onSort = vi.fn();
     render(
       <DataTable
@@ -97,13 +116,58 @@ describe('DataTable', () => {
         onSort={onSort}
       />
     );
-    // Click sortable header
     const nameHeader = screen.getByText('Name');
     fireEvent.click(nameHeader);
-    expect(onSort).toHaveBeenCalledWith('name', 'asc');
+    // In uncontrolled mode, sort state is managed internally;
+    // onSort should NOT fire to avoid conflicting control patterns
+    expect(onSort).not.toHaveBeenCalled();
   });
 
-  it('handles expandable rows', () => {
+  it('sets aria-sort on sortable column headers', () => {
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        sortable={true}
+        sortKey="email"
+        sortDirection="asc"
+      />
+    );
+    const headers = document.querySelectorAll('th[aria-sort]');
+    // Name column is sortable; Email is not
+    const nameTh = headers[0];
+    const emailTh = document.querySelector('th:nth-child(2)');
+    expect(nameTh?.getAttribute('aria-sort')).toBe('none');
+    expect(emailTh?.getAttribute('aria-sort')).toBeNull();
+  });
+
+  it('sets aria-sort to ascending/descending for active sort column', () => {
+    const { rerender } = render(
+      <DataTable
+        data={data}
+        columns={columns}
+        sortable={true}
+        sortKey="name"
+        sortDirection="asc"
+      />
+    );
+    let nameTh = document.querySelectorAll('th[aria-sort]')[0];
+    expect(nameTh?.getAttribute('aria-sort')).toBe('ascending');
+
+    rerender(
+      <DataTable
+        data={data}
+        columns={columns}
+        sortable={true}
+        sortKey="name"
+        sortDirection="desc"
+      />
+    );
+    nameTh = document.querySelectorAll('th[aria-sort]')[0];
+    expect(nameTh?.getAttribute('aria-sort')).toBe('descending');
+  });
+
+  it('handles expandable rows', () => { 
     render(
       <DataTable
         data={data}
