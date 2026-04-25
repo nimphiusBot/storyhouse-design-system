@@ -30,13 +30,13 @@ const dateTimePickerVariants = cva(
     variants: {
       variant: {
         default:
-          'border-gray-300 bg-white text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500',
+          'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-orange-500 focus:ring-2 focus:ring-orange-500',
         filled:
-          'border-transparent bg-gray-100 text-gray-900 focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500',
+          'border-transparent bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500',
         error:
-          'border-red-300 bg-red-50 text-gray-900 focus:border-red-500 focus:ring-2 focus:ring-red-500',
+          'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20 text-gray-900 dark:text-gray-100 focus:border-red-500 focus:ring-2 focus:ring-red-500',
         success:
-          'border-green-300 bg-green-50 text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500',
+          'border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20 text-gray-900 dark:text-gray-100 focus:border-green-500 focus:ring-2 focus:ring-green-500',
       },
       size: {
         sm: 'text-sm h-8',
