@@ -72,7 +72,7 @@ export const Stepper: React.FC<StepperProps> = ({
   size = 'md',
   orientation = 'horizontal',
   onStepClick,
-  allowStepClick = false,
+  allowStepClick = true,
   className,
   children,
 }) => {
