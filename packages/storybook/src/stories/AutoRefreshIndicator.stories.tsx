@@ -16,6 +16,7 @@ const meta: Meta<typeof AutoRefreshIndicator> = {
     lastPollFailed: { control: 'boolean' },
     dataJustRefreshed: { control: 'boolean' },
     effectiveIntervalLabel: { control: 'text' },
+    paused: { control: 'boolean' },
   },
 };
 
@@ -37,6 +38,16 @@ export const Polling: Story = {
     enabled: true,
     isPolling: true,
     intervalLabel: '30s',
+  },
+};
+
+export const Paused: Story = {
+  args: {
+    enabled: true,
+    isPolling: false,
+    intervalLabel: '30s',
+    paused: true,
+    lastPolledLabel: '1m ago',
   },
 };
 
@@ -87,6 +98,17 @@ export const WithEffectiveInterval: Story = {
   },
 };
 
+export const TabHiddenVsPaused: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="text-xs text-gray-500">Tab hidden (automatic):</div>
+      <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" tabHidden lastPolledLabel="2m ago" /></div>
+      <div className="text-xs text-gray-500">Paused (programmatic):</div>
+      <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" paused lastPolledLabel="2m ago" /></div>
+    </div>
+  ),
+};
+
 export const AllStates: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
@@ -94,6 +116,7 @@ export const AllStates: Story = {
       <div><AutoRefreshIndicator enabled isPolling intervalLabel="30s" /></div>
       <div><AutoRefreshIndicator enabled={false} isPolling={false} intervalLabel="30s" lastPolledLabel="5m ago" /></div>
       <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" tabHidden /></div>
+      <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" paused lastPolledLabel="1m ago" /></div>
       <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" lastPollFailed lastPolledLabel="1m ago" /></div>
       <div><AutoRefreshIndicator enabled isPolling={false} intervalLabel="30s" dataJustRefreshed lastPolledLabel="just now" /></div>
     </div>

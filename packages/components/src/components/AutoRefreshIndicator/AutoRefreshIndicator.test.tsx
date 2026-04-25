@@ -40,7 +40,7 @@ describe('AutoRefreshIndicator', () => {
         tabHidden={true}
       />
     );
-    expect(screen.getByText('Paused')).toBeInTheDocument();
+    expect(screen.getByText('Paused (tab hidden)')).toBeInTheDocument();
   });
 
   it('renders disabled state without lastPolledLabel', () => {
@@ -146,5 +146,120 @@ describe('AutoRefreshIndicator', () => {
       />
     );
     expect(screen.getByText('Every 60s (backoff)')).toBeInTheDocument();
+  });
+
+  describe('paused prop', () => {
+    it('shows paused state when paused is true', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          paused={true}
+          lastPolledLabel="1m ago"
+        />
+      );
+      expect(screen.getByText('Paused')).toBeInTheDocument();
+      expect(screen.getByText(/1m ago/)).toBeInTheDocument();
+    });
+
+    it('does not show paused label when paused is false', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          paused={false}
+          lastPolledLabel="12s ago"
+        />
+      );
+      expect(screen.getByText('Every 30s')).toBeInTheDocument();
+      expect(screen.queryByText('Paused')).not.toBeInTheDocument();
+    });
+
+    it('shows enabled state by default when paused is not provided', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          lastPolledLabel="12s ago"
+        />
+      );
+      expect(screen.getByText('Every 30s')).toBeInTheDocument();
+      expect(screen.queryByText('Paused')).not.toBeInTheDocument();
+    });
+
+    it('uses orange background for paused state', () => {
+      const { container } = render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          paused={true}
+          lastPolledLabel="1m ago"
+        />
+      );
+      const el = container.firstChild as HTMLElement;
+      expect(el.className).toContain('bg-orange-50');
+    });
+
+    it('shows correct tooltip when paused', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          paused={true}
+          lastPolledLabel="1m ago"
+        />
+      );
+      const status = screen.getByRole('status');
+      expect(status.getAttribute('title')).toBe('Auto-refresh paused');
+    });
+
+    it('prioritizes lastPollFailed over paused', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          paused={true}
+          lastPollFailed={true}
+          lastPolledLabel="2m ago"
+        />
+      );
+      expect(screen.getByText('Retrying…')).toBeInTheDocument();
+    });
+
+    it('prioritizes isPolling over paused', () => {
+      render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={true}
+          intervalLabel="30s"
+          paused={true}
+          lastPolledLabel="Just now"
+        />
+      );
+      expect(screen.getByText('Refreshing…')).toBeInTheDocument();
+    });
+
+    it('shows paused title even when tabHidden is also true (paused wins)', () => {
+      const { container } = render(
+        <AutoRefreshIndicator
+          enabled={true}
+          isPolling={false}
+          intervalLabel="30s"
+          tabHidden={true}
+          paused={true}
+          lastPolledLabel="1m ago"
+        />
+      );
+      const el = container.firstChild as HTMLElement;
+      expect(el.getAttribute('title')).toBe('Auto-refresh paused');
+      // Paused label, not "Paused (tab hidden)"
+      expect(screen.getByText('Paused')).toBeInTheDocument();
+    });
   });
 });

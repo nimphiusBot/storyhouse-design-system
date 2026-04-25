@@ -28,6 +28,14 @@ export interface AutoRefreshIndicatorProps {
   dataJustRefreshed?: boolean;
   /** The effective interval (with backoff info) displayed in the label */
   effectiveIntervalLabel?: string;
+  /**
+   * Whether auto-refresh is programmatically paused by the parent.
+   * When true, the indicator shows a paused state visually distinct from
+   * tab-hidden. Use this when the parent needs to temporarily pause
+   * auto-refresh (e.g., during form editing, error state, modal open)
+   * without disabling or unmounting the component.
+   */
+  paused?: boolean;
 }
 
 /**
@@ -77,12 +85,15 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
   lastPollFailed = false,
   dataJustRefreshed = false,
   effectiveIntervalLabel,
+  paused = false,
 }) => {
   if (!enabled && !lastPolledLabel) return null;
 
   // Build tooltip
   const tooltipParts: string[] = [];
-  if (enabled) {
+  if (paused) {
+    tooltipParts.push('Auto-refresh paused');
+  } else if (enabled) {
     tooltipParts.push(`Auto-refreshing every ${intervalLabel}`);
     if (effectiveIntervalLabel && effectiveIntervalLabel !== intervalLabel) {
       tooltipParts.push(`Effective: ${effectiveIntervalLabel}`);
@@ -98,15 +109,18 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
   }
 
   // Determine background based on state priority
+  // Priority: lastPollFailed > isPolling > paused > tabHidden > enabled > disabled
   const bgClass = lastPollFailed
     ? 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300'
     : isPolling
       ? 'bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-300'
-      : tabHidden
-        ? 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300'
-        : enabled
-          ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300'
-          : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
+      : paused
+        ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300'
+        : tabHidden
+          ? 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300'
+          : enabled
+            ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300'
+            : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
 
   return (
     <div
@@ -119,13 +133,15 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
       title={tooltipParts.join(' | ')}
       role="status"
       aria-live="polite"
-      aria-label={`Auto-refresh status: ${lastPollFailed ? 'retrying' : isPolling ? 'refreshing' : tabHidden ? 'paused' : enabled ? `every ${effectiveIntervalLabel ?? intervalLabel}` : 'off'}`}
+      aria-label={`Auto-refresh status: ${lastPollFailed ? 'retrying' : isPolling ? 'refreshing' : paused ? 'paused by user' : tabHidden ? 'paused' : enabled ? `every ${effectiveIntervalLabel ?? intervalLabel}` : 'off'}`}
     >
       {/* Icon */}
       {lastPollFailed ? (
         <AlertTriangle className="h-3 w-3" aria-hidden="true" />
       ) : isPolling ? (
         <RefreshCw className="h-3 w-3 animate-spin" aria-hidden="true" />
+      ) : paused ? (
+        <WifiOff className="h-3 w-3" aria-hidden="true" />
       ) : tabHidden ? (
         <WifiOff className="h-3 w-3" aria-hidden="true" />
       ) : enabled ? (
@@ -143,11 +159,13 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
           ? 'Retrying…'
           : isPolling
             ? 'Refreshing…'
-            : tabHidden
+            : paused
               ? 'Paused'
-              : enabled
-                ? `Every ${effectiveIntervalLabel ?? intervalLabel}`
-                : 'Auto-refresh off'}
+              : tabHidden
+                ? 'Paused (tab hidden)'
+                : enabled
+                  ? `Every ${effectiveIntervalLabel ?? intervalLabel}`
+                  : 'Auto-refresh off'}
       </span>
 
       {/* Last polled (always shown for refinement) */}
