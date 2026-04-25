@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { X, Download } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -71,25 +71,30 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   metadata,
   className,
 }) => {
-  // Close on Escape key
+  // Use a ref to hold the latest onClose to prevent stale closures
+  // and avoid re-registering the listener when onClose reference changes.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  // Close on Escape key — only active when lightbox is open
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      // Prevent body scroll when lightbox is open
-      document.body.style.overflow = 'hidden';
-    }
+    document.addEventListener('keydown', handleEscape);
+    // Prevent body scroll when lightbox is open
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = '';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   // Don't render if not open
   if (!isOpen) return null;
