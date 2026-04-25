@@ -11,13 +11,30 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
+/**
+ * Maximum length for component stack logging to avoid spamming the console
+ * with enormous trace strings.
+ */
+const MAX_STACK_LENGTH = 1000;
+
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
+  /** Guard flag to prevent setState after unmount. */
+  private _isMounted = false;
+
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
+  }
+
+  override componentDidMount(): void {
+    this._isMounted = true;
+  }
+
+  override componentWillUnmount(): void {
+    this._isMounted = false;
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
@@ -25,12 +42,32 @@ export class ErrorBoundary extends Component<
   }
 
   override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    // Log the error with full detail at console.error level, but truncate
+    // the component stack to avoid flooding the console with multi-hundred-line traces.
+    if (errorInfo.componentStack && errorInfo.componentStack.length > MAX_STACK_LENGTH) {
+      console.error(
+        'ErrorBoundary caught an error:',
+        error,
+        { componentStack: errorInfo.componentStack.slice(0, MAX_STACK_LENGTH) + '…' },
+      );
+      // Use console.debug for the full stack when it's large so it's still
+      // discoverable but doesn't clutter the default console output.
+      console.debug('ErrorBoundary full component stack:', errorInfo.componentStack);
+    } else {
+      console.error('ErrorBoundary caught an error:', error, errorInfo);
+    }
+
     this.props.onError?.(error, errorInfo);
   }
 
   handleReload = (): void => {
     window.location.reload();
+  };
+
+  handleReset = (): void => {
+    if (this._isMounted) {
+      this.setState({ hasError: false, error: null });
+    }
   };
 
   override render(): React.ReactNode {
@@ -70,9 +107,7 @@ export class ErrorBoundary extends Component<
             </button>
             <button
               className="inline-flex items-center justify-center rounded-lg bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2"
-              onClick={() =>
-                this.setState({ hasError: false, error: null })
-              }
+              onClick={this.handleReset}
             >
               Try Again
             </button>
