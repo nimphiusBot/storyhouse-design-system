@@ -11,6 +11,7 @@ import {
   Film,
   Music,
   Archive,
+  AlertCircle,
 } from 'lucide-react';
 
 function cn(...inputs: ClassValue[]): string {
@@ -49,20 +50,139 @@ const fileUploadVariants = cva(
   }
 );
 
+/**
+ * Maps a MIME type or pattern (e.g. "image/*", ".pdf", "application/pdf")
+ * to a human-readable label for display in the UI.
+ */
+function mimeTypeToLabel(pattern: string): string {
+  const lower = pattern.trim().toLowerCase();
+
+  const knownLabels: Record<string, string> = {
+    'image/*': 'Images',
+    'image/jpeg': 'JPEG Images',
+    'image/png': 'PNG Images',
+    'image/gif': 'GIF Images',
+    'image/webp': 'WebP Images',
+    'image/svg+xml': 'SVG Images',
+    'video/*': 'Videos',
+    'video/mp4': 'MP4 Videos',
+    'video/webm': 'WebM Videos',
+    'video/ogg': 'OGG Videos',
+    'audio/*': 'Audio',
+    'audio/mpeg': 'MP3 Audio',
+    'audio/wav': 'WAV Audio',
+    'audio/ogg': 'OGG Audio',
+    'application/pdf': 'PDF Documents',
+    'application/msword': 'Word Documents',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Documents',
+    'application/vnd.ms-excel': 'Excel Spreadsheets',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel Spreadsheets',
+    'text/*': 'Text Files',
+    'text/plain': 'Plain Text',
+    'text/csv': 'CSV Files',
+    'text/html': 'HTML Files',
+    'application/zip': 'ZIP Archives',
+    'application/x-rar-compressed': 'RAR Archives',
+    'application/x-7z-compressed': '7z Archives',
+    '.pdf': 'PDF Files',
+    '.doc': 'Word Documents',
+    '.docx': 'Word Documents',
+    '.xls': 'Excel Spreadsheets',
+    '.xlsx': 'Excel Spreadsheets',
+    '.csv': 'CSV Files',
+    '.json': 'JSON Files',
+    '.xml': 'XML Files',
+    '.zip': 'ZIP Archives',
+    '.rar': 'RAR Archives',
+    '.png': 'PNG Images',
+    '.jpg': 'JPEG Images',
+    '.jpeg': 'JPEG Images',
+    '.gif': 'GIF Images',
+    '.webp': 'WebP Images',
+    '.svg': 'SVG Images',
+    '.mp4': 'MP4 Videos',
+    '.mp3': 'MP3 Audio',
+    '.txt': 'Text Files',
+    // Catch-all extension patterns
+    '.js': 'JavaScript Files',
+    '.ts': 'TypeScript Files',
+    '.tsx': 'TypeScript Files',
+    '.css': 'CSS Files',
+    '.scss': 'SCSS Files',
+    '.md': 'Markdown Files',
+  };
+
+  if (knownLabels[lower]) return knownLabels[lower];
+
+  // Extract extension from patterns like "image/*"
+  if (lower.endsWith('/*')) {
+    const category = lower.replace('/*', '');
+    return category.charAt(0).toUpperCase() + category.slice(1);
+  }
+  // For MIME types like "application/vnd.ms-powerpoint"
+  if (lower.startsWith('application/')) {
+    const name = lower.replace('application/', '').replace(/^vnd\./, '').replace(/\./g, ' ');
+    return name.charAt(0).toUpperCase() + name.slice(1) + ' Files';
+  }
+  // For extensions like ".cfg" — show as-is
+  if (lower.startsWith('.')) {
+    return lower.slice(1).toUpperCase() + ' Files';
+  }
+
+  // Default: return the value as a label
+  return pattern;
+}
+
+/**
+ * Parses an accept string into an array of individual MIME/extension patterns.
+ */
+function parseAcceptPatterns(accept: string): string[] {
+  return accept
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 export interface FileUploadProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'onChange'>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange'>,
     VariantProps<typeof fileUploadVariants> {
+  /** Label displayed above the dropzone */
   label?: string;
+  /** Error message displayed below the dropzone */
   error?: string;
+  /** Help text displayed below the dropzone */
   helpText?: string;
+  /** Callback fired when the selected files change */
   onFilesChange?: (files: File[]) => void;
+  /** Maximum file size in bytes */
   maxSize?: number;
+  /** Maximum number of files allowed */
   maxFiles?: number;
+  /** Whether to show image previews for uploaded files */
   showPreview?: boolean;
+  /** Whether to show the file list after upload */
   showFileList?: boolean;
+  /** Custom icon to display in the dropzone */
   icon?: React.ReactNode;
+  /** Custom drag-and-drop text */
   dragText?: string;
+  /** Custom browse button text */
   browseText?: string;
+  /**
+   * Accepted file types — passed directly to the native `<input type="file">` element.
+   *
+   * Supports:
+   * - MIME type patterns: `"image/*"`, `"video/*"`, `"application/pdf"`
+   * - Specific MIME types: `"image/jpeg,image/png"`
+   * - File extensions: `".pdf,.doc,.docx"`
+   * - Combinations: `"image/*,.pdf"`
+   *
+   * @example "image/*"
+   * @example ".pdf,.doc,.docx"
+   * @example "image/jpeg,image/png"
+   * @example "image/*,video/*"
+   */
+  accept?: string;
 }
 
 const formatFileSize = (bytes: number): string => {
@@ -95,6 +215,32 @@ const getFileIcon = (file: File) => {
   return <File className="h-5 w-5" />;
 };
 
+/**
+ * Checks whether a File matches a single accept pattern.
+ */
+function matchAcceptPattern(file: File, pattern: string): boolean {
+  if (pattern.startsWith('.')) {
+    // Extension-based matching
+    const fileExtension = '.' + (file.name.split('.').pop()?.toLowerCase() ?? '');
+    return fileExtension === pattern.toLowerCase();
+  }
+
+  if (pattern.endsWith('/*')) {
+    // Wildcard MIME type (e.g., "image/*")
+    return file.type.startsWith(pattern.replace('/*', ''));
+  }
+
+  // Exact MIME type matching
+  return file.type === pattern;
+}
+
+/**
+ * Checks whether a File matches any of the given accept patterns.
+ */
+function isFileAccepted(file: File, acceptPatterns: string[]): boolean {
+  return acceptPatterns.some((pattern) => matchAcceptPattern(file, pattern));
+}
+
 export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
   (
     {
@@ -125,58 +271,51 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     const [fileErrors, setFileErrors] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const validateFiles = (
-      fileList: FileList | File[]
-    ): { valid: File[]; errors: string[] } => {
-      const newFiles = Array.from(fileList);
-      const errors: string[] = [];
-      const valid: File[] = [];
+    const acceptPatterns = accept ? parseAcceptPatterns(accept) : [];
+    const acceptedLabels = acceptPatterns.map(mimeTypeToLabel);
 
-      if (maxFiles && files.length + newFiles.length > maxFiles) {
-        errors.push(
-          `Maximum ${maxFiles} file${maxFiles > 1 ? 's' : ''} allowed`
-        );
-        return { valid: [], errors };
-      }
+    const validateFiles = useCallback(
+      (fileList: FileList | File[]): { valid: File[]; errors: string[] } => {
+        const newFiles = Array.from(fileList);
+        const errors: string[] = [];
+        const valid: File[] = [];
 
-      newFiles.forEach((file) => {
-        if (maxSize && file.size > maxSize) {
+        const totalFiles = multiple ? files.length + newFiles.length : newFiles.length;
+
+        if (multiple && maxFiles != null && totalFiles > maxFiles) {
           errors.push(
-            `${file.name} exceeds maximum size of ${formatFileSize(maxSize)}`
+            `Maximum ${maxFiles} file${maxFiles > 1 ? 's' : ''} allowed`
           );
-          return;
+          return { valid: [], errors };
         }
 
-        if (accept) {
-          const acceptedTypes = accept.split(',').map((t) => t.trim());
-          const fileExtension =
-            '.' + file.name.split('.').pop()?.toLowerCase();
-          const isAccepted = acceptedTypes.some((type) => {
-            if (type.startsWith('.')) {
-              return fileExtension === type.toLowerCase();
-            }
-            if (type.endsWith('/*')) {
-              return file.type.startsWith(type.replace('/*', ''));
-            }
-            return file.type === type;
-          });
-
-          if (!isAccepted) {
-            errors.push(`${file.name} is not an accepted file type`);
-            return;
+        for (const file of newFiles) {
+          if (maxSize != null && file.size > maxSize) {
+            errors.push(
+              `${file.name} exceeds the maximum size of ${formatFileSize(maxSize)}`
+            );
+            continue;
           }
+
+          if (acceptPatterns.length > 0 && !isFileAccepted(file, acceptPatterns)) {
+            errors.push(
+              `${file.name} is not an accepted file type. Accepted: ${acceptedLabels.join(', ')}`
+            );
+            continue;
+          }
+
+          valid.push(file);
         }
 
-        valid.push(file);
-      });
-
-      return { valid, errors };
-    };
+        return { valid, errors };
+      },
+      [files.length, multiple, maxFiles, maxSize, acceptPatterns, acceptedLabels]
+    );
 
     const handleFiles = useCallback(
       (fileList: FileList | File[]) => {
         const { valid, errors } = validateFiles(fileList);
-        setFileErrors(errors);
+        setFileErrors((prev) => [...prev, ...errors]);
 
         if (valid.length > 0) {
           const newFiles = multiple ? [...files, ...valid] : valid;
@@ -184,7 +323,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           onFilesChange?.(newFiles);
         }
       },
-      [files, multiple, maxSize, maxFiles, accept, onFilesChange]
+      [files, multiple, onFilesChange, validateFiles]
     );
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -216,8 +355,15 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
       setFileErrors([]);
     };
 
+    const clearErrors = () => {
+      setFileErrors([]);
+    };
+
     const handleClick = () => {
-      if (!disabled) inputRef.current?.click();
+      if (!disabled) {
+        clearErrors();
+        inputRef.current?.click();
+      }
     };
 
     const effectiveVariant =
@@ -228,17 +374,12 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
         {label && (
           <label
             className={cn(
-              'block text-sm font-medium mb-2',
-              error || fileErrors.length > 0
-                ? 'text-red-700 dark:text-red-400'
-                : 'text-gray-700 dark:text-gray-300',
-              disabled && 'opacity-50'
+              'block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300',
+              disabled && 'opacity-50 cursor-not-allowed',
+              required && 'after:content-["_*"] after:text-red-500'
             )}
           >
             {label}
-            {required && (
-              <span className="text-red-500 ml-1">*</span>
-            )}
           </label>
         )}
 
@@ -247,6 +388,15 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={handleClick}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-disabled={disabled}
+          onKeyDown={(e) => {
+            if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
+              handleClick();
+            }
+          }}
           className={cn(
             fileUploadVariants({
               variant: effectiveVariant,
@@ -255,11 +405,16 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             }),
             disabled && 'opacity-50 cursor-not-allowed',
             !disabled && 'cursor-pointer',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2',
             className
           )}
         >
           <input
-            ref={ref || inputRef}
+            ref={(el) => {
+              (inputRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
+              if (typeof ref === 'function') ref(el);
+              else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
+            }}
             type="file"
             multiple={multiple}
             accept={accept}
@@ -274,7 +429,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             {icon || (
               <Upload
                 className={cn(
-                  'text-gray-400 dark:text-gray-500 mb-3',
+                  'mb-3 text-gray-400 dark:text-gray-500',
                   size === 'sm' && 'h-8 w-8',
                   size === 'md' && 'h-10 w-10',
                   size === 'lg' && 'h-12 w-12'
@@ -298,7 +453,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
 
             <p
               className={cn(
-                'text-gray-500 dark:text-gray-400 mt-1',
+                'mt-1 text-gray-500 dark:text-gray-400',
                 size === 'sm' && 'text-xs',
                 size === 'md' && 'text-sm',
                 size === 'lg' && 'text-base'
@@ -307,28 +462,42 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
               {browseText}
             </p>
 
-            {(accept || maxSize || maxFiles > 1) && (
+            {(accept || maxSize != null || maxFiles > 1) && (
               <div
                 className={cn(
-                  'mt-2 text-gray-400 dark:text-gray-500',
+                  'mt-2 flex flex-wrap items-center justify-center gap-x-1 text-gray-400 dark:text-gray-500',
                   size === 'sm' && 'text-xs',
                   size === 'md' && 'text-xs',
                   size === 'lg' && 'text-sm'
                 )}
               >
-                {accept && <div>Accepted: {accept}</div>}
-                {maxSize && <div>Max size: {formatFileSize(maxSize)}</div>}
-                {maxFiles > 1 && <div>Max files: {maxFiles}</div>}
+                {accept && (
+                  <span>
+                    Accepts: {acceptedLabels.join(', ')}
+                  </span>
+                )}
+                {accept && maxSize != null && <span aria-hidden="true">·</span>}
+                {maxSize != null && (
+                  <span>Max: {formatFileSize(maxSize)}</span>
+                )}
+                {maxFiles > 1 && (
+                  <>
+                    {accept && maxSize == null && maxFiles > 1 && (
+                      <span aria-hidden="true">·</span>
+                    )}
+                    <span>Up to {maxFiles} files</span>
+                  </>
+                )}
               </div>
             )}
           </div>
         </div>
 
         {showFileList && files.length > 0 && (
-          <div className="mt-3 space-y-2">
+          <ul className="mt-3 space-y-2" aria-label="Uploaded files">
             {files.map((file, index) => (
-              <div
-                key={index}
+              <li
+                key={`${file.name}-${file.size}-${file.lastModified}-${index}`}
                 className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -336,10 +505,10 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
                     <img
                       src={URL.createObjectURL(file)}
                       alt={file.name}
-                      className="h-10 w-10 object-cover rounded"
+                      className="h-10 w-10 object-cover rounded shrink-0"
                     />
                   ) : (
-                    <div className="text-gray-400 dark:text-gray-500">
+                    <div className="shrink-0 text-gray-400 dark:text-gray-500">
                       {getFileIcon(file)}
                     </div>
                   )}
@@ -361,14 +530,15 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
                       e.stopPropagation();
                       handleRemoveFile(index);
                     }}
-                    className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors ml-2"
+                    className="shrink-0 ml-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                    aria-label={`Remove ${file.name}`}
                   >
                     <X className="h-4 w-4" />
                   </button>
                 )}
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         {helpText && !error && fileErrors.length === 0 && (
@@ -385,16 +555,18 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
         {(error || fileErrors.length > 0) && (
           <div className="mt-2 space-y-1">
             {error && (
-              <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+              <p className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                 {error}
               </p>
             )}
             {fileErrors.map((err, index) => (
               <p
                 key={index}
-                className="text-sm text-red-600 dark:text-red-400"
+                className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400"
                 role="alert"
               >
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                 {err}
               </p>
             ))}
