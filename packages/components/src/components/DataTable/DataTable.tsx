@@ -112,12 +112,12 @@ export function DataTable<T>({
 
   const handleSort = (key: string) => {
     if (!sortable) return;
-    let newDirection: 'asc' | 'desc' = 'asc';
+    let newDirection: 'asc' | 'desc' = sortDirection;
     if (sortKey === key) {
       // Toggle direction when clicking the same column
       newDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     }
-    // else: clicking a new column starts at asc
+    // else: clicking a new column preserves the previous direction
     setSortKey(key);
     setSortDirection(newDirection);
     onSort?.(key, newDirection);
