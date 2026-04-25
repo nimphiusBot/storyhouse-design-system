@@ -136,6 +136,13 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     setIsDragging(false);
   }, []);
 
+  // Cleanup drag state when the system cancels the touch (e.g. incoming call,
+  // gesture conflict).  Without this, isDragging stays true and the slider
+  // becomes stuck until the user re-interacts.
+  const handleTouchCancel = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
   // Stable effect: manage global listeners for active drag
   useEffect(() => {
     if (!isDragging) return;
@@ -143,13 +150,15 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     window.addEventListener('mouseup', handleDragEnd);
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleDragEnd);
+    window.addEventListener('touchcancel', handleTouchCancel);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleDragEnd);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleDragEnd);
+      window.removeEventListener('touchcancel', handleTouchCancel);
     };
-  }, [isDragging, handleMouseMove, handleTouchMove, handleDragEnd]);
+  }, [isDragging, handleMouseMove, handleTouchMove, handleDragEnd, handleTouchCancel]);
 
   // Start editing
   const handleStartEdit = () => {
@@ -206,10 +215,21 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
     snapFromClientX(e.clientX);
   };
 
-  const handleDragStart = () => {
-    if (!disabled) {
-      setIsDragging(true);
+  const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
+    if (disabled) return;
+    // Prevent default to stop the browser from treating the gesture as scroll
+    // This is critical on mobile (iOS/Android) where touch on a button element
+    // triggers scroll behavior unless explicitly prevented.
+    if ('touches' in e) {
+      e.preventDefault();
     }
+    setIsDragging(true);
+  };
+
+  const handleTrackTouchStart = (e: React.TouchEvent) => {
+    if (disabled || !trackRef.current || !e.touches[0]) return;
+    // Immediately snap on touch start so tapping the track works on mobile
+    snapFromClientX(e.touches[0].clientX);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -263,6 +283,7 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
         <div
           ref={trackRef}
           onClick={handleTrackClick}
+          onTouchStart={handleTrackTouchStart}
           className={cn(
             'relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full',
             !disabled && 'cursor-pointer'
