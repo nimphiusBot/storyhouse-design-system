@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Edit3, Check, X } from 'lucide-react';
@@ -64,6 +64,19 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
   const trackRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Refs to always have access to latest values in event handlers
+  // without requiring effect dependency changes
+  const valueRef = useRef(value);
+  const onChangeRef = useRef(onChange);
+  const disabledRef = useRef(disabled);
+  const isDraggingRef = useRef(false);
+
+  // Keep refs in sync
+  useEffect(() => { valueRef.current = value; }, [value]);
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
+  useEffect(() => { disabledRef.current = disabled; }, [disabled]);
+  useEffect(() => { isDraggingRef.current = isDragging; }, [isDragging]);
+
   const currentIndex = DURATION_OPTIONS.findIndex((opt: DurationOption) => opt.value === value);
   const isCustomValue = currentIndex === -1;
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
@@ -89,6 +102,54 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
   const percentage = isCustomValue
     ? calcCustomPercentage()
     : (safeIndex / (DURATION_OPTIONS.length - 1)) * 100;
+
+  // Helper shared by both mouse and touch drag handlers
+  const snapFromClientX = useCallback((clientX: number): void => {
+    const track = trackRef.current;
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const moveX = clientX - rect.left;
+    const movePercentage = (moveX / rect.width) * 100;
+    const nearestIndex = Math.round((movePercentage / 100) * (DURATION_OPTIONS.length - 1));
+    const clampedIndex = Math.max(0, Math.min(DURATION_OPTIONS.length - 1, nearestIndex));
+    const snappedValue = DURATION_OPTIONS[clampedIndex]!.value;
+    if (snappedValue !== valueRef.current) {
+      onChangeRef.current(snappedValue);
+    }
+  }, []);
+
+  // ── Event listeners use refs so they always have current values ──
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDraggingRef.current || disabledRef.current) return;
+    snapFromClientX(e.clientX);
+  }, [snapFromClientX]);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDraggingRef.current || disabledRef.current || !e.touches[0]) return;
+    // Prevent page scroll while dragging the slider
+    e.preventDefault();
+    snapFromClientX(e.touches[0].clientX);
+  }, [snapFromClientX]);
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Stable effect: manage global listeners for active drag
+  useEffect(() => {
+    if (!isDragging) return;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleDragEnd);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleDragEnd);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleDragEnd);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleDragEnd);
+    };
+  }, [isDragging, handleMouseMove, handleTouchMove, handleDragEnd]);
 
   // Start editing
   const handleStartEdit = () => {
@@ -142,79 +203,14 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
 
   const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (disabled || !trackRef.current) return;
-
-    const rect = trackRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickPercentage = (clickX / rect.width) * 100;
-
-    const nearestIndex = Math.round((clickPercentage / 100) * (DURATION_OPTIONS.length - 1));
-    const clampedIndex = Math.max(0, Math.min(DURATION_OPTIONS.length - 1, nearestIndex));
-
-    onChange(DURATION_OPTIONS[clampedIndex]!.value);
+    snapFromClientX(e.clientX);
   };
 
-  const handleMouseDown = () => {
-    if (!disabled) setIsDragging(true);
-  };
-
-  const handleTouchStart = () => {
-    if (!disabled) setIsDragging(true);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging || disabled || !trackRef.current) return;
-
-    const rect = trackRef.current.getBoundingClientRect();
-    const moveX = e.clientX - rect.left;
-    const movePercentage = (moveX / rect.width) * 100;
-
-    const nearestIndex = Math.round((movePercentage / 100) * (DURATION_OPTIONS.length - 1));
-    const clampedIndex = Math.max(0, Math.min(DURATION_OPTIONS.length - 1, nearestIndex));
-
-    if (DURATION_OPTIONS[clampedIndex]!.value !== value) {
-      onChange(DURATION_OPTIONS[clampedIndex]!.value);
+  const handleDragStart = () => {
+    if (!disabled) {
+      setIsDragging(true);
     }
   };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!isDragging || disabled || !trackRef.current || !e.touches[0]) return;
-    // Prevent page scroll while dragging the slider
-    e.preventDefault();
-
-    const rect = trackRef.current.getBoundingClientRect();
-    const touch = e.touches[0];
-    const moveX = touch.clientX - rect.left;
-    const movePercentage = (moveX / rect.width) * 100;
-
-    const nearestIndex = Math.round((movePercentage / 100) * (DURATION_OPTIONS.length - 1));
-    const clampedIndex = Math.max(0, Math.min(DURATION_OPTIONS.length - 1, nearestIndex));
-
-    if (DURATION_OPTIONS[clampedIndex]!.value !== value) {
-      onChange(DURATION_OPTIONS[clampedIndex]!.value);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [isDragging, value]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
@@ -298,8 +294,8 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
           {/* Thumb */}
           <button
             type="button"
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
+            onMouseDown={handleDragStart}
+            onTouchStart={handleDragStart}
             onKeyDown={handleKeyDown}
             disabled={disabled}
             className={cn(
