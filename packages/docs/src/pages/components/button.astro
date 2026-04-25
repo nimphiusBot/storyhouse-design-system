@@ -39,7 +39,7 @@ const currentPath = `${base}components/button`;
     </p>
 
     <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Primary</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2">Primary</button>
       <button class="inline-flex items-center justify-center rounded-lg bg-gray-200 px-4 py-2 text-base font-medium text-gray-900 transition-colors hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2">Secondary</button>
       <button class="inline-flex items-center justify-center rounded-lg bg-transparent px-4 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2">Ghost</button>
       <button class="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2">Danger</button>
@@ -64,9 +64,9 @@ export function ButtonVariants() {
     <p>Three sizes cover most use cases: small for tight spaces, medium as the default, and large for primary CTAs.</p>
 
     <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700">Small</button>
-      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700">Medium</button>
-      <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-lg font-medium text-white transition-colors hover:bg-blue-700">Large</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-orange-700">Small</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-orange-700">Medium</button>
+      <button class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-6 py-3 text-lg font-medium text-white transition-colors hover:bg-orange-700">Large</button>
     </div>
 
     <CodeBlock title="button-sizes.tsx" code={`import { Button } from '@storyhouse/components';
@@ -90,7 +90,7 @@ export function ButtonSizes() {
     </p>
 
     <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none"><span class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>Saving...</button>
+      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none"><span class="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>Saving...</button>
     </div>
 
     <CodeBlock title="button-loading.tsx" code={`import { Button } from '@storyhouse/components';
@@ -109,7 +109,7 @@ export function ButtonLoading() {
     <p>Use <code>fullWidth</code> for buttons that should span their container — ideal for mobile layouts and form submissions.</p>
 
     <div class="my-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <button class="w-full inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700">Submit</button>
+      <button class="w-full inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-orange-700">Submit</button>
     </div>
 
     <CodeBlock title="button-fullwidth.tsx" code={`import { Button } from '@storyhouse/components';
@@ -127,7 +127,7 @@ export function ButtonFullWidth() {
     <h2 id="disabled">Disabled State</h2>
 
     <div class="my-6 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none">Cannot Click</button>
+      <button disabled="" class="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-base font-medium text-white opacity-50 pointer-events-none">Cannot Click</button>
     </div>
 
     <CodeBlock title="button-disabled.tsx" code={`import { Button } from '@storyhouse/components';
