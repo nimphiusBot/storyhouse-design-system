@@ -4,6 +4,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Badge } from '../Badge/Badge';
 import { Button } from '../Button/Button';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -87,16 +88,14 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
     };
 
     document.addEventListener('keydown', handleEscape);
-    // Prevent body scroll when lightbox is open
-    document.body.style.overflow = 'hidden';
-
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
-  // Don't render if not open
+  // Stack-aware body scroll lock — coordinates with Modal, SlidePanel, etc.
+  useBodyScrollLock(isOpen);
+
   if (!isOpen) return null;
 
   const handleDownload = async () => {

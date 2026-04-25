@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -226,32 +227,8 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown, true);
   }, [isOpen, shouldRender]);
 
-  // Prevent body scroll when panel is open — save and restore original overflow value
-  const originalOverflowRef = useRef<string>('');
-  const originalPaddingRightRef = useRef<string>('');
-
-  useEffect(() => {
-    if (!preventBodyScroll) return;
-
-    if (isOpen && shouldRender) {
-      // Save original values before overwriting
-      originalOverflowRef.current = document.body.style.overflow;
-      originalPaddingRightRef.current = document.body.style.paddingRight;
-
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      // Restore original values instead of clearing unconditionally
-      document.body.style.overflow = originalOverflowRef.current;
-      document.body.style.paddingRight = originalPaddingRightRef.current;
-    }
-
-    return () => {
-      document.body.style.overflow = originalOverflowRef.current;
-      document.body.style.paddingRight = originalPaddingRightRef.current;
-    };
-  }, [isOpen, shouldRender, preventBodyScroll]);
+  // Stack-aware body scroll lock — coordinates with Modal, ThumbnailLightbox, etc.
+  useBodyScrollLock(preventBodyScroll && isOpen && shouldRender);
 
   const handleOverlayClick = useCallback(() => {
     if (closeOnOverlayClick) {

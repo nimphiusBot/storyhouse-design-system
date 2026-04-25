@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { createPortal } from 'react-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -132,24 +133,22 @@ export const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
+  // Stack-aware body scroll lock — coordinates with SlidePanel, ThumbnailLightbox, etc.
+  useBodyScrollLock(isOpen);
+
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
       previousActiveElement.current = document.activeElement as HTMLElement;
       setTimeout(() => setIsAnimating(true), 10);
-      document.body.style.overflow = 'hidden';
     } else {
       setIsAnimating(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
-        document.body.style.overflow = '';
         previousActiveElement.current?.focus();
       }, 200);
       return () => clearTimeout(timer);
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isOpen]);
 
   useEffect(() => {
