@@ -20,14 +20,14 @@ describe('Alert', () => {
 
   it('dismisses when dismiss button is clicked', () => {
     render(<Alert dismissible>Dismiss me</Alert>);
-    fireEvent.click(screen.getByLabelText('Dismiss'));
+    fireEvent.click(screen.getByLabelText('Dismiss info alert'));
     expect(screen.queryByText('Dismiss me')).not.toBeInTheDocument();
   });
 
   it('calls onDismiss when dismissed', () => {
     const fn = vi.fn();
     render(<Alert dismissible onDismiss={fn}>Dismiss me</Alert>);
-    fireEvent.click(screen.getByLabelText('Dismiss'));
+    fireEvent.click(screen.getByLabelText('Dismiss info alert'));
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
