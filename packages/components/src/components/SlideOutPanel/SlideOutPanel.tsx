@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -20,13 +22,18 @@ export interface SlideOutPanelProps {
   children: React.ReactNode;
   /** Panel width size */
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * Selector for the element to receive initial focus when the panel opens.
+   * Falls back to the first focusable element, then the close button.
+   */
+  initialFocusSelector?: string;
 }
 
 /**
  * SlideOutPanel Component
  *
  * A slide-out side panel (drawer) that appears from the right edge of the screen.
- * Supports escape key closing, backdrop click closing, and body scroll locking.
+ * Supports focus trap, escape key closing, backdrop click closing, and body scroll locking.
  *
  * @example
  * ```tsx
@@ -47,11 +54,38 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
   subtitle,
   children,
   size = 'md',
+  initialFocusSelector,
 }) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  // Focus trap
+  useFocusTrap({
+    enabled: isOpen,
+    containerRef: panelRef,
+    autoFocus: true,
+    initialFocusSelector,
+  });
+
+  // Save and restore focus on open/close
+  useEffect(() => {
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
+    }
+    return () => {
+      if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+        previousActiveElement.current.focus({ preventScroll: true });
+        previousActiveElement.current = null;
+      }
+    };
+  }, [isOpen]);
+
   // Handle escape key
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
@@ -63,13 +97,17 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
   // Prevent body scroll when panel is open
   useEffect(() => {
     if (isOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     };
   }, [isOpen]);
 
@@ -82,28 +120,36 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  const panelContent = (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 transition-opacity"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Panel */}
       <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
         <div
+          ref={panelRef}
+          tabIndex={-1}
           className={cn(
-            'relative w-screen transform transition-transform duration-300 ease-in-out',
+            'relative w-screen transform transition-transform duration-300 ease-in-out focus:outline-none',
             sizeClasses[size],
             isOpen ? 'translate-x-0' : 'translate-x-full',
           )}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="slide-out-panel-title"
         >
           <div className="flex h-full flex-col bg-white shadow-xl dark:bg-gray-900">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
+                <h2 id="slide-out-panel-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  {title}
+                </h2>
                 {subtitle && (
                   <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>
                 )}
@@ -116,6 +162,8 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
                   'dark:hover:bg-gray-800 dark:hover:text-gray-300',
                   'focus:outline-none focus:ring-2 focus:ring-orange-500',
                 )}
+                aria-label="Close panel"
+                type="button"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -130,6 +178,10 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(panelContent, document.body);
 };
 
 SlideOutPanel.displayName = 'SlideOutPanel';
+
+export default SlideOutPanel;

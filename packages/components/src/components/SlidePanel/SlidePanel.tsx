@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
 const slidePanelVariants = cva(
-  'fixed bg-white dark:bg-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out flex flex-col',
+  'fixed bg-white dark:bg-gray-900 shadow-2xl transform transition-all duration-300 ease-in-out flex flex-col focus:outline-none',
   {
     variants: {
       position: {
@@ -81,6 +82,16 @@ export interface SlidePanelProps extends VariantProps<typeof slidePanelVariants>
   overlayClassName?: string;
   /** Prevent body scroll when panel is open */
   preventBodyScroll?: boolean;
+  /**
+   * Selector for the element to receive initial focus when the panel opens.
+   * Falls back to the first focusable element, then the close button.
+   */
+  initialFocusSelector?: string;
+  /**
+   * Callback fired when the panel closes. Useful for restoring focus to the
+   * trigger element that opened the panel.
+   */
+  onCloseComplete?: () => void;
 }
 
 /**
@@ -94,11 +105,12 @@ export interface SlidePanelProps extends VariantProps<typeof slidePanelVariants>
  * - Four positions: left, right, top, bottom
  * - Five sizes: sm, md, lg, xl, full
  * - Smooth enter/exit animations
- * - Focus trap for accessibility
+ * - Focus trap for accessibility (WCAG 2.4.3 Focus Order)
  * - Escape key to close
  * - Click overlay to close
  * - Body scroll lock
  * - Renders via React portal
+ * - Focus restoration on close
  *
  * @example
  * ```tsx
@@ -130,30 +142,61 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
   className,
   overlayClassName,
   preventBodyScroll = true,
+  initialFocusSelector,
+  onCloseComplete,
 }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
   const [isAnimating, setIsAnimatingState] = useState(false);
-  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [shouldRender, setShouldRender] = useState(false);
 
   // Handle mounting/unmounting with animation
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
-      // Small delay to trigger animation
       const timer = setTimeout(() => setIsAnimatingState(true), 10);
       return () => clearTimeout(timer);
-    } else {
-      // Trigger slide-out animation
-      setIsAnimatingState(false);
-      // Unmount after animation completes
-      const unmountTimer = setTimeout(() => setShouldRender(false), 320);
-      return () => clearTimeout(unmountTimer);
     }
+    return;
   }, [isOpen]);
 
-  // Handle escape key
   useEffect(() => {
-    if (!closeOnEscape || !isOpen) return;
+    if (!isOpen && shouldRender) {
+      setIsAnimatingState(false);
+      const unmountTimer = setTimeout(() => {
+        setShouldRender(false);
+        onCloseComplete?.();
+      }, 320);
+      return () => clearTimeout(unmountTimer);
+    }
+    return;
+  }, [isOpen, shouldRender, onCloseComplete]);
+
+  // Save and restore focus
+  useEffect(() => {
+    if (isOpen && shouldRender) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
+    }
+    return () => {
+      // Restore focus when component unmounts
+      if (previousActiveElement.current && typeof previousActiveElement.current.focus === 'function') {
+        previousActiveElement.current.focus({ preventScroll: true });
+        previousActiveElement.current = null;
+      }
+    };
+  }, [isOpen, shouldRender]);
+
+  // Focus trap
+  useFocusTrap({
+    enabled: isOpen && shouldRender,
+    containerRef: panelRef,
+    autoFocus: true,
+    initialFocusSelector,
+  });
+
+  // Handle escape key (independent hook for cleanup correctness)
+  useEffect(() => {
+    if (!closeOnEscape || !isOpen || !shouldRender) return;
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -163,13 +206,13 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose, closeOnEscape]);
+  }, [isOpen, shouldRender, onClose, closeOnEscape]);
 
   // Prevent body scroll when panel is open
   useEffect(() => {
     if (!preventBodyScroll) return;
 
-    if (isOpen) {
+    if (isOpen && shouldRender) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -182,43 +225,13 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
     };
-  }, [isOpen, preventBodyScroll]);
+  }, [isOpen, shouldRender, preventBodyScroll]);
 
-  // Focus trap
-  useEffect(() => {
-    if (!isOpen || !panelRef.current) return;
-
-    const panel = panelRef.current;
-    const focusableElements = panel.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    const handleTab = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-
-    panel.addEventListener('keydown', handleTab);
-    // Focus the first focusable element
-    firstElement?.focus();
-
-    return () => {
-      panel.removeEventListener('keydown', handleTab);
-    };
-  }, [isOpen]);
+  const handleOverlayClick = useCallback(() => {
+    if (closeOnOverlayClick) {
+      onClose();
+    }
+  }, [closeOnOverlayClick, onClose]);
 
   if (!shouldRender) return null;
 
@@ -240,12 +253,6 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
     return 'translate-x-0 translate-y-0';
   };
 
-  const handleOverlayClick = () => {
-    if (closeOnOverlayClick) {
-      onClose();
-    }
-  };
-
   const panelContent = (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop/Overlay */}
@@ -262,6 +269,7 @@ export const SlidePanel: React.FC<SlidePanelProps> = ({
       {/* Panel */}
       <div
         ref={panelRef}
+        tabIndex={-1}
         className={cn(
           slidePanelVariants({ position, size }),
           getTransformClass(),
