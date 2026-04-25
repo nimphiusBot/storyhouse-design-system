@@ -83,16 +83,18 @@ const MultiSelectFilter: React.FC<{
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+    const handlePointerDown = (event: PointerEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         setOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
+    // Use pointerdown instead of separate mousedown + touchstart.
+    // Touch events fire event.target differently on mobile browsers,
+    // while pointerdown is consistently supported across mouse, touch,
+    // and pen inputs with reliable target detection.
+    document.addEventListener('pointerdown', handlePointerDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('pointerdown', handlePointerDown);
     };
   }, []);
 
