@@ -100,22 +100,67 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   if (!isOpen) return null;
 
   const handleDownload = async () => {
-    try {
-      const response = await fetch(imageUrl, { mode: 'cors' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
+    /**
+     * Downloads the image via a three-tier strategy:
+     * 1. Direct fetch (CORS-enabled sources)
+     * 2. Canvas-based download (some cross-origin images with CORS headers)
+     * 3. Open in new tab (universal fallback)
+     */
+    const downloadBlob = (blob: Blob, filename: string) => {
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = `thumbnail-${orientation}`;
+      link.href = url;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
+      window.URL.revokeObjectURL(url);
+    };
+
+    const filename = `thumbnail-${orientation}`;
+
+    try {
+      // Strategy 1: Direct fetch
+      const response = await fetch(imageUrl, { mode: 'cors' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      downloadBlob(blob, filename);
+      return;
     } catch (error) {
-      console.warn('Direct download failed (likely CORS), opening image in new tab:', error);
-      window.open(imageUrl, '_blank');
+      console.warn('Fetch download failed (likely CORS), trying canvas approach:', error);
     }
+
+    try {
+      // Strategy 2: Load image via crossorigin attribute, draw to canvas, get blob
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error('Image failed to load'));
+        img.src = imageUrl;
+      });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Could not get canvas context');
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          downloadBlob(blob, filename);
+        } else {
+          throw new Error('toBlob returned null');
+        }
+      });
+      return;
+    } catch (error) {
+      console.warn('Canvas download failed (CORS taint), opening in new tab:', error);
+    }
+
+    // Strategy 3: Fallback — open image in new tab
+    window.open(imageUrl, '_blank');
   };
 
   const formatDate = (dateString?: string) => {
