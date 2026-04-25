@@ -11,6 +11,7 @@ const meta: Meta<typeof Tooltip> = {
     content: { control: 'text' },
     position: { control: 'select', options: ['top', 'bottom', 'left', 'right'] },
     delay: { control: 'number' },
+    className: { control: 'text' },
   },
   decorators: [
     (Story) => (
