@@ -2,6 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FileUpload } from './index';
 
+// Mock URL.createObjectURL for jsdom
+URL.createObjectURL = vi.fn(() => 'blob:mock');
+
 // Helper to create a mock File
 function createMockFile(name: string, size: number, type: string): File {
   const blob = new Blob(['a'.repeat(size)], { type });

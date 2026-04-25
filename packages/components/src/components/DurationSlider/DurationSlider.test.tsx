@@ -5,14 +5,16 @@ import { DurationSlider } from './index';
 describe('DurationSlider', () => {
   it('renders with default value', () => {
     render(<DurationSlider value={60} onChange={() => {}} />);
-    expect(screen.getByText('Standard')).toBeInTheDocument();
+    // "Standard" appears twice — once as preset button, once as display label
+    const standards = screen.getAllByText('Standard');
+    expect(standards.length).toBeGreaterThan(0);
     expect(screen.getByText('(60s)')).toBeInTheDocument();
   });
 
   it('renders all duration options', () => {
     render(<DurationSlider value={60} onChange={() => {}} />);
     expect(screen.getByText('Short')).toBeInTheDocument();
-    expect(screen.getByText('Standard')).toBeInTheDocument();
+    expect(screen.getAllByText('Standard').length).toBeGreaterThan(0);
     expect(screen.getByText('Extended')).toBeInTheDocument();
     expect(screen.getByText('Long Form')).toBeInTheDocument();
   });
@@ -27,8 +29,10 @@ describe('DurationSlider', () => {
 
   it('highlights the selected option in the top label row', () => {
     render(<DurationSlider value={60} onChange={() => {}} />);
-    const standardButton = screen.getByText('Standard');
-    expect(standardButton.className).toContain('text-orange-600');
+    // The top row has preset buttons — get the Standard preset button specifically
+    const presetButtons = document.querySelectorAll('button');
+    const standardPresetBtn = Array.from(presetButtons).find(b => b.textContent === 'Standard');
+    expect(standardPresetBtn!.className).toContain('text-orange-600');
   });
 
   it('renders slider role with proper ARIA attributes', () => {
@@ -41,7 +45,10 @@ describe('DurationSlider', () => {
 
   it('enters edit mode when clicking the display label', () => {
     render(<DurationSlider value={60} onChange={() => {}} />);
-    const displayButton = screen.getByText('Standard').closest('button');
+    // Click the display button (the button with the pen icon in the middle)
+    const allButtons = document.querySelectorAll('button');
+    const displayButton = Array.from(allButtons).find(b => b.textContent?.includes('Standard') && b.textContent?.includes('(60s)'));
+    expect(displayButton).toBeDefined();
     fireEvent.click(displayButton!);
     // Should now show an input
     const input = document.querySelector('input[type="number"]');
@@ -51,7 +58,8 @@ describe('DurationSlider', () => {
   it('confirms edit on Enter key', () => {
     const onChange = vi.fn();
     render(<DurationSlider value={60} onChange={onChange} />);
-    const displayButton = screen.getByText('Standard').closest('button');
+    const allButtons = document.querySelectorAll('button');
+    const displayButton = Array.from(allButtons).find(b => b.textContent?.includes('Standard') && b.textContent?.includes('(60s)'));
     fireEvent.click(displayButton!);
     const input = document.querySelector('input[type="number"]')!;
     fireEvent.change(input, { target: { value: '90' } });
@@ -62,12 +70,13 @@ describe('DurationSlider', () => {
   it('cancels edit on Escape key', () => {
     const onChange = vi.fn();
     render(<DurationSlider value={60} onChange={onChange} />);
-    const displayButton = screen.getByText('Standard').closest('button');
+    const allButtons = document.querySelectorAll('button');
+    const displayButton = Array.from(allButtons).find(b => b.textContent?.includes('Standard') && b.textContent?.includes('(60s)'));
     fireEvent.click(displayButton!);
     const input = document.querySelector('input[type="number"]')!;
     fireEvent.keyDown(input, { key: 'Escape' });
     // Should return to display mode
-    expect(screen.getByText('Standard')).toBeInTheDocument();
+    expect(screen.getByText('60s')).toBeInTheDocument();
   });
 
   it('handles keyboard navigation with arrow keys', () => {
@@ -111,7 +120,7 @@ describe('DurationSlider', () => {
   it('renders with 900 value (15min)', () => {
     render(<DurationSlider value={900} onChange={() => {}} />);
     expect(screen.getByText('Long Form')).toBeInTheDocument();
-    expect(screen.getByText('(15min)')).toBeInTheDocument();
+    expect(screen.getByText('15min')).toBeInTheDocument();
   });
 
   it('provides accessible label on the slider thumb', () => {

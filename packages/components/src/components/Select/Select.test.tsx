@@ -49,7 +49,8 @@ describe('Select', () => {
 
   it('renders placeholder as disabled option', () => {
     render(<Select placeholder="Choose..." options={[]} />);
-    const placeholderOption = screen.getByRole('option', { name: 'Choose...' });
+    const select = document.querySelector('select')!;
+    const placeholderOption = select.querySelector('option[value=""]');
     expect(placeholderOption).toBeInTheDocument();
     expect(placeholderOption).toBeDisabled();
   });

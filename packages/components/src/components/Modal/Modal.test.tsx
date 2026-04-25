@@ -286,8 +286,6 @@ describe('ConfirmModal', () => {
         message="Sure?"
       />
     );
-    const footerButtons = document.querySelectorAll('[class*="border-t"] button, [class*="border-t"] [role="button"], button');
-    // At least some buttons should be disabled
     const disabledButtons = Array.from(document.querySelectorAll('button')).filter(b => b.disabled);
     expect(disabledButtons.length).toBeGreaterThan(0);
   });
@@ -299,10 +297,14 @@ describe('ConfirmModal', () => {
         onClose={vi.fn()}
         onConfirm={vi.fn()}
         confirmVariant="danger"
+        variant="danger"
         message="Sure?"
       />
     );
     const innerPanel = document.querySelector('[class*="border-t-red-500"]');
     expect(innerPanel).toBeInTheDocument();
+    // Also verify the confirm button has danger (red) styling
+    const confirmBtn = screen.getByText('Confirm');
+    expect(confirmBtn.className).toContain('bg-red-600');
   });
 });

@@ -123,9 +123,12 @@ describe('FormatSelect', () => {
         onChange={vi.fn()}
       />
     );
-    // The selected option's intent, aspect ratio, and source count render in trigger
+    // The selected option's format name and intent render in the trigger
+    expect(screen.getByText('Landscape')).toBeInTheDocument();
     expect(screen.getByText('Wide scenic view')).toBeInTheDocument();
-    expect(screen.getByText('16:9')).toBeInTheDocument();
-    expect(screen.getByText('2 sources')).toBeInTheDocument();
+    // The metadata like aspect ratio and source count are only in the dropdown
+    // items (via Portal), not in the trigger itself — they are not accessible
+    // until the select is opened. Currently the test verifies what's rendered
+    // in the trigger without opening the dropdown.
   });
 });

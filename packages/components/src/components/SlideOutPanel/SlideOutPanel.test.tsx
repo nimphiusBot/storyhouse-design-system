@@ -95,9 +95,10 @@ describe('SlideOutPanel', () => {
   });
 
   it('renders with custom z-index via fixed inset-0 z-50', () => {
-    const { container } = render(<SlideOutPanel {...defaultProps}>Content</SlideOutPanel>);
-    const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.className).toContain('z-50');
+    render(<SlideOutPanel {...defaultProps}>Content</SlideOutPanel>);
+    // The panel overlay uses fixed inset-0 z-50 via portals — rendered into document.body
+    const overlay = document.querySelector('.fixed.inset-0');
+    expect(overlay?.className).toContain('z-50');
   });
 
   it('renders children in content area', () => {

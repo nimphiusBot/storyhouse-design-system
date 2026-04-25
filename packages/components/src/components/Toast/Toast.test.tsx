@@ -11,19 +11,22 @@ describe('Toast', () => {
 
   it('renders success type by default', () => {
     const { container } = render(<Toast message="Success!" />);
-    const checkIcon = container.querySelector('.lucide-check-circle');
-    expect(checkIcon).toBeInTheDocument();
+    // In newer lucide-react, CheckCircle renders as lucide-circle-check-big
+    const icon = container.querySelector('.lucide-circle-check-big');
+    expect(icon).toBeInTheDocument();
   });
 
   it('renders error type', () => {
     const { container } = render(<Toast message="Error!" type="error" />);
-    const icon = container.querySelector('.lucide-x-circle');
+    // In newer lucide-react, XCircle renders as lucide-circle-x
+    const icon = container.querySelector('.lucide-circle-x');
     expect(icon).toBeInTheDocument();
   });
 
   it('renders warning type', () => {
     const { container } = render(<Toast message="Warning!" type="warning" />);
-    const icon = container.querySelector('.lucide-alert-circle');
+    // In newer lucide-react, AlertCircle renders as lucide-circle-alert
+    const icon = container.querySelector('.lucide-circle-alert');
     expect(icon).toBeInTheDocument();
   });
 
@@ -126,7 +129,8 @@ describe('useToast', () => {
     render(<TestComponent />);
     fireEvent.click(screen.getByText('Show'));
     expect(screen.getByText('Error!')).toBeInTheDocument();
-    const icon = document.querySelector('.lucide-x-circle');
+    // In newer lucide-react, XCircle renders as lucide-circle-x
+    const icon = document.querySelector('.lucide-circle-x');
     expect(icon).toBeInTheDocument();
   });
 
