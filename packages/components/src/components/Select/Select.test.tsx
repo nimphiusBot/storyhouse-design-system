@@ -114,6 +114,21 @@ describe('Select', () => {
     expect(select.className).toContain('px-4 py-3');
   });
 
+  it('applies inline font size on options based on size prop', () => {
+    const options = [{ value: 'a', label: 'Option A' }];
+    const { rerender } = render(<Select size="sm" options={options} />);
+    const optionSm = screen.getByRole('option', { name: 'Option A' });
+    expect(optionSm.style.fontSize).toBe('14px');
+
+    rerender(<Select size="md" options={options} />);
+    const optionMd = screen.getByRole('option', { name: 'Option A' });
+    expect(optionMd.style.fontSize).toBe('16px');
+
+    rerender(<Select size="lg" options={options} />);
+    const optionLg = screen.getByRole('option', { name: 'Option A' });
+    expect(optionLg.style.fontSize).toBe('18px');
+  });
+
   it('renders ChevronDown icon', () => {
     const { container } = render(<Select />);
     const chevron = container.querySelector('.lucide-chevron-down');
