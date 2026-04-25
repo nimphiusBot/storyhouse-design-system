@@ -90,15 +90,21 @@ export interface EmptyStateProps
   illustration?: React.ReactNode;
   title: string;
   description?: string;
+  /** @deprecated Use `action` prop for full control over the render. primaryAction provides a styled button with label/onClick. */
   primaryAction?: {
     label: string;
     onClick: () => void;
     icon?: React.ReactNode;
   };
+  /** @deprecated Secondary action button. */
   secondaryAction?: {
     label: string;
     onClick: () => void;
   };
+  /** Slot for a custom action element (e.g., a Button, Link, or any ReactNode).
+   * Use this for full flexibility over the call-to-action rendering.
+   * When both `action` and `primaryAction` are provided, `action` takes precedence. */
+  action?: React.ReactNode;
   className?: string;
 }
 
@@ -109,6 +115,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   description,
   primaryAction,
   secondaryAction,
+  action,
   variant = 'no-data',
   size = 'md',
   className,
@@ -158,29 +165,33 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         <p className={cn(descriptionVariants({ size }))}>{description}</p>
       )}
 
-      {(primaryAction || secondaryAction) && (
+      {action || (primaryAction || secondaryAction) ? (
         <div className="flex items-center gap-3">
-          {primaryAction && (
-            <button
-              className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
-              onClick={primaryAction.onClick}
-            >
-              {primaryAction.icon && (
-                <span className="mr-2">{primaryAction.icon}</span>
+          {action || (
+            <>
+              {primaryAction && (
+                <button
+                  className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
+                  onClick={primaryAction.onClick}
+                >
+                  {primaryAction.icon && (
+                    <span className="mr-2">{primaryAction.icon}</span>
+                  )}
+                  {primaryAction.label}
+                </button>
               )}
-              {primaryAction.label}
-            </button>
-          )}
-          {secondaryAction && (
-            <button
-              className="inline-flex items-center justify-center rounded-lg bg-transparent px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-              onClick={secondaryAction.onClick}
-            >
-              {secondaryAction.label}
-            </button>
+              {secondaryAction && (
+                <button
+                  className="inline-flex items-center justify-center rounded-lg bg-transparent px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+                  onClick={secondaryAction.onClick}
+                >
+                  {secondaryAction.label}
+                </button>
+              )}
+            </>
           )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

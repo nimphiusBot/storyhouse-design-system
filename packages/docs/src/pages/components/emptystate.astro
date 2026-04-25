@@ -16,10 +16,12 @@ const props = [
   { name: 'title', type: 'string', default: '-', description: 'Main heading text' },
   { name: 'description', type: 'string', default: '-', description: 'Supporting description text' },
   { name: 'icon', type: 'ReactNode', default: '-', description: 'Custom icon element' },
+  { name: 'illustration', type: 'ReactNode', default: '-', description: 'Full illustration element (replaces icon when provided)' },
   { name: 'variant', type: '"no-data" | "no-results" | "error" | "no-permission" | "loading"', default: '"no-data"', description: 'Preset variant with predefined icon and colors' },
   { name: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size of the empty state display' },
-  { name: 'primaryAction', type: '{ label: string; onClick: () => void }', default: '-', description: 'Primary action button' },
-  { name: 'secondaryAction', type: '{ label: string; onClick: () => void }', default: '-', description: 'Secondary action button' },
+  { name: 'action', type: 'ReactNode', default: '-', description: 'Custom call-to-action element. Full flexibility — pass a Button, Link, or any ReactNode. Takes precedence over primaryAction.' },
+  { name: 'primaryAction', type: '{ label: string; onClick: () => void; icon?: ReactNode }', default: '-', description: 'Primary action button (deprecated — prefer action prop)' },
+  { name: 'secondaryAction', type: '{ label: string; onClick: () => void }', default: '-', description: 'Secondary action button (deprecated — combine actions in action prop)' },
   { name: 'className', type: 'string', default: '-', description: 'Additional CSS classes' },
 ];
 ---
@@ -89,13 +91,19 @@ const props = [
 
     <section>
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Usage</h2>
-      <CodeBlock lang="tsx" code={`import { EmptyState } from '@storyhouse/components';
-import { Search, Lock, AlertTriangle } from 'lucide-react';
+      <CodeBlock lang="tsx" code={`import { EmptyState, Button } from '@storyhouse/components';
+import { Search, Lock, AlertTriangle, Plus } from 'lucide-react';
 
-// No data
+// No data — using action prop (recommended)
 <EmptyState
   title="No projects yet"
-  currentPath={currentPath}
+  description="Create your first project to get started."
+  action={<Button onClick={handleCreate}>Create Project</Button>}
+/>
+
+// No data — using primaryAction (legacy)
+<EmptyState
+  title="No projects yet"
   description="Create your first project to get started."
   primaryAction={{ label: 'Create Project', onClick: handleCreate }}
 />
@@ -104,7 +112,6 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
 <EmptyState
   variant="no-results"
   title="No results found"
-  currentPath={currentPath}
   description="Try adjusting your search query."
   icon={<Search className="w-6 h-6" />}
 />
@@ -113,9 +120,16 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
 <EmptyState
   variant="error"
   title="Failed to load"
-  currentPath={currentPath}
   description="An error occurred. Please try again."
   primaryAction={{ label: 'Retry', onClick: handleRetry }}
+/>
+
+// With custom action element (e.g., Link)
+<EmptyState
+  title="Access denied"
+  variant="no-permission"
+  description="Contact your administrator to request access."
+  action={<a href="/support" className="text-orange-600 underline">Contact Support</a>}
 />`} />
     </section>
 
@@ -125,8 +139,10 @@ import { Search, Lock, AlertTriangle } from 'lucide-react';
         <li><strong>No icon provided</strong> — Falls back to variant default icon.</li>
         <li><strong>No actions</strong> — Renders without action buttons.</li>
         <li><strong>Single action</strong> — Only primary button shows.</li>
-        <li><strong>Custom content</strong> — Icon + text can be entirely custom.</li>
+        <li><strong>action vs primaryAction</strong> — <code>action</code> (ReactNode) takes precedence over <code>primaryAction</code> when both are provided.</li>
+        <li><strong>Custom action</strong> — Use <code>action</code> prop for any ReactNode (Button, Link, custom elements).</li>
         <li><strong>Loading variant</strong> — Shows animated spinner instead of icon.</li>
+        <li><strong>Illustration override</strong> — <code>illustration</code> replaces the icon wrapper entirely.</li>
       </ul>
     </section>
 

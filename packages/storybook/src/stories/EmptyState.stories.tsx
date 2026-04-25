@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { EmptyState } from './stubs';
-import { Search, Lock, Database, AlertTriangle } from 'lucide-react';
+import { Search, Lock, Database, AlertTriangle, Plus } from 'lucide-react';
 
 const meta: Meta<typeof EmptyState> = {
   title: 'Components/EmptyState',
@@ -59,6 +59,30 @@ export const WithActions: Story = {
     icon: <Database className="w-6 h-6" />,
     primaryAction: { label: 'Create Project', onClick: () => {} },
     secondaryAction: { label: 'Learn more', onClick: () => {} },
+  },
+};
+
+export const WithActionProp: Story = {
+  args: {
+    title: 'No projects yet',
+    description: 'Get started by creating your first project.',
+    icon: <Database className="w-6 h-6" />,
+    action: (
+      <button className="inline-flex items-center justify-center rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700">
+        <Plus className="w-4 h-4 mr-1.5" />
+        Create Project
+      </button>
+    ),
+  },
+};
+
+export const WithCustomLinkAction: Story = {
+  args: {
+    title: 'Access denied',
+    variant: 'no-permission',
+    description: 'Contact your administrator to request access.',
+    icon: <Lock className="w-6 h-6" />,
+    action: <a href="/support" className="text-orange-600 underline text-sm">Contact Support →</a>,
   },
 };
 
