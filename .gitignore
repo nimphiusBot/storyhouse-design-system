@@ -11,3 +11,4 @@ dist/
 packages/docs/.astro/
 storybook-static/
 _site/
+memory/
