@@ -342,8 +342,7 @@ export function DataTable<T>({
                     <td
                       colSpan={
                         columns.length +
-                        (selectable ? 1 : 0) +
-                        (expandable ? 1 : 0)
+                        (selectable ? 1 : 0)
                       }
                       className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50"
                     >
