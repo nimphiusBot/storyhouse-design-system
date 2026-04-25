@@ -56,6 +56,10 @@ export interface DataTableProps<T> {
   selectedRows?: Set<string | number>;
   onSelectionChange?: (selected: Set<string | number>) => void;
   sortable?: boolean;
+  /** Controlled sort key — when provided, sort state is controlled by the parent */
+  sortKey?: string;
+  /** Controlled sort direction — when provided, sort state is controlled by the parent */
+  sortDirection?: 'asc' | 'desc';
   defaultSortKey?: string;
   defaultSortDirection?: 'asc' | 'desc';
   onSort?: (key: string, direction: 'asc' | 'desc') => void;
@@ -84,6 +88,8 @@ export function DataTable<T>({
   selectedRows = new Set(),
   onSelectionChange,
   sortable = false,
+  sortKey: controlledSortKey,
+  sortDirection: controlledSortDirection,
   defaultSortKey,
   defaultSortDirection = 'asc',
   onSort,
@@ -102,13 +108,24 @@ export function DataTable<T>({
   className,
   onRowClick,
 }: DataTableProps<T>): React.ReactElement | null {
-  const [sortKey, setSortKey] = useState<string | undefined>(defaultSortKey);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(
-    defaultSortDirection
+  // Controlled vs uncontrolled sort state
+  const isSortControlled = controlledSortKey !== undefined;
+  const [internalSortKey, setInternalSortKey] = useState<string | undefined>(
+    defaultSortKey ?? controlledSortKey
   );
+  const [internalSortDirection, setInternalSortDirection] = useState<
+    'asc' | 'desc'
+  >(controlledSortDirection ?? defaultSortDirection);
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(
     new Set()
   );
+
+  const sortKey = isSortControlled
+    ? (controlledSortKey ?? undefined)
+    : internalSortKey;
+  const sortDirection = isSortControlled
+    ? (controlledSortDirection ?? 'asc')
+    : internalSortDirection;
 
   const handleSort = (key: string) => {
     if (!sortable) return;
@@ -118,8 +135,10 @@ export function DataTable<T>({
       newDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     }
     // else: clicking a new column preserves the previous direction
-    setSortKey(key);
-    setSortDirection(newDirection);
+    if (!isSortControlled) {
+      setInternalSortKey(key);
+      setInternalSortDirection(newDirection);
+    }
     onSort?.(key, newDirection);
   };
 
