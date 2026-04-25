@@ -13,7 +13,7 @@ const storybookUrl = '/storyhouse-design-system/storybook/?path=/docs/components
 
 const props = [
   { name: 'options', type: 'SelectOption[] | SelectOptionGroup[]', default: '-', description: 'Array of options or grouped options' },
-  { name: 'value', type: 'string | string[]', default: '-', description: 'Controlled value of the select' },
+  { name: 'value', type: 'string', default: '-', description: 'Controlled value of the select (single selection only)' },
   { name: 'defaultValue', type: 'string', default: '-', description: 'Default value for uncontrolled usage' },
   { name: 'onChange', type: '(value: string) => void', default: '-', description: 'Callback when selection changes' },
   { name: 'label', type: 'string', default: '-', description: 'Label text above the select' },
