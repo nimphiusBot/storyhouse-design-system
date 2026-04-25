@@ -46,24 +46,40 @@ const isBrowser = typeof document !== 'undefined';
  * @param locked - Whether this consumer is actively requesting a scroll lock.
  */
 export function useBodyScrollLock(locked: boolean): void {
-  const isLockedRef = useRef(false);
+  // Each render generates a new generation counter. The effect body bakes in
+  // the generation at the time it runs. The cleanup only releases the lock if
+  // its generation still matches (meaning no newer effect body superseded it).
+  // This fixes the React deps-change ordering issue: when `locked` changes,
+  // cleanup (old gen) fires first but is a no-op because the generation
+  // doesn't match, and the new effect body handles the transition correctly.
+  const genRef = useRef(0);
+  const lockedRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     if (!isBrowser) return;
 
-    if (locked && !isLockedRef.current) {
-      isLockedRef.current = true;
-      acquireLock();
-    }
+    const currentGen = ++genRef.current;
 
-    if (!locked && isLockedRef.current) {
-      isLockedRef.current = false;
+    // If the previous effect had the lock and we're transitioning out,
+    // release it — this runs after the old cleanup has already been
+    // suppressed by generation mismatch.
+    if (!locked && lockedRef.current === true) {
+      lockedRef.current = false;
       releaseLock();
     }
 
+    if (locked && lockedRef.current !== true) {
+      lockedRef.current = true;
+      acquireLock();
+    }
+
     return () => {
-      if (isLockedRef.current) {
-        isLockedRef.current = false;
+      // Only release if no newer effect body has run (i.e. genuine unmount,
+      // not a deps-change superseding). If a newer body ran, it incremented
+      // genRef, so the cleanup's gen is stale.
+      if (currentGen !== genRef.current) return;
+      if (lockedRef.current === true) {
+        lockedRef.current = false;
         releaseLock();
       }
     };
