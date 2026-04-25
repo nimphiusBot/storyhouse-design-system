@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Youtube, Music, Instagram, Facebook } from 'lucide-react';
+import { Youtube, Instagram, Facebook } from 'lucide-react';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -36,9 +36,34 @@ export interface SocialIconProps {
   external?: boolean;
 }
 
+/**
+ * TikTokIcon — custom SVG icon for TikTok brand, not available in lucide-react.
+ */
+const TikTokIcon: React.FC<{ size?: number; className?: string }> = ({ size = 20, className }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M9 8h-1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1" />
+    <path d="M15 2v7a4 4 0 0 0 4 4h1" />
+    <path d="M15 5a4 4 0 0 0-3.6-2.2c-1.3 0-2.4.6-3.1 1.6A4 4 0 0 0 9 12h0" />
+    <circle cx="9" cy="15" r="2" />
+  </svg>
+);
+
+TikTokIcon.displayName = 'TikTokIcon';
+
 const iconMap: Record<SocialIconType, React.FC<{ size?: number; className?: string }>> = {
   youtube: Youtube,
-  tiktok: Music,
+  tiktok: TikTokIcon,
   instagram: Instagram,
   facebook: Facebook,
 };
