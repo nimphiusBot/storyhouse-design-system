@@ -4,6 +4,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { X } from 'lucide-react';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -94,22 +95,8 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  // Prevent body scroll when panel is open
-  useEffect(() => {
-    if (isOpen) {
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [isOpen]);
+  // Stack-aware body scroll lock — coordinates with Modal, SlidePanel, ThumbnailLightbox, etc.
+  useBodyScrollLock(isOpen);
 
   const sizeClasses = {
     sm: 'max-w-md',

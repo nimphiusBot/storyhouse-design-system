@@ -1,1 +1,2 @@
 {"type":"memory.recall.recorded","timestamp":"2026-04-25T04:58:05.864Z","query":"Linear API key location storyhouse-main","resultCount":2,"results":[{"path":"memory/2026-04-24.md","startLine":25,"endLine":48,"score":0.6319431817004516},{"path":"memory/2026-04-24.md","startLine":1,"endLine":32,"score":0.6315050799498636}]}
+{"type":"memory.recall.recorded","timestamp":"2026-04-25T15:51:55.795Z","query":"Linear team ID 38de7b4b","resultCount":1,"results":[{"path":"memory/2026-04-24.md","startLine":25,"endLine":48,"score":0.6319431817004516}]}

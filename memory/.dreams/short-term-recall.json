@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-25T04:58:05.864Z",
+  "updatedAt": "2026-04-25T15:51:55.795Z",
   "entries": {
     "memory:memory/2026-04-24.md:25:48": {
       "key": "memory:memory/2026-04-24.md:25:48",
@@ -9,15 +9,16 @@
       "endLine": 48,
       "source": "memory",
       "snippet": "**Commit:** `b41b27a` — pushed to main, CI/CD triggered. ## ORA-109: ToggleSwitch Docs Overhaul Investigated ORA-109 (ToggleSwitch: Missing disabled prop and onChange handler). **Finding:** The ToggleSwitch component already had `disabled` and `onChange` props defined in its TypeScript interface and implemented in the component. Tests (13/13) pass covering both props. **What was done:** - Rewrote the ToggleSwitch docs page to match the production docs pattern - Added `status=\"stable\"` to DocLayout - Added `label` and `ariaLabel` to PropsTable (were completely missing) - Added `disabled` and `onChange` as required props with clear descriptions - Added comprehensive usage examples: basic t",
-      "recallCount": 1,
+      "recallCount": 2,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.6319431817004516,
+      "totalScore": 1.2638863634009032,
       "maxScore": 0.6319431817004516,
       "firstRecalledAt": "2026-04-25T04:58:05.864Z",
-      "lastRecalledAt": "2026-04-25T04:58:05.864Z",
+      "lastRecalledAt": "2026-04-25T15:51:55.795Z",
       "queryHashes": [
-        "452f2e400263"
+        "452f2e400263",
+        "dd029a3a54eb"
       ],
       "recallDays": [
         "2026-04-25"
