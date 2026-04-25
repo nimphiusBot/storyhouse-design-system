@@ -26,6 +26,7 @@ export const Toast: React.FC<ToastProps> = ({
   type = 'success',
   show = true,
   duration = 3000,
+  position = 'top-right',
   onClose,
 }) => {
   useEffect(() => {
@@ -87,24 +88,26 @@ export const Toast: React.FC<ToastProps> = ({
   const Icon = config.icon;
 
   return (
-    <div className="animate-in fade-in duration-300">
-      <div
-        className={`rounded-lg shadow-lg p-4 border max-w-sm ${config.bgColor} ${config.textColor} ${config.borderColor}`}
-      >
-        <div className="flex items-start space-x-3">
-          <Icon className={`w-5 h-5 mt-0.5 ${config.iconColor}`} />
-          <div className="flex-1">
-            <p className="text-sm font-medium">{message}</p>
+    <div className={`fixed z-[60] ${positionClasses[position]}`}>
+      <div className="animate-in fade-in duration-300">
+        <div
+          className={`rounded-lg shadow-lg p-4 border max-w-sm ${config.bgColor} ${config.textColor} ${config.borderColor}`}
+        >
+          <div className="flex items-start space-x-3">
+            <Icon className={`w-5 h-5 mt-0.5 ${config.iconColor}`} />
+            <div className="flex-1">
+              <p className="text-sm font-medium">{message}</p>
+            </div>
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                title="Close notification"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              title="Close notification"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
         </div>
       </div>
     </div>
