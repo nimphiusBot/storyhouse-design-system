@@ -46,42 +46,35 @@ const isBrowser = typeof document !== 'undefined';
  * @param locked - Whether this consumer is actively requesting a scroll lock.
  */
 export function useBodyScrollLock(locked: boolean): void {
-  // Tracks what the previous effect body committed to the lock state.
-  // The cleanup reads this and only releases when the effect that set it
-  // still "owns" the lock (no newer effect body has taken over).
-  // This correctly handles dependency-change ordering: cleanup (old effect)
-  // fires *before* the new effect body, so prevLockedRef still reflects the
-  // old effect's intent.  The new effect body then reads the (already-updated)
-  // ref and decides whether to acquire/release based on the new `locked` prop.
-  const prevLockedRef = useRef<boolean | null>(null);
+  // Track whether this hook instance currently holds a lock, so both the
+  // transition effect and the unmount cleanup can reliably decide whether
+  // to release.
+  const ownsLockRef = useRef(false);
 
+  // Acquire/release on transition
   useEffect(() => {
     if (!isBrowser) return;
 
-    const prevLocked = prevLockedRef.current;
-
-    if (locked && prevLocked !== true) {
-      // Transitioning from not-locked → locked
-      prevLockedRef.current = true;
-      acquireLock();
-    } else if (!locked && prevLocked === true) {
-      // Transitioning from locked → not-locked
-      prevLockedRef.current = false;
+    if (locked) {
+      if (!ownsLockRef.current) {
+        acquireLock();
+        ownsLockRef.current = true;
+      }
+    } else if (ownsLockRef.current) {
       releaseLock();
-    } else {
-      // No change — keep prevLockedRef in sync
-      prevLockedRef.current = locked;
+      ownsLockRef.current = false;
     }
+  }, [locked]);
 
+  // Release on unmount (only if we still hold the lock)
+  useEffect(() => {
     return () => {
-      // Cleanup fires on unmount OR before a new effect for the same deps.
-      // Only release if we still hold the lock (no subsequent effect took over).
-      if (prevLockedRef.current === true) {
-        prevLockedRef.current = false;
+      if (ownsLockRef.current) {
+        ownsLockRef.current = false;
         releaseLock();
       }
     };
-  }, [locked]);
+  }, []);
 }
 
 export default useBodyScrollLock;
