@@ -6,6 +6,21 @@ function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Inline keyframes for the shimmer animation.
+ * These are injected via a <style> tag so the animation works even when
+ * the consuming app doesn't have the Tailwind shimmer keyframe configured.
+ */
+const SHIMMER_KEYFRAMES = `
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-skeleton-shimmer {
+  animation: skeleton-shimmer 1.5s infinite;
+}
+`;
+
 export interface SkeletonProps {
   /** Width of the skeleton */
   width?: string | number;
@@ -62,13 +77,13 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const baseClass = cn(
     'relative overflow-hidden bg-gray-200 dark:bg-gray-700',
     roundedClasses[rounded],
+    'animate-skeleton-shimmer',
     className
   );
 
   const shimmerClass = cn(
     'absolute inset-0 -translate-x-full',
     'bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent',
-    'animate-shimmer'
   );
 
   const style: React.CSSProperties = {};
@@ -78,7 +93,11 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const skeletonItem = (key: number, itemWidth?: string | number) => (
     <div
       key={key}
-      className={baseClass}
+      className={cn(
+        'relative overflow-hidden bg-gray-200 dark:bg-gray-700',
+        roundedClasses[rounded],
+        'animate-skeleton-shimmer',
+      )}
       style={{
         ...style,
         width: itemWidth !== undefined
@@ -93,25 +112,29 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     </div>
   );
 
-  if (count && count > 1) {
-    return (
-      <div className={cn('flex', direction === 'column' ? 'flex-col' : 'flex-row', gap)}>
-        {Array.from({ length: count }).map((_, i) =>
-          skeletonItem(
-            i,
-            width
-              ? typeof width === 'number' ? `${width}px` : width
-              : `${100 - i * 15}%`
-          )
-        )}
-      </div>
-    );
-  }
-
-  return (
+  const skeletonEl = count && count > 1 ? (
+    <div className={cn('flex', direction === 'column' ? 'flex-col' : 'flex-row', gap)}>
+      {Array.from({ length: count }).map((_, i) =>
+        skeletonItem(
+          i,
+          width
+            ? typeof width === 'number' ? `${width}px` : width
+            : `${100 - i * 15}%`
+        )
+      )}
+    </div>
+  ) : (
     <div className={baseClass} style={style}>
       <div className={shimmerClass} />
     </div>
+  );
+
+  return (
+    <>
+      {/* Inject shimmer keyframes once into <head> */}
+      <style>{SHIMMER_KEYFRAMES}</style>
+      {skeletonEl}
+    </>
   );
 };
 
