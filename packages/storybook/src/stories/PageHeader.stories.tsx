@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { PageHeader, PageHeaderTop, PageHeaderMiddle, PageHeaderTabs, PageHeaderBottom } from '../stubs';
+import { PageHeader, PageHeaderTop, PageHeaderMiddle, PageHeaderTabs, PageHeaderBottom } from './stubs';
 import {
   Settings, Users, BarChart3, FileText, Plus, Download, Filter,
   Camera, Clock, CheckCircle2, AlertCircle, Loader2,
