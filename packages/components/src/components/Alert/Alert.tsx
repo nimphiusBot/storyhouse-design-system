@@ -150,7 +150,7 @@ export const Alert: React.FC<AlertProps> = ({
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500',
             config.closeHover
           )}
-          aria-label="Dismiss"
+          aria-label={`Dismiss ${variant} alert`}
         >
           <X className={cn('h-4 w-4', config.closeIcon)} />
         </button>
