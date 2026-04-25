@@ -60,42 +60,59 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   gap = 'gap-3',
 }) => {
   const baseClass = cn(
-    'animate-pulse bg-gray-200 dark:bg-gray-700',
+    'relative overflow-hidden bg-gray-200 dark:bg-gray-700',
     roundedClasses[rounded],
     className
+  );
+
+  const shimmerClass = cn(
+    'absolute inset-0 -translate-x-full',
+    'bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent',
+    'animate-shimmer'
   );
 
   const style: React.CSSProperties = {};
   if (width) style.width = typeof width === 'number' ? `${width}px` : width;
   if (height) style.height = typeof height === 'number' ? `${height}px` : height;
 
+  const skeletonItem = (key: number, itemWidth?: string | number) => (
+    <div
+      key={key}
+      className={baseClass}
+      style={{
+        ...style,
+        width: itemWidth !== undefined
+          ? typeof itemWidth === 'number' ? `${itemWidth}px` : itemWidth
+          : style.width,
+        height: height
+          ? typeof height === 'number' ? `${height}px` : height
+          : '0.75rem',
+      }}
+    >
+      <div className={shimmerClass} />
+    </div>
+  );
+
   if (count && count > 1) {
     return (
       <div className={cn('flex', direction === 'column' ? 'flex-col' : 'flex-row', gap)}>
-        {Array.from({ length: count }).map((_, i) => (
-          <div
-            key={i}
-            className={baseClass}
-            style={{
-              ...style,
-              width: width
-                ? typeof width === 'number'
-                  ? `${width}px`
-                  : width
-                : `${100 - i * 15}%`,
-              height: height
-                ? typeof height === 'number'
-                  ? `${height}px`
-                  : height
-                : '0.75rem',
-            }}
-          />
-        ))}
+        {Array.from({ length: count }).map((_, i) =>
+          skeletonItem(
+            i,
+            width
+              ? typeof width === 'number' ? `${width}px` : width
+              : `${100 - i * 15}%`
+          )
+        )}
       </div>
     );
   }
 
-  return <div className={baseClass} style={style} />;
+  return (
+    <div className={baseClass} style={style}>
+      <div className={shimmerClass} />
+    </div>
+  );
 };
 
 Skeleton.displayName = 'Skeleton';

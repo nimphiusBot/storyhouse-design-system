@@ -6,7 +6,7 @@ describe('Skeleton', () => {
   it('renders with default classes', () => {
     const { container } = render(<Skeleton className="h-4 w-48" />);
     const el = container.firstChild as HTMLElement;
-    expect(el.className).toContain('animate-pulse');
+    expect(el.className).toContain('animate-shimmer');
   });
 
   it('renders with custom dimensions', () => {
