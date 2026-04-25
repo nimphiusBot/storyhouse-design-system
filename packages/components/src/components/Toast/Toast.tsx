@@ -89,6 +89,7 @@ export const Toast: React.FC<ToastProps> = ({
               onClick={onClose}
               className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               title="Close notification"
+              aria-label="Close notification"
             >
               <X className="w-4 h-4" />
             </button>
@@ -116,7 +117,7 @@ export const useToast = (): ToastContext => {
 
   const showToast = React.useCallback(
     (message: string, type: Required<ToastProps>['type'] = 'success', duration: number = 3000) => {
-      const id = Date.now().toString();
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       setToasts((prev) => [...prev, { id, message, type, duration }]);
     },
     []
