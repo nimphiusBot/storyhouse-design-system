@@ -69,18 +69,23 @@ export const Accordion: React.FC<AccordionProps> = ({
   const isControlled = controlledValue !== undefined;
   const openItems = isControlled ? controlledValue : internalValue;
 
+  // Keep a ref so toggleItem always reads the latest openItems without recreating the callback
+  const openItemsRef = React.useRef(openItems);
+  openItemsRef.current = openItems;
+
   const toggleItem = React.useCallback(
     (itemValue: string) => {
-      const next = openItems.includes(itemValue)
-        ? openItems.filter((v) => v !== itemValue)
+      const current = openItemsRef.current;
+      const next = current.includes(itemValue)
+        ? current.filter((v) => v !== itemValue)
         : type === 'single'
           ? [itemValue]
-          : [...openItems, itemValue];
+          : [...current, itemValue];
 
       if (!isControlled) setInternalValue(next);
       onValueChange?.(next);
     },
-    [openItems, type, isControlled, onValueChange]
+    [type, isControlled, onValueChange]
   );
 
   const variants: Record<string, string> = {

@@ -132,7 +132,7 @@ async function main() {
     
     const states = data.data?.workflowStates?.nodes || [];
     const teamId = issue.team?.id;
-    const match = states.find((s: any) => s.name === targetState && s.team?.id === teamId);
+    const match = states.find((s) => s.name === targetState && s.team?.id === teamId);
     
     if (!match) {
       console.error(`❌ State "${targetState}" not found for team ${issue.team?.key}`);
