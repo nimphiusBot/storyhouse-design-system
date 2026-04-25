@@ -152,7 +152,8 @@ describe('DataTable', () => {
   it('renders striped variant', () => {
     const { container } = render(<DataTable data={data} columns={columns} striped={true} />);
     const tbody = container.querySelector('tbody');
-    expect(tbody!.className).toContain('striped');
+    // The component uses Tailwind arbitrary variant: [&>*:nth-child(even)]:bg-gray-50
+    expect(tbody!.className).toContain('nth-child');
   });
 
   it('renders sticky header', () => {
