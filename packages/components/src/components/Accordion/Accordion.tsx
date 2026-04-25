@@ -202,13 +202,15 @@ export const AccordionContent: React.FC<AccordionContentProps> = ({
   return (
     <div
       className={cn(
-        'overflow-hidden transition-all duration-200',
-        !itemCtx.isOpen && 'hidden',
+        'grid transition-all duration-300 ease-in-out',
+        itemCtx.isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
         className
       )}
     >
-      <div className="px-4 pb-4 pt-2 text-sm text-gray-600 dark:text-gray-400">
-        {children}
+      <div className="overflow-hidden">
+        <div className="px-4 pb-4 pt-2 text-sm text-gray-600 dark:text-gray-400">
+          {children}
+        </div>
       </div>
     </div>
   );
