@@ -64,6 +64,10 @@ export interface ProgressBarProps
   labelPosition?: 'top' | 'bottom' | 'inline';
   /** Custom label text (overrides the default percentage) */
   label?: string;
+  /** ID of an external element to use as the accessible label via aria-labelledby */
+  labelledBy?: string;
+  /** ID of an external element to use as the accessible description via aria-describedby */
+  describedBy?: string;
   /** When true, renders an indeterminate progress bar (spinner-like animation) */
   indeterminate?: boolean;
   /** Accessible value text for screen readers (overrides default percentage/value readout) */
@@ -97,6 +101,14 @@ export interface ProgressBarProps
  *   omits `aria-valuenow` per the ARIA spec.
  * - Use `label` or `valueText` to provide a clear accessible name and value
  *   readout for screen readers.
+ * - Use `labelledBy` to reference an external element ID as the accessible
+ *   name via `aria-labelledby`.
+ * - Use `describedBy` to reference an external element ID as an accessible
+ *   description via `aria-describedby`.
+ * - When `showLabel={true}`, the visible label text is automatically linked
+ *   to the progressbar via `aria-labelledby`.
+ * - The inner fill bar is `aria-hidden="true"` to prevent redundant
+ *   screen-reader announcements.
  *
  * @example
  * ```tsx
@@ -107,6 +119,11 @@ export interface ProgressBarProps
  *   showLabel
  * />
  * <ProgressBar indeterminate size="md" label="Loading..." />
+ * <ProgressBar
+ *   value={60}
+ *   labelledBy="my-label-id"
+ *   describedBy="my-desc-id"
+ * />
  * ```
  */
 const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
@@ -120,6 +137,8 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
       showLabel = false,
       labelPosition = 'top',
       label: customLabel,
+      labelledBy,
+      describedBy,
       indeterminate = false,
       valueText,
       thresholds,
@@ -148,8 +167,14 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
       }
     }
 
+    // Unique ID for associating the visible label with the progressbar
+    const labelId = React.useId();
+
     // Accessible label text
     const accessibleLabel = customLabel || `Progress`;
+
+    // Compute aria-labelledby: prefer explicit labelledBy, else link to visible label when shown
+    const ariaLabelledby = labelledBy ?? (showLabel ? labelId : undefined);
 
     // ARIA value text for screen readers
     const ariaValueText = valueText ??
@@ -177,7 +202,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {showLabel && labelPosition === 'top' && (
-          <div className="mb-1">{renderLabelChildren()}</div>
+          <div id={labelId} className="mb-1">{renderLabelChildren()}</div>
         )}
 
         {/* The outer track container carries the progressbar role per WAI-ARIA spec */}
@@ -186,12 +211,15 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
           aria-valuenow={indeterminate ? undefined : clampedValue}
           aria-valuemin={0}
           aria-valuemax={max}
-          aria-label={accessibleLabel}
+          aria-label={labelledBy || ariaLabelledby ? undefined : accessibleLabel}
+          aria-labelledby={ariaLabelledby}
+          aria-describedby={describedBy}
           aria-valuetext={ariaValueText}
           aria-busy={indeterminate ? true : undefined}
           className={progressBarVariants({ size, variant })}
         >
           <div
+            aria-hidden="true"
             className={cn(
               progressFillVariants({ variant }),
               indeterminate && 'animate-pulse',
@@ -202,7 +230,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         </div>
 
         {showLabel && labelPosition === 'bottom' && (
-          <div className="mt-1">{renderLabelChildren()}</div>
+          <div id={labelId} className="mt-1">{renderLabelChildren()}</div>
         )}
       </div>
     );

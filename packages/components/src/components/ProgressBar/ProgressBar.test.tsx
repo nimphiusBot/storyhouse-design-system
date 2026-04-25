@@ -56,6 +56,65 @@ describe('ProgressBar', () => {
     });
   });
 
+  describe('aria-labelledby', () => {
+    it('links visible label via aria-labelledby when showLabel is true', () => {
+      render(<ProgressBar value={65} showLabel />);
+      const bar = screen.getByRole('progressbar');
+      const labelId = bar.getAttribute('aria-labelledby');
+      expect(labelId).toBeTruthy();
+      const labelEl = document.getElementById(labelId!);
+      expect(labelEl).toBeInTheDocument();
+      expect(labelEl).toHaveTextContent('Progress');
+    });
+
+    it('does not set aria-label when aria-labelledby is present', () => {
+      render(<ProgressBar value={65} showLabel />);
+      const bar = screen.getByRole('progressbar');
+      expect(bar).not.toHaveAttribute('aria-label');
+    });
+
+    it('uses explicit labelledBy prop over internal label', () => {
+      render(
+        <>
+          <span id="ext-label">Custom Label</span>
+          <ProgressBar value={50} labelledBy="ext-label" />
+        </>
+      );
+      const bar = screen.getByRole('progressbar');
+      expect(bar).toHaveAttribute('aria-labelledby', 'ext-label');
+      expect(bar).not.toHaveAttribute('aria-label');
+    });
+
+    it('still sets aria-label when neither showLabel nor labelledBy is used', () => {
+      render(<ProgressBar value={50} />);
+      const bar = screen.getByRole('progressbar');
+      expect(bar).toHaveAttribute('aria-label', 'Progress');
+      expect(bar).not.toHaveAttribute('aria-labelledby');
+    });
+  });
+
+  describe('aria-describedby', () => {
+    it('sets aria-describedby from describedBy prop', () => {
+      render(
+        <>
+          <span id="desc-text">File upload progress</span>
+          <ProgressBar value={50} describedBy="desc-text" />
+        </>
+      );
+      const bar = screen.getByRole('progressbar');
+      expect(bar).toHaveAttribute('aria-describedby', 'desc-text');
+    });
+  });
+
+  describe('aria-hidden on fill bar', () => {
+    it('marks the inner fill div as aria-hidden', () => {
+      const { container } = render(<ProgressBar value={50} />);
+      const track = container.querySelector('[role="progressbar"]');
+      const fill = track?.querySelector('[aria-hidden="true"]');
+      expect(fill).toBeInTheDocument();
+    });
+  });
+
   describe('indeterminate mode', () => {
     it('sets aria-busy="true" when indeterminate', () => {
       render(<ProgressBar indeterminate label="Loading..." />);
