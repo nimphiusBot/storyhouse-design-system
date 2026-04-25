@@ -231,43 +231,58 @@ export function DataTable<T>({
             {expandable && (
               <th className="px-6 py-3 w-12" />
             )}
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                className={cn(
-                  'px-6 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
-                  dense ? 'py-2' : 'py-3',
-                  column.sortable &&
-                    sortable &&
-                    'cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700',
-                  column.align === 'center' && 'text-center',
-                  column.align === 'right' && 'text-right'
-                )}
-                style={{ width: column.width }}
-                onClick={() =>
-                  column.sortable &&
-                  sortable &&
-                  handleSort(column.sortKey || column.key)
-                }
-              >
-                <div className="flex items-center gap-1">
-                  <span>{column.label}</span>
-                  {column.sortable && sortable && (
-                    <span className="ml-1">
-                      {sortKey === (column.sortKey || column.key) ? (
-                        sortDirection === 'asc' ? (
-                          <ChevronUp className="w-4 h-4" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4" />
-                        )
-                      ) : (
-                        <ChevronsUpDown className="w-4 h-4 text-gray-400" />
-                      )}
-                    </span>
+            {columns.map((column) => {
+              const columnSortKey = column.sortKey || column.key;
+              const isActiveSort = column.sortable && sortable && sortKey === columnSortKey;
+
+              let ariaSort: 'ascending' | 'descending' | 'none' | undefined;
+              if (column.sortable && sortable) {
+                ariaSort = isActiveSort
+                  ? sortDirection === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none';
+              }
+
+              return (
+                <th
+                  key={column.key}
+                  aria-sort={ariaSort}
+                  className={cn(
+                    'px-6 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
+                    dense ? 'py-2' : 'py-3',
+                    column.sortable &&
+                      sortable &&
+                      'cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700',
+                    column.align === 'center' && 'text-center',
+                    column.align === 'right' && 'text-right'
                   )}
-                </div>
-              </th>
-            ))}
+                  style={{ width: column.width }}
+                  onClick={() =>
+                    column.sortable &&
+                    sortable &&
+                    handleSort(columnSortKey)
+                  }
+                >
+                  <div className="flex items-center gap-1">
+                    <span>{column.label}</span>
+                    {column.sortable && sortable && (
+                      <span className="ml-1">
+                        {sortKey === columnSortKey ? (
+                          sortDirection === 'asc' ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )
+                        ) : (
+                          <ChevronsUpDown className="w-4 h-4 text-gray-400" />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody
@@ -303,7 +318,7 @@ export function DataTable<T>({
                       />
                     </td>
                   )}
-                {expandable && (
+                  {expandable && (
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={(e) => {
