@@ -41,5 +41,8 @@
     "clsx": "^2.1.1",
     "lucide-react": "^1.11.0",
     "tailwind-merge": "^3.5.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.60.2"
   }
 }
