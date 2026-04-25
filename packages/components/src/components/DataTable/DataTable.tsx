@@ -214,17 +214,22 @@ export function DataTable<T>({
           )}
         >
           <tr>
-            {selectable && (
+            {(selectable || expandable) && (
               <th className="px-6 py-3 w-12">
-                <DataTableCheckbox
-                  checked={isAllSelected}
-                  indeterminate={isSomeSelected}
-                  onChange={handleSelectAll}
-                  aria-label="Select all rows"
-                />
+                {selectable && (
+                  <div className="flex items-center gap-1">
+                    {selectable && (
+                      <DataTableCheckbox
+                        checked={isAllSelected}
+                        indeterminate={isSomeSelected}
+                        onChange={handleSelectAll}
+                        aria-label="Select all rows"
+                      />
+                    )}
+                  </div>
+                )}
               </th>
             )}
-            {expandable && <th className="px-6 py-3 w-12" />}
             {columns.map((column) => (
               <th
                 key={column.key}
@@ -287,34 +292,36 @@ export function DataTable<T>({
                   )}
                   onClick={() => onRowClick?.(item)}
                 >
-                  {selectable && (
+                  {(selectable || expandable) && (
                     <td className="px-6 py-4">
-                      <DataTableCheckbox
-                        checked={isSelected}
-                        onChange={() => handleSelectRow(key)}
-                        onClick={(e) => e.stopPropagation()}
-                        aria-label={`Select row ${index + 1}`}
-                      />
-                    </td>
-                  )}
-                  {expandable && (
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleExpand(key);
-                        }}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        aria-label={
-                          isExpanded ? 'Collapse row' : 'Expand row'
-                        }
-                      >
-                        {isExpanded ? (
-                          <ExpandIcon className="w-5 h-5" />
-                        ) : (
-                          <ChevronRight className="w-5 h-5" />
+                      <div className={selectable && expandable ? 'flex items-center gap-1' : undefined}>
+                        {selectable && (
+                          <DataTableCheckbox
+                            checked={isSelected}
+                            onChange={() => handleSelectRow(key)}
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label={`Select row ${index + 1}`}
+                          />
                         )}
-                      </button>
+                        {expandable && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleExpand(key);
+                            }}
+                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                            aria-label={
+                              isExpanded ? 'Collapse row' : 'Expand row'
+                            }
+                          >
+                            {isExpanded ? (
+                              <ExpandIcon className="w-5 h-5" />
+                            ) : (
+                              <ChevronRight className="w-5 h-5" />
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </td>
                   )}
                   {columns.map((column) => (
@@ -336,8 +343,7 @@ export function DataTable<T>({
                     <td
                       colSpan={
                         columns.length +
-                        (selectable ? 1 : 0) +
-                        (expandable ? 1 : 0)
+                        (selectable || expandable ? 1 : 0)
                       }
                       className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50"
                     >

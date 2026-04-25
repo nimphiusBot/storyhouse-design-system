@@ -162,6 +162,36 @@ describe('DataTable', () => {
     expect(thead!.className).toContain('sticky');
   });
 
+  it('renders selectable and expandable in one action column', () => {
+    const { container } = render(
+      <DataTable
+        data={data}
+        columns={columns}
+        selectable={true}
+        expandable={true}
+        renderExpandedRow={(item) => <div>Expanded {item.name}</div>}
+      />
+    );
+
+    // Expand first row
+    const expandButtons = screen.getAllByLabelText('Expand row');
+    fireEvent.click(expandButtons[0]!);
+
+    // The expanded row should be visible
+    expect(screen.getByText('Expanded Alice')).toBeInTheDocument();
+
+    // The action column td should contain both checkbox and expand button
+    const tds = container.querySelectorAll('tbody tr td');
+    // First cell should contain both a checkbox and a button
+    const firstCell = tds[0]!;
+    expect(firstCell.querySelector('input[type="checkbox"]')).toBeInTheDocument();
+    expect(firstCell.querySelector('button')).toBeInTheDocument();
+
+    // The expanded row td should have colSpan = columns.length + 1
+    const expandedTd = container.querySelector('tbody td[colspan]');
+    expect(expandedTd?.getAttribute('colspan')).toBe('3'); // 2 columns + 1 action
+  });
+
   it('uses custom key extractor', () => {
     const keyExtractor = (item: TestItem) => item.id;
     const { container } = render(
