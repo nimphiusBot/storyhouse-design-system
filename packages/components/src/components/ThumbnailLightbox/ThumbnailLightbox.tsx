@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, Download } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -74,8 +74,26 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
 }) => {
   // Use a ref to hold the latest onClose to prevent stale closures
   // and avoid re-registering the listener when onClose reference changes.
+  // Track animation/mounting state so the body scroll lock is held
+  // during the full lifecycle: entering, visible, and exit animation.
+  // This prevents closing one overlay from releasing the lock when
+  // another overlay is still open behind it.
+  const [shouldRender, setShouldRender] = useState(false);
+
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
+
+  // Manage render lifecycle with a short delay to allow exit animations
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+    } else {
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // Close on Escape key — only active when lightbox is open
   useEffect(() => {
@@ -94,9 +112,11 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   }, [isOpen]);
 
   // Stack-aware body scroll lock — coordinates with Modal, SlidePanel, etc.
-  useBodyScrollLock(isOpen);
+  // Uses isOpen || shouldRender so the lock is held through the full lifecycle:
+  // initial render, panel visible, and close animation.
+  useBodyScrollLock(isOpen || shouldRender);
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   const handleDownload = async () => {
     /**

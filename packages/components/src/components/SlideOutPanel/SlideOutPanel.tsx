@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -57,12 +57,30 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
   size = 'md',
   initialFocusSelector,
 }) => {
+  // Track animation/mounting state so the body scroll lock is held
+  // during the full lifecycle: entering, visible, and exit animation.
+  // This prevents closing one overlay from releasing the lock when
+  // another overlay is still open behind it.
+  const [shouldRender, setShouldRender] = useState(false);
+
   const panelRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
+  // Manage render lifecycle with a short delay to allow exit animations
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+    } else {
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   // Focus trap
   useFocusTrap({
-    enabled: isOpen,
+    enabled: isOpen && shouldRender,
     containerRef: panelRef,
     autoFocus: true,
     initialFocusSelector,
@@ -70,7 +88,7 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
 
   // Save and restore focus on open/close
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && shouldRender) {
       previousActiveElement.current = document.activeElement as HTMLElement;
     }
     return () => {
@@ -79,11 +97,11 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
         previousActiveElement.current = null;
       }
     };
-  }, [isOpen]);
+  }, [isOpen, shouldRender]);
 
   // Handle escape key
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !shouldRender) return;
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -93,10 +111,11 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen, shouldRender, onClose]);
 
   // Stack-aware body scroll lock — coordinates with Modal, SlidePanel, ThumbnailLightbox, etc.
-  useBodyScrollLock(isOpen);
+  // Uses isOpen || shouldRender so the lock is held through the full lifecycle.
+  useBodyScrollLock(isOpen || shouldRender);
 
   const sizeClasses = {
     sm: 'max-w-md',
@@ -105,7 +124,7 @@ export const SlideOutPanel: React.FC<SlideOutPanelProps> = ({
     xl: 'max-w-4xl',
   };
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   const panelContent = (
     <div className="fixed inset-0 z-50 overflow-hidden">
