@@ -53,7 +53,7 @@ export interface SelectOptionGroup {
 }
 
 export interface SelectProps
-  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size'>,
+  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'value'>,
     VariantProps<typeof selectVariants> {
   label?: string;
   error?: string;
@@ -61,6 +61,8 @@ export interface SelectProps
   options?: (SelectOption | SelectOptionGroup)[];
   placeholder?: string;
   fullWidth?: boolean;
+  /** Controlled value (single selection only) */
+  value?: string;
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
