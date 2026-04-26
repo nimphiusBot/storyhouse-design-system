@@ -46,7 +46,11 @@ describe('SlidePanel', () => {
         <p>Content</p>
       </SlidePanel>,
     );
-    const overlay = document.querySelector('[aria-hidden="true"]');
+    // Find the overlay (backdrop) — it's the first element inside the portal wrapper
+    // with the transition-opacity class (not siblings modified by body-scroll-lock).
+    const portal = document.querySelector('.fixed.inset-0.z-50');
+    expect(portal).toBeTruthy();
+    const overlay = portal?.querySelector('[aria-hidden="true"]');
     expect(overlay).toBeTruthy();
     if (overlay) fireEvent.click(overlay);
     expect(onClose).toHaveBeenCalledOnce();
@@ -59,7 +63,8 @@ describe('SlidePanel', () => {
         <p>Content</p>
       </SlidePanel>,
     );
-    const overlay = document.querySelector('[aria-hidden="true"]');
+    const portal = document.querySelector('.fixed.inset-0.z-50');
+    const overlay = portal?.querySelector('[aria-hidden="true"]');
     if (overlay) fireEvent.click(overlay);
     expect(onClose).not.toHaveBeenCalled();
   });

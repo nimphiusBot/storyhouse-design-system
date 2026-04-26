@@ -47,9 +47,11 @@ describe('FilterBar', () => {
       },
     ];
     render(<FilterBar filters={filters} onSearchChange={vi.fn()} />);
-    // The Select renders as a native <select> element
-    const selects = document.querySelectorAll('select');
-    expect(selects.length).toBeGreaterThanOrEqual(1);
+    // The Select is a custom component, not a native <select>.
+    // Verify a combobox trigger button renders with the placeholder text.
+    const trigger = screen.getByRole('combobox');
+    expect(trigger).toBeTruthy();
+    expect(trigger.textContent).toBeTruthy();
   });
 
   it('renders boolean filter config', () => {

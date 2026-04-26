@@ -173,14 +173,16 @@ describe('Tooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('applies custom className', () => {
+  it('applies custom className to wrapper', () => {
     render(
       <Tooltip content="Tooltip" className="inline-block">
         <button>Hover</button>
       </Tooltip>
     );
-    const container = screen.getByText('Hover').parentElement!;
-    expect(container.className).toContain('inline-block');
+    // The Tooltip wraps children in a <div ref={childRef}>, whose parent
+    // is the outer Tooltip wrapper with the className.
+    const wrapper = screen.getByText('Hover').parentElement!.parentElement!;
+    expect(wrapper.className).toContain('inline-block');
   });
 
   it('renders arrow element', () => {
