@@ -13,6 +13,15 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  async viteFinal(config) {
+    const { defineConfig } = await import('vite');
+    return defineConfig({
+      ...config,
+      css: {
+        postcss: './postcss.config.js',
+      },
+    });
+  },
   docs: {
     autodocs: 'tag',
   },
