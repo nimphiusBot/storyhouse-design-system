@@ -55,7 +55,7 @@ const currentPath = base + 'components/filter-bar';
       rows={[
         { name: 'key', type: 'string', default: '-', description: 'Unique identifier for the filter.' },
         { name: 'label', type: 'string', default: '-', description: 'Display label for the filter.' },
-        { name: 'type', type: "'select' | 'boolean'", default: '-', description: 'Filter type — dropdown select or toggle button.' },
+        { name: 'type', type: "'select' | 'multi-select' | 'boolean'", default: '-', description: 'Filter type — dropdown select, multi-select with checkboxes, or toggle button.' },
         { name: 'options', type: '{ value: string; label: string }[]', default: '-', description: 'Options for select type filters.' },
         { name: 'value', type: 'any', default: '-', description: 'Current filter value.' },
         { name: 'onChange', type: '(value: any) => void', default: '-', description: 'Callback when filter value changes.' },
@@ -80,6 +80,99 @@ const currentPath = base + 'components/filter-bar';
         { name: 'icon', type: 'React.ReactNode', default: '-', description: 'Optional icon element.' },
       ]}
     />
+  </section>
+
+  <section>
+    <h2 id="multi-select">Multi-Select Filters</h2>
+    <p>
+      When <code>FilterConfig.type</code> is <code>'multi-select'</code>, the filter renders as a
+      dropdown with checkboxes. The <code>value</code> is a <code>string[]</code> and
+      <code>onChange</code> receives the updated array when an option is toggled.
+      Internally, the <code>MultiSelectFilter</code> component handles:
+    </p>
+    <ul>
+      <li><strong>Dropdown toggle</strong> — displays the filter label, selected option label, or count badge (e.g., "Category (2)")</li>
+      <li><strong>Checkbox list</strong> — each option renders with a checkbox and checked state</li>
+      <li><strong>Outside click</strong> — closes the dropdown when clicking outside</li>
+      <li><strong>Scroll overflow</strong> — dropdown caps at <code>max-h-[240px]</code> with scrolling</li>
+    </ul>
+
+    <CodeBlock title="filter-bar-multi-select.tsx" code={`import { FilterBar, type FilterConfig, type ActiveFilter } from '@storyhouse/components';
+import { useState } from 'react';
+
+export function MultiSelectExample() {
+  const [categories, setCategories] = useState<string[]>([]);
+  const [platforms, setPlatforms] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+
+  const filters: FilterConfig[] = [
+    {
+      key: 'category',
+      label: 'Category',
+      type: 'multi-select',
+      options: [
+        { value: 'design', label: 'Design' },
+        { value: 'development', label: 'Development' },
+        { value: 'marketing', label: 'Marketing' },
+      ],
+      value: categories,
+      onChange: (val) => {
+        const arr = val as string[];
+        setCategories(arr);
+        setActiveFilters(arr.map(v => ({
+          key: 'category',
+          label: 'Category',
+          value: v,
+          displayValue: { design: 'Design', development: 'Development', marketing: 'Marketing' }[v],
+        })));
+      },
+    },
+    {
+      key: 'platform',
+      label: 'Platform',
+      type: 'multi-select',
+      options: [
+        { value: 'web', label: 'Web' },
+        { value: 'mobile', label: 'Mobile' },
+        { value: 'api', label: 'API' },
+      ],
+      value: platforms,
+      onChange: (val) => setPlatforms(val as string[]),
+    },
+  ];
+
+  return (
+    <FilterBar
+      filters={filters}
+      activeFilters={activeFilters}
+      onRemoveFilter={(key) => {
+        if (key === 'category') setCategories([]);
+        if (key === 'platform') setPlatforms([]);
+        setActiveFilters(activeFilters.filter(f => f.key !== key));
+      }}
+      onClearAll={() => {
+        setCategories([]);
+        setPlatforms([]);
+        setActiveFilters([]);
+      }}
+    />
+  );
+}`} />
+
+    <h3>Desktop Rendering</h3>
+    <p>On desktop (sm+), multi-select filters render as dropdown buttons with a chevron indicator. The trigger button shows:</p>
+    <ul>
+      <li>Filter label when nothing is selected</li>
+      <li>Selected option label when exactly one is selected</li>
+      <li><code>"Label (N)"</code> when multiple options are selected</li>
+    </ul>
+    <p>When a selection is active, the trigger button gets an orange border and background accent for visual feedback.</p>
+
+    <h3>Mobile Rendering</h3>
+    <p>On mobile, multi-select filters render as inline checkboxes inside the collapsible filter panel, each with a standard checkbox input. This avoids overlay issues on small screens.</p>
+
+    <h3>Value Type</h3>
+    <p>The <code>value</code> prop for multi-select filters is always a <code>string[]</code>. Always initialize to an empty array (<code>[]</code>) to avoid type mismatches. The <code>onChange</code> callback receives the full updated array each time an option is toggled.</p>
   </section>
 
   <section>

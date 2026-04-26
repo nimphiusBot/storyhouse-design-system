@@ -91,6 +91,83 @@ export const Default: Story = {
   },
 };
 
+export const WithMultiSelect: Story = {
+  render: () => {
+    const [categories, setCategories] = useState<string[]>([]);
+    const [platforms, setPlatforms] = useState<string[]>([]);
+    const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+
+    const categoryLabelMap: Record<string, string> = {
+      design: 'Design',
+      development: 'Development',
+      marketing: 'Marketing',
+    };
+
+    const filters: FilterConfig[] = [
+      {
+        key: 'category',
+        label: 'Category',
+        type: 'multi-select',
+        options: [
+          { value: 'design', label: 'Design' },
+          { value: 'development', label: 'Development' },
+          { value: 'marketing', label: 'Marketing' },
+        ],
+        value: categories,
+        onChange: (val) => {
+          const arr = val as string[];
+          setCategories(arr);
+          setActiveFilters((prev) => {
+            const filtered = prev.filter((f) => f.key !== 'category');
+            return [
+              ...filtered,
+              ...arr.map((v) => ({
+                key: 'category',
+                label: 'Category',
+                value: v,
+                displayValue: categoryLabelMap[v],
+              })),
+            ];
+          });
+        },
+      },
+      {
+        key: 'platform',
+        label: 'Platform',
+        type: 'multi-select',
+        options: [
+          { value: 'web', label: 'Web' },
+          { value: 'mobile', label: 'Mobile' },
+          { value: 'api', label: 'API' },
+        ],
+        value: platforms,
+        onChange: (val) => {
+          setPlatforms(val as string[]);
+        },
+      },
+    ];
+
+    return (
+      <FilterBar
+        filters={filters}
+        activeFilters={activeFilters}
+        onRemoveFilter={(key) => {
+          if (key === 'category') {
+            setCategories([]);
+            setActiveFilters((prev) => prev.filter((f) => f.key !== 'category'));
+          }
+          if (key === 'platform') setPlatforms([]);
+        }}
+        onClearAll={() => {
+          setCategories([]);
+          setPlatforms([]);
+          setActiveFilters([]);
+        }}
+      />
+    );
+  },
+};
+
 export const WithPresets: Story = {
   render: () => {
     const [search, setSearch] = useState('');
