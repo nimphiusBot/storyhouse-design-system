@@ -1,11 +1,20 @@
 import React, { useEffect } from 'react';
 import { X, CheckCircle, XCircle, AlertCircle, Info } from 'lucide-react';
 
+export type ToastPosition = 
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top-center'
+  | 'bottom-center';
+
 export interface ToastProps {
   message: string;
   type?: 'success' | 'error' | 'warning' | 'info';
   show?: boolean;
   duration?: number;
+  position?: ToastPosition;
   onClose?: () => void;
 }
 
@@ -77,12 +86,12 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <div className="animate-in slide-in-from-right duration-300">
       <div
-        className={`rounded-lg shadow-lg p-4 border max-w-sm ${config.bgColor} ${config.textColor} ${config.borderColor}`}
+        className={`rounded-lg shadow-lg p-4 border max-w-sm w-full sm:max-w-sm ${config.bgColor} ${config.textColor} ${config.borderColor}`}
       >
         <div className="flex items-start space-x-3">
           <Icon className={`w-5 h-5 mt-0.5 ${config.iconColor}`} />
-          <div className="flex-1">
-            <p className="text-sm font-medium">{message}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium break-words">{message}</p>
           </div>
           {onClose && (
             <button
@@ -100,20 +109,20 @@ export const Toast: React.FC<ToastProps> = ({
   );
 };
 
+interface ToastData {
+  id: string;
+  message: string;
+  type: Required<ToastProps>['type'];
+  duration?: number;
+}
+
 interface ToastContext {
   showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info', duration?: number) => void;
   ToastContainer: React.FC;
 }
 
 export const useToast = (): ToastContext => {
-  const [toasts, setToasts] = React.useState<
-    Array<{
-      id: string;
-      message: string;
-      type: Required<ToastProps>['type'];
-      duration?: number;
-    }>
-  >([]);
+  const [toasts, setToasts] = React.useState<ToastData[]>([]);
 
   const showToast = React.useCallback(
     (message: string, type: Required<ToastProps>['type'] = 'success', duration: number = 3000) => {
@@ -127,15 +136,15 @@ export const useToast = (): ToastContext => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
-  const ToastContainer = React.useCallback(
+  const ToastContainer: React.FC = React.useCallback(
     () => (
-      <div className="fixed top-4 right-4 z-[60] space-y-2">
+      <div className={`fixed z-[60] space-y-2 top-4 right-4 max-w-[calc(100vw-2rem)] sm:max-w-sm`}>
         {toasts.map((toast) => (
           <Toast
             key={toast.id}
             message={toast.message}
             type={toast.type}
-            {...(typeof toast.duration !== 'undefined' ? { duration: toast.duration } : {})}
+            duration={toast.duration}
             onClose={() => hideToast(toast.id)}
           />
         ))}

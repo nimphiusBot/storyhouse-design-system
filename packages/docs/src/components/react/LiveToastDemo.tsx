@@ -52,8 +52,8 @@ export default function LiveToastDemo(): React.ReactNode {
         </div>
       </div>
 
-      {/* Toast container */}
-      <div className="fixed top-4 right-4 z-50 space-y-2">
+      {/* Toast container — responsive to mobile screens */}
+      <div className="fixed top-4 right-4 md:right-4 left-4 md:left-auto z-50 space-y-2">
         {toasts.map((t) => (
           <DemoToast key={t.id} message={t.message} type={t.type} onClose={() => removeToast(t.id)} />
         ))}

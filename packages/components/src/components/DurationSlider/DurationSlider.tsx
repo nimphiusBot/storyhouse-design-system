@@ -286,6 +286,7 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
           onTouchStart={handleTrackTouchStart}
           className={cn(
             'relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full',
+            'touch-action:manipulation',
             !disabled && 'cursor-pointer'
           )}
         >
@@ -321,10 +322,12 @@ export const DurationSlider: React.FC<DurationSliderProps> = ({
             disabled={disabled}
             className={cn(
               'absolute top-1/2 -translate-y-1/2',
-              'w-6 h-6 bg-white dark:bg-gray-200 rounded-full',
+              'w-8 h-8 sm:w-6 sm:h-6 bg-white dark:bg-gray-200 rounded-full',
               'border-2 border-orange-500 dark:border-orange-400',
               'shadow-lg',
               'transition-all duration-200',
+              'touch-action:manipulation',
+              'select-none',
               'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900',
               'disabled:cursor-not-allowed disabled:opacity-50',
               !disabled && 'hover:scale-110 hover:shadow-xl',
