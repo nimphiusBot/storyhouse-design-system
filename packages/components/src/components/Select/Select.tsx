@@ -232,7 +232,8 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           case ' ':
             e.preventDefault();
             if (focusedIndex >= 0 && focusedIndex < flatOptions.length) {
-              selectOption(flatOptions[focusedIndex]);
+              const opt = flatOptions[focusedIndex];
+              if (opt) selectOption(opt);
             }
             break;
           case 'Escape':
@@ -472,7 +473,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
             className="sr-only"
             tabIndex={-1}
             aria-hidden="true"
-            readOnly
+            aria-readonly="true"
             onChange={() => {}} // Prevent React warning
           >
             {flatOptions.map((opt) => (

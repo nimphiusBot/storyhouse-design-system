@@ -144,6 +144,8 @@ export const Modal: React.FC<ModalProps> = ({
       setShouldRender(true);
       previousActiveElement.current = document.activeElement as HTMLElement;
       setTimeout(() => setIsAnimating(true), 10);
+      // No cleanup needed for open path — component will handle on close
+      return;
     } else {
       setIsAnimating(false);
       const timer = setTimeout(() => {

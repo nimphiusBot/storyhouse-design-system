@@ -87,6 +87,7 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
+      return;
     } else {
       const timer = setTimeout(() => {
         setShouldRender(false);
