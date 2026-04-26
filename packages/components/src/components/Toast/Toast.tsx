@@ -54,11 +54,11 @@ export const Toast: React.FC<ToastProps> = ({
         };
       case 'info':
         return {
-          bgColor: 'bg-orange-50 dark:bg-orange-950',
-          textColor: 'text-orange-800 dark:text-orange-200',
-          borderColor: 'border-orange-200 dark:border-orange-800',
+          bgColor: 'bg-blue-50 dark:bg-blue-950',
+          textColor: 'text-blue-800 dark:text-blue-200',
+          borderColor: 'border-blue-200 dark:border-blue-800',
           icon: Info,
-          iconColor: 'text-orange-500 dark:text-orange-400',
+          iconColor: 'text-blue-500 dark:text-blue-400',
         };
       default:
         return {

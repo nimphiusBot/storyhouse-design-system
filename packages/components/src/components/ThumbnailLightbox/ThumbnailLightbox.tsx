@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Download } from 'lucide-react';
+import { X, Download, Loader2 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Badge } from '../Badge/Badge';
@@ -79,6 +79,8 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   // This prevents closing one overlay from releasing the lock when
   // another overlay is still open behind it.
   const [shouldRender, setShouldRender] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
@@ -117,16 +119,31 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
   // initial render, panel visible, and close animation.
   useBodyScrollLock(isOpen || shouldRender);
 
+  // Reset download error when lightbox opens/closes or imageUrl changes
+  // NOTE: Must be declared before any conditional return to avoid hook order violation
+  useEffect(() => {
+    setDownloadError(null);
+    setIsDownloading(false);
+  }, [imageUrl, isOpen]);
+
   if (!shouldRender) return null;
 
+  /**
+   * Downloads the image via a three-tier strategy:
+   *
+   * 1. **Direct `<a download>`** — Same-origin and CORS-approved images
+   *    (works immediately, no Blob overhead)
+   * 2. **Fetch + Blob** — CORS-enabled external resources
+   * 3. **Open in new tab** — Universal fallback for CORS-restricted images
+   */
   const handleDownload = async () => {
-    /**
-     * Downloads the image via a three-tier strategy:
-     * 1. Direct fetch (CORS-enabled sources)
-     * 2. Canvas-based download (some cross-origin images with CORS headers)
-     * 3. Open in new tab (universal fallback)
-     */
-    const downloadBlob = (blob: Blob, filename: string) => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    setDownloadError(null);
+
+    const filename = `thumbnail-${orientation}`;
+
+    const downloadBlob = (blob: Blob) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -137,50 +154,72 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
       window.URL.revokeObjectURL(url);
     };
 
-    const filename = `thumbnail-${orientation}`;
+    try {
+      // Strategy 1: Direct <a download> — works for same-origin images
+      const isSameOrigin =
+        imageUrl.startsWith(window.location.origin) ||
+        imageUrl.startsWith('/') ||
+        !imageUrl.startsWith('http');
+
+      if (isSameOrigin) {
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setIsDownloading(false);
+        return;
+      }
+    } catch {
+      // Same-origin approach failed, move to next strategy
+    }
 
     try {
-      // Strategy 1: Direct fetch
-      const response = await fetch(imageUrl, { mode: 'cors' });
+      // Strategy 2: Fetch with CORS
+      const response = await fetch(imageUrl, { mode: 'cors', credentials: 'omit' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const blob = await response.blob();
-      downloadBlob(blob, filename);
+      downloadBlob(blob);
+      setIsDownloading(false);
       return;
     } catch (error) {
       console.warn('Fetch download failed (likely CORS), trying canvas approach:', error);
     }
 
     try {
-      // Strategy 2: Load image via crossorigin attribute, draw to canvas, get blob
+      // Strategy 3: Canvas-based download with crossOrigin attribute
       const img = new Image();
       img.crossOrigin = 'anonymous';
       await new Promise<void>((resolve, reject) => {
         img.onload = () => resolve();
-        img.onerror = () => reject(new Error('Image failed to load'));
+        img.onerror = () => reject(new Error('Image failed to load with crossOrigin'));
         img.src = imageUrl;
       });
 
       const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
+      canvas.width = img.naturalWidth || img.width;
+      canvas.height = img.naturalHeight || img.height;
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Could not get canvas context');
       ctx.drawImage(img, 0, 0);
 
-      canvas.toBlob((blob) => {
-        if (blob) {
-          downloadBlob(blob, filename);
-        } else {
-          throw new Error('toBlob returned null');
-        }
-      });
-      return;
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob((b) => resolve(b))
+      );
+      if (blob) {
+        downloadBlob(blob);
+        setIsDownloading(false);
+        return;
+      }
     } catch (error) {
       console.warn('Canvas download failed (CORS taint), opening in new tab:', error);
     }
 
-    // Strategy 3: Fallback — open image in new tab
+    // Strategy 4: Universal fallback — open image in new tab for manual saving
     window.open(imageUrl, '_blank');
+    setDownloadError('Could not download directly. Image opened in new tab for manual saving.');
+    setIsDownloading(false);
   };
 
   const formatDate = (dateString?: string) => {
@@ -248,10 +287,15 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleDownload}
-              className="bg-black/60 hover:bg-black/80 text-white backdrop-blur-sm shadow-lg"
+              disabled={isDownloading}
+              className="bg-black/60 hover:bg-black/80 text-white backdrop-blur-sm shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Download className="w-4 h-4 mr-2" />
-              Download
+              {isDownloading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Download className="w-4 h-4 mr-2" />
+              )}
+              {isDownloading ? 'Downloading…' : 'Download'}
             </Button>
 
             {/* Close Button */}
@@ -274,6 +318,15 @@ export const ThumbnailLightbox: React.FC<ThumbnailLightboxProps> = ({
             className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
           />
         </div>
+
+        {/* Download error toast */}
+        {downloadError && (
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20">
+            <div className="px-4 py-2 bg-yellow-900/90 backdrop-blur-sm text-yellow-200 text-sm rounded-lg shadow-lg border border-yellow-700">
+              {downloadError}
+            </div>
+          </div>
+        )}
 
         {/* Footer with Metadata */}
         {metadata && (
