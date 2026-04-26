@@ -280,7 +280,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 {filter.type === 'select' && (
                   <Select
                     value={filter.value as string}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => filter.onChange(e.target.value)}
+                    onChange={(value: string) => filter.onChange(value)}
                     size="md"
                   >
                     <option value="">{filter.label}</option>
@@ -357,7 +357,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               {filter.type === 'select' && (
                 <Select
                   value={filter.value as string}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => filter.onChange(e.target.value)}
+                  onChange={(value: string) => filter.onChange(value)}
                   size="md"
                   className="w-full"
                 >
