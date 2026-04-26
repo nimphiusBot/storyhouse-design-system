@@ -29,15 +29,13 @@ const props = [
 
 <DocLayout
   title="Textarea"
-  currentPath={currentPath}
   description="A styled multi-line text input component with support for variants, sizes, validation states, auto-resizing, and character counting."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Textarea</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A styled multi-line text input component with support for variants, sizes, validation states,
@@ -147,10 +145,8 @@ export function LimitedTextarea() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-textarea--docs"
       title="Textarea Component"
-      currentPath={currentPath}
     />
   </div>
 </DocLayout>

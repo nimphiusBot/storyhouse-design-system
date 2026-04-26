@@ -27,15 +27,13 @@ const props = [
 
 <DocLayout
   title="ProgressBar"
-  currentPath={currentPath}
   description="A horizontal progress bar component with support for multiple sizes, color variants, threshold-based color coding, and labels."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ProgressBar</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         Displays the progress of a task or operation as a horizontal bar with support for
@@ -132,10 +130,8 @@ export function StorageUsage() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-progress-bar--docs"
       title="ProgressBar Component"
-      currentPath={currentPath}
     />
   </div>
 </DocLayout>

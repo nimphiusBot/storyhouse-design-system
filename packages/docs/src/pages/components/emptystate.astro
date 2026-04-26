@@ -28,14 +28,12 @@ const props = [
 
 <DocLayout
   title="EmptyState"
-  currentPath={currentPath}
   description="A flexible empty state component for displaying no data, no results, errors, permission denials, and loading states with optional actions."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">EmptyState</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         An empty state component for handling edge cases: no data, no search results, errors,
@@ -146,10 +144,8 @@ import { Search, Lock, AlertTriangle, Plus } from 'lucide-react';
       </ul>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-emptystate--docs"
       title="EmptyState Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

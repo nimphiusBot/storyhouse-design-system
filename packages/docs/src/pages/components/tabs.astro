@@ -33,14 +33,12 @@ const tabItemProps = [
 
 <DocLayout
   title="Tabs"
-  currentPath={currentPath}
   description="A tab navigation component for organizing content into switchable panels, with support for icons, badges, and pills variant."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Tabs</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         Organize related content into switchable panels. Supports default underlined and pill
@@ -137,10 +135,8 @@ const tabs = [
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-tabs--docs"
       title="Tabs Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

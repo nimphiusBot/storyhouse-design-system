@@ -27,15 +27,13 @@ const props = [
 
 <DocLayout
   title="AutoRefreshIndicator"
-  currentPath={currentPath}
   description="A compact UI badge that shows auto-refresh state for dashboards, with support for polling, errors, tab-hidden awareness, and data-change highlights."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">AutoRefreshIndicator</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A compact UI badge that shows the auto-refresh state of a dashboard or data view.
@@ -140,10 +138,8 @@ export function PollingIndicator() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-auto-refresh-indicator--docs"
       title="AutoRefreshIndicator Component"
-      currentPath={currentPath}
     />
   </div>
 </DocLayout>

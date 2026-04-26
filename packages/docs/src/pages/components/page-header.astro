@@ -75,15 +75,13 @@ const subcomponentProps = [
 
 <DocLayout
   title="PageHeader"
-  currentPath={currentPath}
   description="A comprehensive page-level header component with support for icons, breadcrumbs, metadata, status indicators, context selectors, toolbars, and tab navigation."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">PageHeader</h1>
-        <StatusBadge status="alpha" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A comprehensive page-level header component that scales from simple titles to complex
@@ -296,10 +294,8 @@ export function CustomHeader() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-page-header--docs"
       title="PageHeader Component"
-      currentPath={currentPath}
     />
   </div>
 </DocLayout>

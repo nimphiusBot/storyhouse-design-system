@@ -31,14 +31,12 @@ const props = [
 
 <DocLayout
   title="Pagination"
-  currentPath={currentPath}
   description="A pagination component for navigating large datasets with page numbers, page size control, and compact variant."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Pagination</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         Navigate large datasets with page numbers, first/last buttons, and a compact variant.
@@ -119,10 +117,8 @@ export function DataPagination() {
       </ul>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-pagination--docs"
       title="Pagination Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

@@ -11,12 +11,15 @@ export interface Props {
 const { id, url, title = 'Interactive Preview', height = '400' } = Astro.props;
 const base = import.meta.env.BASE_URL || '/storyhouse-design-system/';
 
-// Build the iframe URL to point at the specific story
-// Storybook uses kebab-case: "Components/Button" → "components-button"
-// Storybook v8 static builds serve previews through the manager UI via path parameter, not iframe.html
-const storybookIframeUrl = `${base}storybook/?path=/story/${id}&viewMode=story`;
-// Build the "Open in Storybook" link to the canvas view (no sidebar chrome)
-const storybookSplashUrl = `${base}storybook/?path=/story/${id}`;
+// Build the iframe URL — prefer direct URL if provided, otherwise construct from ID
+const storybookIframeUrl = url
+  ? url
+  : `${base}storybook/iframe.html?id=${id || 'undefined'}&viewMode=story`;
+
+// Build the "Open in Storybook" link
+const storybookSplashUrl = url
+  ? url.replace('/iframe.html?', '/?path=/story/')
+  : `${base}storybook/?path=/story/${id}`;
 ---
 
 <div class="my-6 overflow-hidden rounded-xl border border-gray-200 shadow-sm dark:border-gray-800">

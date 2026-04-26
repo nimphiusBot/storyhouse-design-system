@@ -21,14 +21,12 @@ const props = [
 
 <DocLayout
   title="ErrorBoundary"
-  currentPath={currentPath}
   description="A React error boundary component for gracefully handling rendering errors with customizable fallback UI."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">ErrorBoundary</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A React error boundary that catches JavaScript errors in its child component tree,
@@ -130,10 +128,8 @@ export function App() {
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-error-boundary--docs"
       title="ErrorBoundary Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>

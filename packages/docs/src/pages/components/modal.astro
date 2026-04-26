@@ -30,14 +30,12 @@ const props = [
 
 <DocLayout
   title="Modal"
-  currentPath={currentPath}
   description="A modal dialog component for focused interactions, with support for sizes, variants, loading state, and confirm dialogs."
 >
   <div class="space-y-12">
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Modal</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A modal dialog component for focused interactions. Supports multiple sizes, variants,
@@ -151,8 +149,7 @@ export function DeleteConfirm() {
       </div>
     </section>
 
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-modal--docs"
       title="Modal Component"
     />
   </div>

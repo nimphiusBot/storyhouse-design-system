@@ -34,15 +34,13 @@ const groupProps = [
 
 <DocLayout
   title="Checkbox"
-  currentPath={currentPath}
   description="A form input component for selection, with support for individual and grouped checkboxes, indeterminate states, and validation."
 >
   <div class="space-y-12">
     <!-- Header -->
     <div class="space-y-4">
       <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Checkbox</h1>
-        <StatusBadge status="stable" />
+                <StatusBadge status="stable" />
       </div>
       <p class="text-lg text-gray-600 dark:text-gray-400">
         A form input component for toggling selections. Supports individual and grouped checkboxes,
@@ -167,10 +165,8 @@ export function InterestsForm() {
     </section>
 
     <!-- Storybook Preview -->
-    <StorybookPreview
-      url={storybookUrl}
+    <StorybookPreview id="components-checkbox--docs"
       title="Checkbox Component"
-  currentPath={currentPath}
     />
   </div>
 </DocLayout>
