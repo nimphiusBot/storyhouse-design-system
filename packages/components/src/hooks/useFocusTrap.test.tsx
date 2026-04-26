@@ -232,7 +232,6 @@ describe('useFocusTrap', () => {
 
     await new Promise((r) => requestAnimationFrame(r));
 
-    const container = screen.getByTestId('trap-container');
     const first = screen.getByTestId('first');
     const middle = screen.getByTestId('middle');
 

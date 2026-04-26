@@ -86,7 +86,7 @@ describe('Tabs', () => {
   });
 
   it('renders pills variant', () => {
-    const { container } = render(
+    render(
       <Tabs
         tabs={defaultTabs}
         activeTab="overview"
@@ -151,7 +151,7 @@ describe('Tabs', () => {
   });
 
   it('applies size variant', () => {
-    const { container, rerender } = render(
+    const { rerender } = render(
       <Tabs
         tabs={defaultTabs}
         activeTab="overview"

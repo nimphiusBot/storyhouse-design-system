@@ -141,7 +141,7 @@ describe('PageHeader', () => {
   });
 
   it('renders with size variant', () => {
-    const { container, rerender } = render(
+    const { rerender } = render(
       <PageHeader title="Dashboard" size="sm" />
     );
     const heading = screen.getByRole('heading', { level: 1 });

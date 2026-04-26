@@ -89,7 +89,7 @@ describe('DataTable', () => {
 
   it('handles sort in controlled mode', () => {
     const onSort = vi.fn();
-    const { rerender } = render(
+    render(
       <DataTable
         data={data}
         columns={columns}
@@ -260,7 +260,7 @@ describe('DataTable', () => {
 
   it('uses custom key extractor', () => {
     const keyExtractor = (item: TestItem) => item.id;
-    const { container } = render(
+    render(
       <DataTable data={data} columns={columns} keyExtractor={keyExtractor} />
     );
     expect(screen.getByText('Alice')).toBeInTheDocument();

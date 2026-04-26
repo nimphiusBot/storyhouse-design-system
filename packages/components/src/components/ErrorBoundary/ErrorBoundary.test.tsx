@@ -86,8 +86,7 @@ describe('ErrorBoundary', () => {
 
   it('re-renders children after clicking Try Again', () => {
     // After Try Again, the error state resets and children should re-render
-    const FallbackAfterError = () => {
-      const [hasError, setHasError] = vi.fn() as unknown as boolean;
+    const FallbackAfterError = () => { // eslint-disable-line @typescript-eslint/no-unused-vars
       return (
         <ErrorBoundary>
           <div>Recovered</div>

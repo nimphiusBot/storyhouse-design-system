@@ -124,7 +124,7 @@ describe('ThumbnailLightbox', () => {
   });
 
   it('applies custom className', () => {
-    const { container } = render(
+    render(
       <ThumbnailLightbox {...defaultProps} className="custom-overlay" />
     );
     const dialog = screen.getByRole('dialog');

@@ -35,7 +35,7 @@ describe('Radio', () => {
   });
 
   it('renders checked state', () => {
-    const { container } = render(<Radio checked onChange={vi.fn()} />);
+    render(<Radio checked onChange={vi.fn()} />);
     const radio = document.querySelector('input[type="radio"]') as HTMLInputElement;
     expect(radio.checked).toBe(true);
   });
@@ -53,7 +53,7 @@ describe('Radio', () => {
   });
 
   it('applies size variant', () => {
-    const { container, rerender } = render(<Radio size="sm" label="Small" />);
+    const { rerender } = render(<Radio size="sm" label="Small" />);
     let radioLabel = document.querySelector('input[type="radio"] + label');
     expect(radioLabel?.className).toContain('h-4');
 

@@ -103,11 +103,10 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
   effectiveIntervalLabel,
   paused = false,
 }) => {
-  if (!enabled && !lastPolledLabel) return null;
-
   /**
    * Tick every 5 seconds to keep relative-time labels and tooltips fresh.
    * The interval is properly cleaned up on unmount to prevent memory leaks.
+   * Note: hooks must be declared unconditionally (before any early returns).
    */
   const [, setTick] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -124,6 +123,8 @@ export const AutoRefreshIndicator: React.FC<AutoRefreshIndicatorProps> = ({
       }
     };
   }, []);
+
+  if (!enabled && !lastPolledLabel) return null;
 
   // Compute dynamic relative-time label from timestamp (re-evaluated on each tick)
   const dynamicTimeLabel = lastPolledAt ? formatRelativeTime(lastPolledAt) : undefined;

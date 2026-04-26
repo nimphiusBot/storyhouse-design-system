@@ -32,7 +32,7 @@ describe('Checkbox', () => {
   });
 
   it('renders indeterminate state', () => {
-    const { container } = render(<Checkbox indeterminate label="Indeterminate" />);
+    render(<Checkbox indeterminate label="Indeterminate" />);
     const input = screen.getByRole('checkbox') as HTMLInputElement;
     expect(input.indeterminate).toBe(true);
   });
