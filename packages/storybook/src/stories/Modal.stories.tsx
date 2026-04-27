@@ -168,3 +168,109 @@ export const Loading: Story = {
     title: 'Loading',
   },
 };
+
+// Accessibility stories
+export const A11yFocusTrap: Story = {
+  name: 'A11y — Focus Trap',
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Test Focus Trap</Button>
+        <Modal
+          {...args}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>Confirm</Button>
+            </>
+          }
+        />
+      </>
+    );
+  },
+  parameters: {
+    a11y: { element: '[role="dialog"]' },
+    docs: {
+      description: {
+        story: 'When open, focus is trapped inside the modal. Tab cycles through interactive elements within the dialog. Pressing Escape closes the modal. Focus returns to the trigger element on close.',
+      },
+    },
+  },
+  args: {
+    title: 'Focus Trap Demo',
+    children: <p className="text-sm text-gray-600">Press Tab to cycle focus. Focus stays within the dialog until closed.</p>,
+  },
+};
+
+export const A11yAriaAttributes: Story = {
+  name: 'A11y — ARIA Attributes',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Modal uses role="dialog", aria-modal="true", aria-labelledby pointing to the title, and aria-describedby pointing to the description. The backdrop uses aria-hidden="true". Body scroll is locked when the modal is open.',
+      },
+    },
+  },
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Test ARIA</Button>
+        <Modal
+          {...args}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          footer={<Button variant="primary" onClick={() => setIsOpen(false)}>Close</Button>}
+        />
+      </>
+    );
+  },
+  args: {
+    title: 'ARIA Demo',
+    description: 'Check the rendered HTML for role, aria-modal, aria-labelledby, and aria-describedby attributes.',
+    children: <p className="text-sm text-gray-600">This dialog has full ARIA support.</p>,
+  },
+};
+
+export const A11yKeyboardNavigation: Story = {
+  name: 'A11y — Keyboard Navigation',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Full keyboard support: Escape to close, Tab to cycle forward through focusable elements, Shift+Tab to cycle backward. All interactive elements inside the modal are reachable via keyboard.',
+      },
+    },
+  },
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Test Keyboard</Button>
+        <Modal
+          {...args}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>Save</Button>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>Discard</Button>
+            </>
+          }
+        />
+      </>
+    );
+  },
+  args: {
+    title: 'Keyboard Test',
+    children: (
+      <div className="space-y-3">
+        <p className="text-sm text-gray-600">Use keyboard to navigate between Cancel, Save, and Discard.</p>
+        <input type="text" placeholder="Focusable input" className="w-full px-3 py-2 border rounded" />
+      </div>
+    ),
+  },
+};
